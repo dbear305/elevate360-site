@@ -199,61 +199,76 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SERVICES */}
+               {/* SERVICES */}
         <section id="services" className="mb-20">
           <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
             Work with Elevate360 Systems
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-slate-300">
-            Structured, focused sessions for teams who want real clarity on
-            their systems, not generic consulting speak.
+            This is not generic “consulting.” These engagements are for teams
+            that want a serious engineer to look at their systems, tell the
+            truth, and give a concrete technical path forward.
           </p>
 
           <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {/* Service 1 */}
             <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
                 Diagnostic
               </div>
               <h3 className="mt-3 text-base font-semibold text-slate-50">
-                Ops &amp; Systems Diagnostic
+                Systems Diagnostic &amp; Triage
               </h3>
+              <p className="mt-1 text-sm font-semibold text-slate-100">
+                Starting at $600
+              </p>
               <p className="mt-2 text-sm text-slate-300">
-                A focused 60-minute working session on one core area of your
-                operation.
+                A focused 60–90 minute working session where we pull your
+                systems apart, look at the real signals, and identify what&apos;s
+                actually breaking under load.
               </p>
               <ul className="mt-3 flex-1 space-y-1.5 text-sm text-slate-300">
-                <li>• Field payroll &amp; wage models</li>
-                <li>• Elevator / route workflows</li>
-                <li>• Trading logic &amp; KPIs</li>
-                <li>• Data-flow cleanup</li>
+                <li>• Field payroll &amp; wage model issues</li>
+                <li>• VPN / WireGuard / VPS configuration sanity check</li>
+                <li>• Trading bot behavior &amp; risk diagnostics</li>
+                <li>• Telemetry / logging that doesn&apos;t add up</li>
               </ul>
-              <div className="mt-4 text-sm font-semibold text-slate-100">
-                From $99
-              </div>
+              <p className="mt-4 text-xs text-slate-400">
+                You leave with a clear list of issues, immediate fixes, and
+                next steps. No fluff.
+              </p>
             </article>
 
+            {/* Service 2 */}
             <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
                 Blueprint
               </div>
               <h3 className="mt-3 text-base font-semibold text-slate-50">
-                Systems Blueprint Session
+                Systems Blueprint &amp; Design Session
               </h3>
+              <p className="mt-1 text-sm font-semibold text-slate-100">
+                Starting at $1,800
+              </p>
               <p className="mt-2 text-sm text-slate-300">
-                A deeper design session for teams ready to define the next
-                version of their system.
+                A deep design engagement for teams that are ready to move from
+                “we hacked this together” to “this is a real, documented
+                system.” We map what you have and design what you actually need.
               </p>
               <ul className="mt-3 flex-1 space-y-1.5 text-sm text-slate-300">
-                <li>• Telemetry &amp; IoT architectures</li>
-                <li>• Predictive maintenance planning</li>
-                <li>• Rules engines (FieldPay, ledger, etc.)</li>
-                <li>• Documented future-state plan</li>
+                <li>• Telemetry &amp; observability architectures</li>
+                <li>• Secure VPN / WireGuard / network layout</li>
+                <li>• FieldPay / payroll / rules engine design</li>
+                <li>• Trading infrastructure and risk frameworks</li>
               </ul>
-              <div className="mt-4 text-sm font-semibold text-slate-100">
-                From $149
-              </div>
+              <p className="mt-4 text-xs text-slate-400">
+                You receive a written blueprint with diagrams and clear
+                implementation steps—whether you execute internally or bring
+                Elevate360 back to build it.
+              </p>
             </article>
 
+            {/* Service 3 */}
             <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
                 Roadmap
@@ -261,19 +276,24 @@ export default function Home() {
               <h3 className="mt-3 text-base font-semibold text-slate-50">
                 Architecture &amp; Roadmap Intensive
               </h3>
+              <p className="mt-1 text-sm font-semibold text-slate-100">
+                Starting at $4,500
+              </p>
               <p className="mt-2 text-sm text-slate-300">
-                A strategic engagement for organizations planning serious
-                upgrades or greenfield builds.
+                A strategic multi-session engagement for organizations that want
+                a clear, honest, technically sound plan for the next 12–24
+                months of their infrastructure and systems.
               </p>
               <ul className="mt-3 flex-1 space-y-1.5 text-sm text-slate-300">
                 <li>• End-to-end architecture review</li>
-                <li>• Risk &amp; failure-mode analysis</li>
-                <li>• Phased implementation roadmap</li>
-                <li>• Build vs. buy recommendations</li>
+                <li>• Security, networking, and reliability posture</li>
+                <li>• Phased implementation roadmap with priorities</li>
+                <li>• Build vs. buy recommendations, with trade-offs</li>
               </ul>
-              <div className="mt-4 text-sm font-semibold text-slate-100">
-                From $199
-              </div>
+              <p className="mt-4 text-xs text-slate-400">
+                This is the engagement for when you&apos;re done guessing and
+                want a real engineer to define how your systems should evolve.
+              </p>
             </article>
           </div>
         </section>
