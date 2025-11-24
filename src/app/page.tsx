@@ -68,40 +68,43 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Hero visual */}
-          <div className="relative h-64 overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6 shadow-2xl lg:h-80">
-            <div className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
-              Operational Intelligence
-            </div>
-            <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-                <div className="text-xs text-slate-400">
-                  Elevators &amp; Field Ops
-                </div>
-                <div className="mt-2 text-sm font-semibold text-slate-50">
-                  Telemetry and status you don&apos;t have to guess about.
-                </div>
-              </div>
-              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-                <div className="text-xs text-slate-400">Financial Flows</div>
-                <div className="mt-2 text-sm font-semibold text-slate-50">
-                  Trading and ledger behavior with a clear paper trail.
-                </div>
-              </div>
-              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-                <div className="text-xs text-slate-400">Field Payroll</div>
-                <div className="mt-2 text-sm font-semibold text-slate-50">
-                  Rules-accurate wage models for real crews.
-                </div>
-              </div>
-              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-                <div className="text-xs text-slate-400">Privacy-First</div>
-                <div className="mt-2 text-sm font-semibold text-slate-50">
-                  Local-first where it makes sense. Your data stays your data.
-                </div>
-              </div>
+         {/* Hero visual */}
+        <div className="relative h-64 overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6 shadow-2xl lg:h-80">
+         <div className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
+           Operational Insights
+         </div>
+
+         <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+           <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+             <div className="text-xs text-slate-400">Elevators &amp; Field Ops</div>
+             <div className="mt-2 text-sm font-semibold text-slate-50">
+               Clear status you don’t have to guess about.
+             </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+            <div className="text-xs text-slate-400">Financial Flows</div>
+            <div className="mt-2 text-sm font-semibold text-slate-50">
+              Behavior and movement with a visible trace.
             </div>
           </div>
+
+          <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+           <div className="text-xs text-slate-400">Field Payroll</div>
+           <div className="mt-2 text-sm font-semibold text-slate-50">
+             Pay rules that match the work performed.
+           </div>
+         </div>
+
+         <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+           <div className="text-xs text-slate-400">Privacy-First</div>
+           <div className="mt-2 text-sm font-semibold text-slate-50">
+             Local-first where it matters. Your data stays yours.
+           </div>
+         </div>
+       </div>
+     </div>
+
         </section>
 
         {/* PLATFORMS */}
