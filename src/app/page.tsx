@@ -5,34 +5,45 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto max-w-6xl px-4 pb-16 pt-10 lg:pt-16">
-        {/* HEADER */}
-        <header className="mb-16 flex items-center justify-between">
-          <div>
-            <div className="text-lg font-semibold tracking-tight">
-              Elevate360 Systems<span className="align-super text-[0.55em]">™</span>
-            </div>
-            <div className="mt-1 text-[0.7rem] uppercase tracking-[0.25em] text-slate-400">
-              Predicting tomorrow, today.
-            </div>
-          </div>
-          <nav className="hidden gap-6 text-sm text-slate-300 md:flex">
-            <a href="#platforms" className="hover:text-slate-50">
-              Platforms
-            </a>
-            <a href="#built" className="hover:text-slate-50">
-              Built &amp; Running
-            </a>
-            <a href="#services" className="hover:text-slate-50">
-              Services
-            </a>
-            <a href="#about" className="hover:text-slate-50">
-              About
-            </a>
-            <a href="#contact" className="hover:text-slate-50">
-              Contact
-            </a>
-          </nav>
-        </header>
+       <header className="mb-16 flex items-center justify-between">
+  <div className="flex flex-col gap-1">
+    <div className="flex items-center gap-3">
+      {/* Temporary text-based E360 badge (NOT your real logo) */}
+      <div className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 bg-slate-900 text-xs font-semibold tracking-wide text-slate-100">
+        E360
+      </div>
+
+      <div className="flex flex-col">
+        <div className="text-lg font-semibold tracking-tight">
+          Elevate360 Systems<span className="align-super text-[0.55em]">™</span>
+        </div>
+        <div className="text-[0.7rem] uppercase tracking-[0.25em] text-slate-400">
+          Predicting tomorrow, today.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* nav stays the same */}
+  <nav className="hidden gap-6 text-sm text-slate-300 md:flex">
+    <a href="#platforms" className="hover:text-slate-50">
+      Platforms
+    </a>
+    <a href="#built" className="hover:text-slate-50">
+      Built &amp; Running
+    </a>
+    <a href="#services" className="hover:text-slate-50">
+      Services
+    </a>
+    <a href="#about" className="hover:text-slate-50">
+      About
+    </a>
+    <a href="#contact" className="hover:text-slate-50">
+      Contact
+    </a>
+  </nav>
+</header>
+
 
             {/* HERO */}
         <section className="mb-20 grid gap-10 lg:grid-cols-[2fr,1.3fr] lg:items-center">
