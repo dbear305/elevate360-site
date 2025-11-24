@@ -34,23 +34,23 @@ export default function Home() {
           </nav>
         </header>
 
-        {/* HERO */}
+            {/* HERO */}
         <section className="mb-20 grid gap-10 lg:grid-cols-[2fr,1.3fr] lg:items-center">
           <div>
             <h1 className="text-balance text-4xl font-semibold tracking-tight text-slate-50 sm:text-5xl lg:text-6xl">
-              Real-world systems.
+              Built from experience.
               <br className="hidden sm:block" />
-              Real-time intelligence.
+              Engineered with discipline.
             </h1>
             <p className="mt-6 max-w-xl text-lg text-slate-300">
-              Elevate360 Systems<span className="align-super text-[0.55em]">™</span> builds
-              privacy-first, transparent systems for elevators, field teams, and
-              financial operations—designed by someone who has actually wired
-              the motors, run the routes, and written the code.
+              Elevate360 Systems<span className="align-super text-[0.55em]">™</span> is a
+              privacy-first engineering studio focused on real-world operations,
+              applied mathematics, and practical systems thinking. I don&apos;t
+              do hype—I build systems that are transparent, understandable, and
+              grounded in the physics and constraints of reality.
             </p>
             <p className="mt-3 max-w-xl text-sm text-slate-400">
-              No black boxes. No hype. The goal is simple: systems that can be
-              understood, trusted, and improved over time.
+              Predicting tomorrow, today.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a
