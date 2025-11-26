@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "systems engineering studio",
   ],
   alternates: {
-    canonical: "/",
+    canonical: "https://elevate360systems.com/",
   },
   openGraph: {
     type: "website",
@@ -45,14 +45,6 @@ export const metadata: Metadata = {
       "Elevate360 Systems – Built from experience. Engineered with discipline.",
     description:
       "Elevate360 Systems™ builds transparent, understandable systems for field operations, analytics, payroll, and infrastructure—grounded in physics, constraints, and real-world experience.",
-    images: [
-      {
-        url: "https://elevate360systems.com/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Elevate360 Systems – Privacy-First Engineering Studio",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -60,7 +52,6 @@ export const metadata: Metadata = {
       "Elevate360 Systems – Privacy-First Engineering, Analytics & Field Operations",
     description:
       "Engineering studio focused on field operations, systems thinking, analytics, and secure infrastructure. Predicting tomorrow, today.",
-    images: ["https://elevate360systems.com/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -76,7 +67,7 @@ export const metadata: Metadata = {
 };
 
 // ===============================
-//         ROOT LAYOUT
+//           ROOT LAYOUT
 // ===============================
 export default function RootLayout({
   children,
@@ -86,12 +77,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* FAVICONS – USE EXACTLY THESE THREE FILES */}
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        {/* Single favicon file in /public/favicon.png */}
+        <link rel="icon" href="/favicon.png" />
       </head>
-
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
