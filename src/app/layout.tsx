@@ -83,7 +83,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // JSON-LD Business Schema
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -92,20 +91,31 @@ export default function RootLayout({
     description:
       "Elevate360 Systems™ is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking.",
     slogan: "Predicting tomorrow, today.",
-    logo: "https://elevate360systems.com/e360favicon.png?v=3",
+    logo: "https://elevate360systems.com/favicon-32x32.png",
   };
 
   return (
     <html lang="en">
       <head>
-        {/* VERSIONED FAVICON — FORCED REFRESH */}
+        {/* FAVICONS – guaranteed setup */}
         <link
           rel="icon"
-          href="/e360favicon.png?v=3"
+          href="/favicon.ico?v=1"
+        />
+        <link
+          rel="icon"
           type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png?v=1"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png?v=1"
         />
 
-        {/* JSON-LD STRUCTURED DATA */}
+        {/* JSON-LD structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
