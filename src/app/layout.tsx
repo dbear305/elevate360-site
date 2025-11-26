@@ -83,45 +83,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Elevate360 Systems",
-    url: "https://elevate360systems.com",
-    description:
-      "Elevate360 Systems™ is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking.",
-    slogan: "Predicting tomorrow, today.",
-    logo: "https://elevate360systems.com/favicon-32x32.png",
-  };
-
   return (
     <html lang="en">
-      <head>
-        {/* FAVICONS – guaranteed setup */}
-        <link
-          rel="icon"
-          href="/favicon.ico?v=1"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png?v=1"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png?v=1"
-        />
-
-        {/* JSON-LD structured data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
-
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
