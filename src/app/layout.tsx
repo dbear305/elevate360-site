@@ -13,61 +13,16 @@ const geistMono = Geist_Mono({
 });
 
 // ===============================
-//        GLOBAL METADATA
+//        SITE METADATA
 // ===============================
 export const metadata: Metadata = {
-  metadataBase: new URL("https://elevate360systems.com"),
-  title: {
-    default:
-      "Elevate360 Systems – Privacy-First Engineering, Analytics & Field Operations",
-    template: "%s | Elevate360 Systems",
-  },
+  title: "Elevate360 Systems – Privacy-First Engineering, Analytics & Field Operations",
   description:
-    "Elevate360 Systems™ is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking. Built from experience. Engineered with discipline.",
-  keywords: [
-    "Elevate360 Systems",
-    "privacy-first engineering",
-    "field operations analytics",
-    "elevator systems",
-    "field payroll logic",
-    "predictive maintenance",
-    "operational analytics",
-    "systems engineering studio",
-  ],
-  alternates: {
-    canonical: "https://elevate360systems.com/",
-  },
-  openGraph: {
-    type: "website",
-    url: "https://elevate360systems.com/",
-    siteName: "Elevate360 Systems",
-    title:
-      "Elevate360 Systems – Built from experience. Engineered with discipline.",
-    description:
-      "Elevate360 Systems™ builds transparent, understandable systems for field operations, analytics, payroll, and infrastructure—grounded in physics, constraints, and real-world experience.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title:
-      "Elevate360 Systems – Privacy-First Engineering, Analytics & Field Operations",
-    description:
-      "Engineering studio focused on field operations, systems thinking, analytics, and secure infrastructure. Predicting tomorrow, today.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-snippet": -1,
-      "max-image-preview": "large",
-      "max-video-preview": -1,
-    },
-  },
+    "Elevate360 Systems™ is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking.",
 };
 
 // ===============================
-//           ROOT LAYOUT
+//          ROOT LAYOUT
 // ===============================
 export default function RootLayout({
   children,
@@ -77,9 +32,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Single favicon file in /public/favicon.png */}
+        {/* Your working 32x32 favicon */}
         <link rel="icon" href="/favicon.png" />
       </head>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
