@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// =============================================
-// FULL ELEVATE360 SYSTEMS METADATA
-// =============================================
+// ===============================
+//        GLOBAL METADATA
+// ===============================
 export const metadata: Metadata = {
   metadataBase: new URL("https://elevate360systems.com"),
   title: {
@@ -47,7 +47,6 @@ export const metadata: Metadata = {
       "Elevate360 Systems™ builds transparent, understandable systems for field operations, analytics, payroll, and infrastructure—grounded in physics, constraints, and real-world experience.",
     images: [
       {
-        // Placeholder OG image — safe for now
         url: "https://elevate360systems.com/og-image.jpg",
         width: 1200,
         height: 630,
@@ -76,16 +75,39 @@ export const metadata: Metadata = {
   },
 };
 
-// =============================================
-// ROOT LAYOUT
-// =============================================
+// ===============================
+//         ROOT LAYOUT
+// ===============================
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  // JSON-LD Business Schema
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Elevate360 Systems",
+    url: "https://elevate360systems.com",
+    description:
+      "Elevate360 Systems™ is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking.",
+    slogan: "Predicting tomorrow, today.",
+    logo: "https://elevate360systems.com/e360favicon.png",
+  };
+
   return (
     <html lang="en">
+      <head>
+        {/* Favicon */}
+        <link rel="icon" href="/e360favicon.png" type="image/png" />
+
+        {/* JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
