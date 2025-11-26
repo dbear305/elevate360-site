@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     title:
       "Elevate360 Systems – Privacy-First Engineering, Analytics & Field Operations",
     description:
-      "Engineering studio focused on field operations, systems thinking, analytics, and infrastructure. Predicting tomorrow, today.",
+      "Engineering studio focused on field operations, systems thinking, analytics, and secure infrastructure. Predicting tomorrow, today.",
     images: ["https://elevate360systems.com/og-image.jpg"],
   },
   robots: {
@@ -92,16 +92,20 @@ export default function RootLayout({
     description:
       "Elevate360 Systems™ is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking.",
     slogan: "Predicting tomorrow, today.",
-    logo: "https://elevate360systems.com/e360favicon.png",
+    logo: "https://elevate360systems.com/e360favicon.png?v=3",
   };
 
   return (
     <html lang="en">
       <head>
-        {/* Favicon */}
-        <link rel="icon" href="/e360favicon.png" type="image/png" />
+        {/* VERSIONED FAVICON — FORCED REFRESH */}
+        <link
+          rel="icon"
+          href="/e360favicon.png?v=3"
+          type="image/png"
+        />
 
-        {/* JSON-LD */}
+        {/* JSON-LD STRUCTURED DATA */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
