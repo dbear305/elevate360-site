@@ -1,51 +1,50 @@
-// src/app/page.tsx
 import React from "react";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto max-w-6xl px-4 pb-16 pt-10 lg:pt-16">
-       <header className="mb-16 flex items-center justify-between">
-  <div className="flex flex-col gap-1">
-    <div className="flex items-center gap-3">
-      {/* Temporary text-based E360 badge (NOT your real logo) */}
-      <div className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 bg-slate-900 text-xs font-semibold tracking-wide text-slate-100">
-        E360
-      </div>
+        {/* HEADER */}
+        <header className="mb-16 flex items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-3">
+              {/* Temporary text-based E360 badge (NOT your real logo) */}
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 bg-slate-900 text-xs font-semibold tracking-wide text-slate-100">
+                E360
+              </div>
 
-      <div className="flex flex-col">
-        <div className="text-lg font-semibold tracking-tight">
-          Elevate360 Systems<span className="align-super text-[0.55em]">™</span>
-        </div>
-        <div className="text-[0.7rem] uppercase tracking-[0.25em] text-slate-400">
-          Predicting tomorrow, today.
-        </div>
-      </div>
-    </div>
-  </div>
+              <div className="flex flex-col">
+                <div className="text-lg font-semibold tracking-tight">
+                  Elevate360 Systems
+                  <span className="align-super text-[0.55em]">™</span>
+                </div>
+                <div className="text-[0.7rem] uppercase tracking-[0.25em] text-slate-400">
+                  Predicting tomorrow, today.
+                </div>
+              </div>
+            </div>
+          </div>
 
-  {/* nav stays the same */}
-  <nav className="hidden gap-6 text-sm text-slate-300 md:flex">
-    <a href="#platforms" className="hover:text-slate-50">
-      Platforms
-    </a>
-    <a href="#built" className="hover:text-slate-50">
-      Built &amp; Running
-    </a>
-    <a href="#services" className="hover:text-slate-50">
-      Services
-    </a>
-    <a href="#about" className="hover:text-slate-50">
-      About
-    </a>
-    <a href="#contact" className="hover:text-slate-50">
-      Contact
-    </a>
-  </nav>
-</header>
+          <nav className="hidden gap-6 text-sm text-slate-300 md:flex">
+            <a href="#platforms" className="hover:text-slate-50">
+              Platforms
+            </a>
+            <a href="#built" className="hover:text-slate-50">
+              Built &amp; Running
+            </a>
+            <a href="#services" className="hover:text-slate-50">
+              Services
+            </a>
+            <a href="#about" className="hover:text-slate-50">
+              About
+            </a>
+            <a href="#contact" className="hover:text-slate-50">
+              Contact
+            </a>
+          </nav>
+        </header>
 
-
-            {/* HERO */}
+        {/* HERO */}
         <section className="mb-20 grid gap-10 lg:grid-cols-[2fr,1.3fr] lg:items-center">
           <div>
             <h1 className="text-balance text-4xl font-semibold tracking-tight text-slate-50 sm:text-5xl lg:text-6xl">
@@ -54,7 +53,8 @@ export default function Home() {
               Engineered with discipline.
             </h1>
             <p className="mt-6 max-w-xl text-lg text-slate-300">
-              Elevate360 Systems<span className="align-super text-[0.55em]">™</span> is a
+              Elevate360 Systems
+              <span className="align-super text-[0.55em]">™</span> is a
               privacy-first engineering studio focused on real-world operations,
               applied mathematics, and practical systems thinking. I don&apos;t
               do hype—I build systems that are transparent, understandable, and
@@ -79,49 +79,108 @@ export default function Home() {
             </div>
           </div>
 
-         {/* Hero visual */}
-        <div className="relative h-64 overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6 shadow-2xl lg:h-80">
-         <div className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
-           Operational Insights
-         </div>
+          {/* Hero visual */}
+          <div className="relative h-64 overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6 shadow-2xl lg:h-80">
+            <div className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
+              Operational Insights
+            </div>
 
-         <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-           <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-             <div className="text-xs text-slate-400">Elevators &amp; Field Ops</div>
-             <div className="mt-2 text-sm font-semibold text-slate-50">
-               Clear status you don’t have to guess about.
-             </div>
-          </div>
+            <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+                <div className="text-xs text-slate-400">
+                  Elevators &amp; Field Ops
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-50">
+                  Clear status you don&apos;t have to guess about.
+                </div>
+              </div>
 
-          <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-            <div className="text-xs text-slate-400">Financial Flows</div>
-            <div className="mt-2 text-sm font-semibold text-slate-50">
-              Behavior and movement with a visible trace.
+              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+                <div className="text-xs text-slate-400">Financial Flows</div>
+                <div className="mt-2 text-sm font-semibold text-slate-50">
+                  Behavior and movement with a visible trace.
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+                <div className="text-xs text-slate-400">Field Payroll</div>
+                <div className="mt-2 text-sm font-semibold text-slate-50">
+                  Pay rules that match the work performed.
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
+                <div className="text-xs text-slate-400">Privacy-First</div>
+                <div className="mt-2 text-sm font-semibold text-slate-50">
+                  Local-first where it matters. Your data stays yours.
+                </div>
+              </div>
             </div>
           </div>
+        </section>
 
-          <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-           <div className="text-xs text-slate-400">Field Payroll</div>
-           <div className="mt-2 text-sm font-semibold text-slate-50">
-             Pay rules that match the work performed.
-           </div>
-         </div>
+        {/* OPERATIONAL INTELLIGENCE (main section) */}
+        <section className="mb-20">
+          <h2 className="text-sm font-semibold tracking-[0.2em] text-slate-400">
+            OPERATIONAL INTELLIGENCE
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm text-slate-300">
+            Clear visibility into how your systems behave, how work is actually
+            getting done, and how it all shows up in your numbers. No guessing,
+            no noise—just the signals you need.
+          </p>
 
-         <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4">
-           <div className="text-xs text-slate-400">Privacy-First</div>
-           <div className="mt-2 text-sm font-semibold text-slate-50">
-             Local-first where it matters. Your data stays yours.
-           </div>
-         </div>
-       </div>
-     </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                Elevators &amp; Field Ops
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Telemetry and status your crews don&apos;t have to guess about:
+                what&apos;s running, what&apos;s offline, and what needs
+                attention.
+              </p>
+            </article>
 
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                Financial Flows
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Trading and ledger behavior with a clear paper trail, so you can
+                see how decisions, risk, and balances move over time.
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                Field Payroll
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Rules-accurate pay that lines up with agreements and the work
+                that was actually performed—no surprises at the end of the pay
+                period.
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                Privacy-First
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Data flows that respect boundaries: minimal collection, clear
+                purpose, and no hidden side channels. Your information stays
+                where it belongs.
+              </p>
+            </article>
+          </div>
         </section>
 
         {/* PLATFORMS */}
         <section id="platforms" className="mb-20">
           <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-            The Elevate360 Systems<span className="align-super text-[0.55em]">™</span> platform
+            The Elevate360 Systems
+            <span className="align-super text-[0.55em]">™</span> platform
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-slate-300">
             A focused set of tools built on real field experience—each solving a
@@ -137,10 +196,11 @@ export default function Home() {
               </h3>
               <p className="mt-2 text-sm text-slate-300">
                 Real-time operational insight and fault awareness for elevators
-                and infrastructure—shaped by someone who&apos;s actually been
-                on the call when things are down.
+                and infrastructure—shaped by someone who&apos;s actually been on
+                the call when things are down.
               </p>
             </article>
+
             <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <h3 className="text-base font-semibold text-slate-50">
                 FieldPay<span className="align-super text-[0.55em]">™</span>
@@ -151,6 +211,7 @@ export default function Home() {
                 the hours.
               </p>
             </article>
+
             <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <h3 className="text-base font-semibold text-slate-50">
                 Elevate360 Analytics
@@ -162,6 +223,7 @@ export default function Home() {
                 instead of predictions without receipts.
               </p>
             </article>
+
             <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <h3 className="text-base font-semibold text-slate-50">
                 Elevate360 Ledger
@@ -173,22 +235,232 @@ export default function Home() {
                 without digging through three different systems.
               </p>
             </article>
+
             <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 md:col-span-2">
               <h3 className="text-base font-semibold text-slate-50">
-                MatchMetrics<span className="align-super text-[0.55em]">™</span> (R&amp;D)
+                MatchMetrics
+                <span className="align-super text-[0.55em]">™</span> (R&amp;D)
               </h3>
               <p className="mt-2 text-sm text-slate-300">
-                An experimental, privacy-focused mobile concept aimed at helping
-                people make better relationship and dating decisions without
-                handing all of their data to a third party. It&apos;s still in
-                development, and that&apos;s intentional.
+                A privacy-focused, multi-vertical advisory engine designed to
+                stay human-controlled. MatchMetrics looks at patterns across
+                different verticals—relationships, teams, decisions, lifestyle,
+                mentoring, and more—to surface alignment, friction, and trend
+                shifts without judgment or labels. Insights are advisory-only;
+                humans always make the decisions.
               </p>
             </article>
           </div>
         </section>
 
-        {/* BUILT & RUNNING */}
-        <section id="built" className="mb-20">
+        {/* MATCHMETRICS VERTICALS */}
+        <section className="mb-20 rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
+            MatchMetrics
+            <span className="align-super text-[0.55em]">™</span> verticals
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm text-slate-300">
+            MatchMetrics is structured as a set of privacy-first, advisory-only
+            verticals. It doesn&apos;t judge or diagnose—it highlights patterns,
+            alignment, and friction so humans can make clearer decisions.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {/* Relationship */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Relationship
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Personal relationship advisor: reads dating profiles, highlights
+                compatibility patterns and alignment signals, and surfaces
+                behavioral trends. Provides advisory insights only—humans make
+                all decisions.
+              </p>
+            </article>
+
+            {/* Business */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Business
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Team alignment and collaboration insight. Not hiring, not
+                filtering—strictly advisory on team-fit patterns, communication
+                preferences, and collaboration styles. Non-protected attributes
+                only; 100% human-controlled.
+              </p>
+            </article>
+
+            {/* Social */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Social
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Friendship and social-circle alignment—matching gym partners,
+                accountability partners, and new-city social connections.
+                Low-pressure compatibility insights. No judging, no labels.
+              </p>
+            </article>
+
+            {/* Focus */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Focus
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Decision-clarity engine: organizes pros/cons, reduces emotional
+                noise, and simplifies complex choices. Offers weighted clarity
+                insights; the human always decides.
+              </p>
+            </article>
+
+            {/* Insight */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Insight
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Self-awareness and behavioral reflection—shows consistent
+                tendencies, pattern repeats, and misalignments. Non-clinical,
+                non-psychological, advisory-only.
+              </p>
+            </article>
+
+            {/* Risk */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Risk
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Behavioral volatility and inconsistency insight—not a
+                psychological assessment, not a danger score. Highlights
+                inconsistent patterns, misaligned goals, and potential friction.
+                Human interprets; human decides.
+              </p>
+            </article>
+
+            {/* Analyst */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Analyst
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Expert-level advisory dashboard with full pattern breakdown,
+                multi-factor weighted insights, and expanded KPIs. Built for
+                founders, executives, and planners who need deeper clarity but
+                still want humans making the final call.
+              </p>
+            </article>
+
+            {/* WorkFit */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics WorkFit
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Role and workflow alignment (Business sub-vertical). Not hiring
+                or screening—advisory insight into task preference, workflow
+                style, ideal environments, and manager fit. Optional
+                participation only.
+              </p>
+            </article>
+
+            {/* TeamFlow */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics TeamFlow
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Dynamic team pairing (Business sub-vertical). Pairs people for
+                projects, identifies collaboration synergy, and highlights
+                likely friction points. Advisory-only; project managers make the
+                final call.
+              </p>
+            </article>
+
+            {/* PartnerFit */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics PartnerFit
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Business partner alignment for co-founders and long-term
+                partners: vision, pace, work ethic, and communication style.
+                No judgment—just alignment signals.
+              </p>
+            </article>
+
+            {/* TravelMate */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics TravelMate
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Travel compatibility advisory: pace, structure vs. spontaneity,
+                budget alignment, sleep/wake rhythm, and activity fit. Solves
+                mismatched travel expectations before the trip starts.
+              </p>
+            </article>
+
+            {/* RoomMate */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics RoomMate
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Roommate / co-living compatibility using safe, non-private
+                signals: cleanliness preference, schedule alignment, noise
+                tolerance, lifestyle mismatch warnings, and communication style.
+              </p>
+            </article>
+
+            {/* Accountability */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics Accountability
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Pairs people for gym, recovery, and lifestyle changes based on
+                consistency and preference patterns. No health data required;
+                ethically safe, advisory-only.
+              </p>
+            </article>
+
+            {/* MentorLink */}
+            <article className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-sm font-semibold text-slate-50">
+                MatchMetrics MentorLink
+                <span className="align-super text-[0.55em]">™</span>
+              </h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Mentor/apprentice compatibility advisory: work style,
+                communication, pace, learning preferences, and motivational
+                alignment. Helps reduce mismatch stress; advisory-only.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        {/* WHAT'S RUNNING TODAY */}
+        <section
+          id="built"
+          className="mb-20"
+        >
           <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
             What&apos;s actually running today
           </h2>
@@ -199,7 +471,7 @@ export default function Home() {
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
               <h3 className="text-sm font-semibold text-slate-50">
                 Structured trading &amp; analytics stack
               </h3>
@@ -208,18 +480,21 @@ export default function Home() {
                 with clear metrics and risk awareness. No magic buttons—just
                 structured decision support.
               </p>
-            </div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
               <h3 className="text-sm font-semibold text-slate-50">
-                FieldPay<span className="align-super text-[0.55em]">™</span> rules &amp; wage modeling
+                FieldPay<span className="align-super text-[0.55em]">™</span>{" "}
+                rules &amp; wage modeling
               </h3>
               <p className="mt-1">
                 A working rules model for complex field pay situations,
                 including different rates, conditions, and job types—built to
                 mirror how work actually happens.
               </p>
-            </div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
               <h3 className="text-sm font-semibold text-slate-50">
                 Secure, segmented infrastructure
               </h3>
@@ -228,8 +503,9 @@ export default function Home() {
                 careful separation between personal systems, trading systems,
                 and operational systems.
               </p>
-            </div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
               <h3 className="text-sm font-semibold text-slate-50">
                 Internal logging &amp; audit trails
               </h3>
@@ -238,11 +514,11 @@ export default function Home() {
                 changes, so it&apos;s possible to understand what the system did
                 later without guessing.
               </p>
-            </div>
+            </article>
           </div>
         </section>
 
-        {/* PRINCIPLES */}
+        {/* HOW ELEVATE360 BUILDS */}
         <section className="mb-20">
           <h2 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
             How Elevate360 Systems builds
@@ -254,7 +530,7 @@ export default function Home() {
           </p>
 
           <div className="mt-8 grid gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <h3 className="text-sm font-semibold text-slate-50">
                 Privacy-first by default
               </h3>
@@ -262,8 +538,9 @@ export default function Home() {
                 No data selling, no surprise integrations. Designs lean toward
                 local processing and minimal data sharing wherever possible.
               </p>
-            </div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <h3 className="text-sm font-semibold text-slate-50">
                 No hype. No lies.
               </h3>
@@ -272,8 +549,9 @@ export default function Home() {
                 still experimental, it&apos;s called that openly. No inflated
                 claims.
               </p>
-            </div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <h3 className="text-sm font-semibold text-slate-50">
                 Built to be understood
               </h3>
@@ -282,7 +560,7 @@ export default function Home() {
                 decisions instead of hiding them behind a model nobody can
                 reason about.
               </p>
-            </div>
+            </article>
           </div>
         </section>
 
@@ -299,7 +577,7 @@ export default function Home() {
           </p>
 
           <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {/* Service 1 */}
+            {/* Diagnostic */}
             <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
                 Diagnostic
@@ -327,7 +605,7 @@ export default function Home() {
               </p>
             </article>
 
-            {/* Service 2 */}
+            {/* Blueprint */}
             <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
                 Blueprint
@@ -356,7 +634,7 @@ export default function Home() {
               </p>
             </article>
 
-            {/* Service 3 */}
+            {/* Roadmap */}
             <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
                 Roadmap
@@ -404,9 +682,9 @@ export default function Home() {
               engineering and data.
             </p>
             <p className="mt-3 text-sm text-slate-300">
-              The intent isn&apos;t to be the flashiest system in the room. It&apos;s
-              to be the one that still makes sense a year later when you&apos;re
-              trying to understand what happened.
+              The intent isn&apos;t to be the flashiest system in the room.
+              It&apos;s to be the one that still makes sense a year later when
+              you&apos;re trying to understand what happened.
             </p>
           </div>
 
@@ -470,10 +748,12 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-start gap-1 text-[0.7rem] sm:flex-row sm:items-center sm:gap-4">
               <span>
-                Elevate360 Systems<span className="align-super text-[0.55em]">™</span>, FieldPay
-                <span className="align-super text-[0.55em]">™</span>, MatchMetrics
-                <span className="align-super text-[0.55em]">™</span>, and related marks are trademarks of
-                Elevate360 Systems LLC.
+                Elevate360 Systems
+                <span className="align-super text-[0.55em]">™</span>, FieldPay
+                <span className="align-super text-[0.55em]">™</span>,
+                MatchMetrics
+                <span className="align-super text-[0.55em]">™</span>, and
+                related marks are trademarks of Elevate360 Systems LLC.
               </span>
               <span>Predicting tomorrow, today.</span>
               <span>Privacy-first engineering. No hype. No lies.</span>
