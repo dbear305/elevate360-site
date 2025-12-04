@@ -1,44 +1,33 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { ReactNode } from "react";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-// ===============================
-//        SITE METADATA
-// ===============================
+// Global metadata for the whole site
 export const metadata: Metadata = {
-  title: "Elevate360 Systems – Privacy-First Engineering, Analytics & Field Operations",
+  title: "Elevate360 Systems – Privacy-First Engineering Studio",
   description:
-    "Elevate360 Systems™ is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking.",
+    "Elevate360 Systems is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking. Built from experience. Engineered with discipline.",
+  openGraph: {
+    title: "Elevate360 Systems – Privacy-First Engineering Studio",
+    description:
+      "Elevate360 Systems is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking.",
+    url: "https://elevate360systems.com",
+    siteName: "Elevate360 Systems",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Elevate360 Systems – Privacy-First Engineering Studio",
+    description:
+      "Privacy-first engineering for real-world operations, trading, and field systems. Built from experience. Engineered with discipline.",
+  },
 };
 
-// ===============================
-//          ROOT LAYOUT
-// ===============================
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        {/* Your working 32x32 favicon */}
-        <link rel="icon" href="/favicon.png" />
-      </head>
-
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="bg-slate-950 text-slate-50 antialiased">
         {children}
       </body>
     </html>
