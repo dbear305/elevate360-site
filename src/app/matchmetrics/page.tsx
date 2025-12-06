@@ -11,7 +11,7 @@ export default function MatchMetricsPage() {
         <p className="mt-4 max-w-3xl text-lg text-slate-300">
           MatchMetrics is a privacy-first, advisory-only engine designed to help
           humans make clearer decisions across relationships, teams, lifestyle,
-          and work. It doesn&apos;t judge, label, or diagnose—it highlights
+          and work. It doesn&apos;t judge, label, or diagnose it highlights
           patterns, alignment, and friction so people can see what&apos;s really
           going on before they commit.
         </p>
@@ -24,7 +24,7 @@ export default function MatchMetricsPage() {
           <p className="mt-3 text-sm text-slate-300">
             MatchMetrics never attempts clinical, medical, or psychological
             assessment. It works only with the surface-level information the
-            user chooses to provide, and it returns patterns—not decisions.
+            user chooses to provide, and it returns patterns not decisions.
             Every vertical is designed to respect boundaries and keep humans in
             control.
           </p>
@@ -56,12 +56,12 @@ export default function MatchMetricsPage() {
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           <Vertical
             title="MatchMetrics Relationship™"
-            desc="Personal relationship advisor. Reads dating profiles, highlights compatibility patterns and behavioral trends, and surfaces alignment signals. Advisory insights only—humans make all decisions."
+            desc="Personal relationship advisor. Reads dating profiles, highlights compatibility patterns and behavioral trends, and surfaces alignment signals. Advisory insights only humans make all decisions."
           />
 
           <Vertical
             title="MatchMetrics Business™"
-            desc="Team alignment & collaboration insight. Not hiring or filtering. Strictly advisory on team-fit patterns, communication style, collaboration patterns, and manager–candidate alignment using non-protected attributes only."
+            desc="Team alignment & collaboration insight. Not hiring or filtering. Strictly advisory on team-fit patterns, communication style, collaboration patterns, and manager candidate alignment using non-protected attributes only."
           />
 
           <Vertical
@@ -81,7 +81,7 @@ export default function MatchMetricsPage() {
 
           <Vertical
             title="MatchMetrics Risk™"
-            desc="Behavioral volatility & inconsistency insight—not a psychological assessment and not a danger score. Identifies inconsistent patterns, misaligned goals, emotional unpredictability, and potential friction areas. Human interprets; human decides."
+            desc="Behavioral volatility & inconsistency insight not a psychological assessment and not a danger score. Identifies inconsistent patterns, misaligned goals, emotional unpredictability, and potential friction areas. Human interprets; human decides."
           />
 
           <Vertical
@@ -101,7 +101,7 @@ export default function MatchMetricsPage() {
 
           <Vertical
             title="MatchMetrics PartnerFit™"
-            desc="Business partner alignment for co-founders and long-term partners: vision, work ethic, pace, and communication style. No judgments—just alignment signals."
+            desc="Business partner alignment for co-founders and long-term partners: vision, work ethic, pace, and communication style. No judgments just alignment signals."
           />
 
           <Vertical

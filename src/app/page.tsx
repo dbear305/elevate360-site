@@ -59,7 +59,7 @@ export default function Home() {
           Elevate360 Systems<span className="align-super text-[0.55em]">™</span> is
           a privacy-first engineering studio focused on real-world operations,
           applied mathematics, and practical systems thinking. I don&apos;t do
-          hype—I build systems that are transparent, understandable, and grounded
+          hype I build systems that are transparent, understandable, and grounded
           in the physics and constraints of reality.
         </p>
 
@@ -90,19 +90,19 @@ export default function Home() {
         </h2>
 
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300">
-          A focused set of tools built on real field experience—each solving a
+          A focused set of tools built on real field experience each solving a
           specific operational problem instead of trying to be everything at once.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <PlatformCard
             title="Elevate360 Core Systems™"
-            desc="Real-time operational insight and fault awareness for elevators and infrastructure—shaped by someone who's actually been on the call when things go down."
+            desc="Real-time operational insight and fault awareness for elevators and infrastructure shaped by someone who's actually been on the call when things go down."
           />
 
           <PlatformCard
             title="FieldPay™"
-            desc="A wage and rules engine for field teams and complex agreements—designed so the math matches the contract and the checks match the hours."
+            desc="A wage and rules engine for field teams and complex agreements designed so the math matches the contract and the checks match the hours."
           />
 
           <PlatformCard
@@ -112,12 +112,12 @@ export default function Home() {
 
           <PlatformCard
             title="Elevate360 Ledger™"
-            desc="A traceable, transparent internal ledger concept—so you can understand what moved, when, and why without digging through three systems."
+            desc="A traceable, transparent internal ledger concept so you can understand what moved, when, and why without digging through three systems."
           />
 
           <PlatformCard
             title="MatchMetrics™ (R&D)"
-            desc="A privacy-first advisory engine designed to surface compatibility, alignment, and friction across multiple verticals—all without sending sensitive data to a third party."
+            desc="A privacy-first advisory engine designed to surface compatibility, alignment, and friction across multiple verticals all without sending sensitive data to a third party."
           />
         </div>
       </section>
@@ -130,18 +130,18 @@ export default function Home() {
 
         <p className="mt-4 max-w-2xl text-sm text-slate-300">
           These aren't roadmap slides. These are real systems and experiments
-          that have been built, run, and refined—some in active daily use, some
+          that have been built, run, and refined some in active daily use, some
           in controlled R&D.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <PlatformCard
             title="Structured trading & analytics stack"
-            desc="A disciplined testing framework with clear metrics and risk awareness. No magic buttons—just structured decision support."
+            desc="A disciplined testing framework with clear metrics and risk awareness. No magic buttons just structured decision support."
           />
           <PlatformCard
             title="FieldPay™ wage & rules modeling"
-            desc="Models real-world field pay situations including rates, conditions, job types, and contract rules—built to mirror how work actually happens."
+            desc="Models real-world field pay situations including rates, conditions, job types, and contract rules built to mirror how work actually happens."
           />
           <PlatformCard
             title="Secure, segmented infrastructure"
@@ -201,7 +201,7 @@ export default function Home() {
         <h2 className="text-3xl font-semibold text-slate-50">Built from the field up</h2>
 
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300">
-          Elevate360 Systems LLC is an independent engineering studio grounded in thousands of hours of field experience—wiring 480V motors, troubleshooting controllers, and running routes under pressure—combined with software engineering and data.
+          Elevate360 Systems LLC is an independent engineering studio grounded in thousands of hours of field experience wiring 480V motors, troubleshooting controllers, and running routes under pressure combined with software engineering and data.
         </p>
 
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300">
