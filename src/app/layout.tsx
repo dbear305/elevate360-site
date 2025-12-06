@@ -1,6 +1,6 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
-import "../globals.css";   // ← FIXED PATH
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Elevate360 Systems™",
@@ -20,8 +20,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-slate-950 text-slate-50">
-        {children}
+      <head />
+      <body className="bg-slate-950 text-slate-50 antialiased">
+        <div className="min-h-screen">{children}</div>
       </body>
     </html>
   );
