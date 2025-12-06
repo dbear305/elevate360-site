@@ -5,14 +5,16 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
 
-      {/* Header / Navigation */}
+      {/* Header */}
       <header className="border-b border-slate-800 bg-slate-900/60 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4">
-          {/* Brand */}
+
+          {/* Logo */}
           <div className="flex items-center gap-3">
             <div className="rounded-full bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-300">
               E360
             </div>
+
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-semibold text-slate-100">
                 Elevate360 Systems<span className="align-super text-[0.55em]">™</span>
@@ -23,81 +25,63 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* Desktop Navigation */}
           <nav className="hidden gap-8 text-sm text-slate-300 md:flex">
-            <a href="#platforms" className="hover:text-slate-50">
-              Platforms
-            </a>
-
-            <a href="/matchmetrics" className="hover:text-slate-50">
-              MatchMetrics
-            </a>
-
-            <a href="#built" className="hover:text-slate-50">
-              Built &amp; Running
-            </a>
-            <a href="#services" className="hover:text-slate-50">
-              Services
-            </a>
-            <a href="#about" className="hover:text-slate-50">
-              About
-            </a>
-            <a href="#contact" className="hover:text-slate-50">
-              Contact
-            </a>
+            <a href="#platforms" className="hover:text-slate-50">Platforms</a>
+            <a href="/matchmetrics" className="hover:text-slate-50">MatchMetrics</a>
+            <a href="#built" className="hover:text-slate-50">Built &amp; Running</a>
+            <a href="#services" className="hover:text-slate-50">Services</a>
+            <a href="#about" className="hover:text-slate-50">About</a>
+            <a href="#contact" className="hover:text-slate-50">Contact</a>
           </nav>
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* HERO SECTION */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <h1 className="max-w-3xl text-5xl font-semibold tracking-tight text-slate-50 md:text-6xl">
           Built from experience. <br /> Engineered with discipline.
         </h1>
 
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
-          Elevate360 Systems<span className="align-super text-[0.55em]">™</span> is
-          a privacy-first engineering studio focused on real-world operations,
-          applied mathematics, and practical systems thinking. I don&apos;t do
-          hype I build systems that are transparent, understandable, and grounded
-          in the physics and constraints of reality.
+          Elevate360 Systems<span className="align-super text-[0.55em]">™</span> is a privacy-first
+          engineering studio focused on real-world operations, applied mathematics, and practical
+          systems thinking. I do not do hype. I build systems that are transparent, understandable,
+          and grounded in the physics and constraints of reality.
         </p>
 
-        <p className="mt-4 text-sm text-slate-400">Predicting tomorrow, today.</p>
+        <p className="mt-4 text-sm text-slate-400">
+          Predicting tomorrow, today.
+        </p>
 
         <div className="mt-10 flex gap-4">
-          <a
-            href="#services"
-            className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white hover:bg-sky-500"
-          >
+          <a href="#services"
+             className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white hover:bg-sky-500">
             View consulting services
           </a>
 
-          <a
-            href="#platforms"
-            className="rounded-full border border-slate-700 px-6 py-2 text-sm font-semibold text-slate-300 hover:border-slate-500 hover:text-slate-50"
-          >
-            See what&apos;s already built
+          <a href="#platforms"
+             className="rounded-full border border-slate-700 px-6 py-2 text-sm font-semibold text-slate-300 hover:border-slate-500 hover:text-slate-50">
+            See what is already built
           </a>
         </div>
       </section>
 
-      {/* Platforms Section */}
+      {/* PLATFORM SECTION */}
       <section id="platforms" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
-          The Elevate360 Systems<span className="align-super text-[0.55em]">™</span>{" "}
-          platform
+          The Elevate360 Systems<span className="align-super text-[0.55em]">™</span> platform
         </h2>
 
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300">
-          A focused set of tools built on real field experience each solving a
-          specific operational problem instead of trying to be everything at once.
+          A focused set of tools built on real field experience, each solving a specific operational
+          problem instead of trying to be everything at once.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <PlatformCard
             title="Elevate360 Core Systems™"
-            desc="Real-time operational insight and fault awareness for elevators and infrastructure shaped by someone who's actually been on the call when things go down."
+            desc="Real-time operational insight and fault awareness for elevators and infrastructure shaped by someone who has actually been on the call when things go down."
           />
 
           <PlatformCard
@@ -112,49 +96,51 @@ export default function Home() {
 
           <PlatformCard
             title="Elevate360 Ledger™"
-            desc="A traceable, transparent internal ledger concept so you can understand what moved, when, and why without digging through three systems."
+            desc="A transparent internal ledger concept that shows what moved, when it moved, and why, without digging through three systems."
           />
 
           <PlatformCard
             title="MatchMetrics™ (R&D)"
-            desc="A privacy-first advisory engine designed to surface compatibility, alignment, and friction across multiple verticals all without sending sensitive data to a third party."
+            desc="A privacy-first advisory engine designed to surface compatibility, alignment, and friction across multiple verticals without sending sensitive data to a third party."
           />
         </div>
       </section>
 
-      {/* Built & Running */}
+      {/* BUILT AND RUNNING */}
       <section id="built" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
-          What&apos;s actually running today
+          What is actually running today
         </h2>
 
         <p className="mt-4 max-w-2xl text-sm text-slate-300">
-          These aren't roadmap slides. These are real systems and experiments
-          that have been built, run, and refined some in active daily use, some
-          in controlled R&D.
+          These are real systems and experiments that have been built, run, and refined. Some are in
+          active daily use, others in controlled R&D.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <PlatformCard
-            title="Structured trading & analytics stack"
-            desc="A disciplined testing framework with clear metrics and risk awareness. No magic buttons just structured decision support."
+            title="Structured trading and analytics stack"
+            desc="A disciplined testing framework with clear metrics and risk awareness. No magic buttons, just structured decision support."
           />
+
           <PlatformCard
-            title="FieldPay™ wage & rules modeling"
-            desc="Models real-world field pay situations including rates, conditions, job types, and contract rules built to mirror how work actually happens."
+            title="FieldPay™ wage and rules modeling"
+            desc="Models real-world field pay situations including rates, conditions, job types, and contract rules. Built to reflect how work happens in the real world."
           />
+
           <PlatformCard
             title="Secure, segmented infrastructure"
-            desc="A hardened environment for tools and experiments, separating personal systems, trading systems, and operational systems."
+            desc="A hardened environment for tools and experiments, clearly separating personal systems, trading systems, and operational systems."
           />
+
           <PlatformCard
-            title="Internal logging & audit trails"
-            desc="A habit and framework of logging key decisions and changes so the system makes sense later without guessing."
+            title="Internal logging and audit trails"
+            desc="A structured habit of logging key decisions and changes so the system always makes sense in hindsight."
           />
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* SERVICES */}
       <section id="services" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
           Work with Elevate360 Systems
@@ -162,61 +148,69 @@ export default function Home() {
 
         <p className="mt-4 max-w-2xl text-sm text-slate-300">
           These engagements are for teams that want a serious engineer to examine their systems,
-          tell the truth, and give a concrete path forward.
+          tell the truth, and provide a concrete path forward.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <ServiceCard
-            title="Systems Diagnostic & Triage"
+            title="Systems Diagnostic and Triage"
             range="$800–$1,500"
             points={[
               "60–90 minute working session",
-              "Identify failure modes & what’s actually causing pain",
-              "Immediate fixes & suggested next steps"
+              "Identify failure modes and what is actually causing pain",
+              "Immediate fixes and recommended next steps"
             ]}
           />
+
           <ServiceCard
-            title="Blueprint & Design Session"
+            title="Blueprint and Design Session"
             range="$1,500–$3,000"
             points={[
-              "Operational & data-flow mapping",
-              "Security & reliability considerations",
-              "A clear written blueprint you can execute on"
+              "Operational and data-flow mapping",
+              "Security and reliability considerations",
+              "A clear, written blueprint you can execute on"
             ]}
           />
+
           <ServiceCard
-            title="Architecture & Roadmap"
+            title="Architecture and Roadmap"
             range="$4,500–$10,000"
             points={[
               "12–24 month roadmap",
-              "Trade-offs & risk modeling",
-              "Build vs. buy recommendations"
+              "Trade-off and risk modeling",
+              "Build versus buy recommendations"
             ]}
           />
         </div>
       </section>
 
-      {/* About Section */}
+      {/* ABOUT */}
       <section id="about" className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-3xl font-semibold text-slate-50">Built from the field up</h2>
+        <h2 className="text-3xl font-semibold text-slate-50">
+          Built from the field up
+        </h2>
 
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300">
-          Elevate360 Systems LLC is an independent engineering studio grounded in thousands of hours of field experience wiring 480V motors, troubleshooting controllers, and running routes under pressure combined with software engineering and data.
+          Elevate360 Systems LLC is grounded in thousands of hours spent wiring 480V motors,
+          troubleshooting controllers, working under pressure, and integrating that field experience
+          with software engineering and data.
         </p>
 
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300">
-          The intent isn&apos;t to be the flashiest system in the room. It&apos;s to be the one that still makes sense a year later when you&apos;re trying to understand what happened.
+          The goal is not to be the flashiest system in the room. The goal is to be the one that
+          still makes sense a year later when you are trying to understand what actually happened.
         </p>
       </section>
 
-      {/* Contact */}
+      {/* CONTACT */}
       <section id="contact" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
           See if Elevate360 Systems is a fit
         </h2>
 
         <p className="mt-4 max-w-xl text-sm text-slate-300">
-          If you're running elevators, field teams, trading flows, or complex operations and you're tired of software that looks good in a demo but falls apart in the real world, let's talk.
+          If you are running elevators, field teams, trading flows, or complex operations and are
+          tired of software that looks good in a demo but falls apart in the real world, let’s talk.
         </p>
 
         <div className="mt-8 flex gap-4">
@@ -236,11 +230,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <footer className="border-t border-slate-800 py-8 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} Elevate360 Systems LLC. Privacy-first engineering.
-        No hype. No lies.
+        © {new Date().getFullYear()} Elevate360 Systems LLC. Privacy-first engineering. No hype. No lies.
       </footer>
+
     </main>
   );
 }
@@ -248,7 +242,7 @@ export default function Home() {
 /* Reusable Cards */
 function PlatformCard({
   title,
-  desc,
+  desc
 }: {
   title: string;
   desc: string;
@@ -264,7 +258,7 @@ function PlatformCard({
 function ServiceCard({
   title,
   range,
-  points,
+  points
 }: {
   title: string;
   range: string;
