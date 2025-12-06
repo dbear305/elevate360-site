@@ -4,12 +4,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Elevate360 Systems™",
-  description:
-    "Privacy-first engineering for real-world operations, applied mathematics, and practical systems thinking.",
+  description: "Privacy-first engineering for real-world operations.",
   openGraph: {
     title: "Elevate360 Systems™",
-    description:
-      "Privacy-first engineering for real-world operations, applied mathematics, and practical systems thinking.",
+    description: "Privacy-first engineering for real-world operations.",
     url: "https://elevate360systems.com",
     siteName: "Elevate360 Systems™",
     type: "website",
@@ -19,14 +17,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-slate-950 text-slate-50">
+      <body className="bg-slate-950 text-slate-50 antialiased">
         {children}
       </body>
     </html>
