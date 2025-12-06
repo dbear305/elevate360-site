@@ -1,31 +1,30 @@
+// src/app/page.tsx
 "use client";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
 
-      {/* Header */}
+      {/* Header / Navigation */}
       <header className="border-b border-slate-800 bg-slate-900/60 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4">
-          
+
           {/* Brand */}
           <div className="flex items-center gap-3">
             <div className="rounded-full bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-300">
               E360
             </div>
-
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-semibold text-slate-100">
                 Elevate360 Systems<span className="align-super text-[0.55em]">™</span>
               </span>
-
               <span className="text-[0.65rem] tracking-wide text-slate-400">
                 PREDICTING TOMORROW, TODAY.
               </span>
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* Nav */}
           <nav className="hidden gap-8 text-sm text-slate-300 md:flex">
             <a href="#platforms" className="hover:text-slate-50">Platforms</a>
             <a href="/matchmetrics" className="hover:text-slate-50">MatchMetrics</a>
@@ -34,46 +33,47 @@ export default function Home() {
             <a href="#about" className="hover:text-slate-50">About</a>
             <a href="#contact" className="hover:text-slate-50">Contact</a>
           </nav>
+
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* HERO SECTION */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <h1 className="max-w-3xl text-5xl font-semibold tracking-tight text-slate-50 md:text-6xl">
           Built from experience. <br /> Engineered with discipline.
         </h1>
 
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
-          Elevate360 Systems<span className="align-super text-[0.55em]">™</span> is a privacy-first engineering studio focused on real-world operations, applied mathematics, and practical systems thinking. I do not do hype. I build systems that are transparent, understandable, and grounded in physics and reality.
+          Elevate360 Systems<span className="align-super text-[0.55em]">™</span> is a privacy-first engineering
+          studio focused on real-world operations, applied mathematics, and practical systems thinking. I do not
+          do hype. I build systems that are transparent, understandable, and grounded in the physics and constraints
+          of reality.
         </p>
 
         <p className="mt-4 text-sm text-slate-400">Predicting tomorrow, today.</p>
 
         <div className="mt-10 flex gap-4">
-          <a
-            href="#services"
-            className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white hover:bg-sky-500"
-          >
+          <a href="#services"
+            className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white hover:bg-sky-500">
             View consulting services
           </a>
 
-          <a
-            href="#platforms"
-            className="rounded-full border border-slate-700 px-6 py-2 text-sm font-semibold text-slate-300 hover:border-slate-500 hover:text-slate-50"
-          >
+          <a href="#platforms"
+            className="rounded-full border border-slate-700 px-6 py-2 text-sm font-semibold text-slate-300 hover:border-slate-500 hover:text-slate-50">
             See what's already built
           </a>
         </div>
       </section>
 
-      {/* Platforms Section */}
+      {/* PLATFORMS */}
       <section id="platforms" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
           The Elevate360 Systems<span className="align-super text-[0.55em]">™</span> platform
         </h2>
 
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300">
-          A focused set of tools built on real field experience, each solving a specific operational problem instead of trying to be everything at once.
+          A focused set of tools built on real field experience, each solving a
+          specific operational problem instead of trying to be everything at once.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -95,12 +95,12 @@ export default function Home() {
           />
           <PlatformCard
             title="MatchMetrics™ (R&D)"
-            desc="A privacy-first advisor surfacing compatibility, alignment, and friction — without needing to send sensitive data."
+            desc="A privacy-first advisor surfacing compatibility, alignment, and friction without sending sensitive data to a third party."
           />
         </div>
       </section>
 
-      {/* Built & Running */}
+      {/* BUILT & RUNNING */}
       <section id="built" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
           What’s actually running today
@@ -130,7 +130,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services */}
+      {/* SERVICES */}
       <section id="services" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
           Work with Elevate360 Systems
@@ -146,7 +146,7 @@ export default function Home() {
             range="$800–$1,500"
             points={[
               "60–90 minute working session",
-              "Identify failure modes",
+              "Identify failure modes and root causes",
               "Immediate fixes and next steps",
             ]}
           />
@@ -154,8 +154,8 @@ export default function Home() {
             title="Blueprint & Design Session"
             range="$1,500–$3,000"
             points={[
-              "Operational & data-flow mapping",
-              "Security & reliability considerations",
+              "Operational and data-flow mapping",
+              "Security and reliability modeling",
               "A clear written blueprint",
             ]}
           />
@@ -164,43 +164,41 @@ export default function Home() {
             range="$4,500–$10,000"
             points={[
               "12–24 month roadmap",
-              "Risk modeling",
-              "Build vs. buy analysis",
+              "Risk modeling and trade-offs",
+              "Build vs buy recommendations",
             ]}
           />
         </div>
       </section>
 
-      {/* About */}
+      {/* ABOUT */}
       <section id="about" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
           Built from the field up
         </h2>
-
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300">
-          Elevate360 Systems LLC is grounded in thousands of hours wiring 480V motors, troubleshooting controllers, and running routes under pressure — combined with software engineering and data.
+          Elevate360 Systems LLC is grounded in thousands of hours wiring 480V motors,
+          troubleshooting controllers, and running routes under pressure combined with
+          software engineering and data.
         </p>
-
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300">
-          The intent isn’t to be the flashiest. It's to be the system that still makes sense a year later when things go wrong.
+          The intent is not to be the flashiest. It is to be the system that still
+          makes sense a year later when you are trying to understand what actually happened.
         </p>
       </section>
 
-      {/* Contact */}
+      {/* CONTACT */}
       <section id="contact" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-slate-50">
           See if Elevate360 Systems is a fit
         </h2>
-
         <p className="mt-4 max-w-xl text-sm text-slate-300">
-          If you're running elevators, field teams, trading flows, or complex operations and want clarity instead of confusion — reach out.
+          If you're running elevators, field teams, trading flows, or complex operations and want clarity instead of confusion, reach out anytime.
         </p>
 
         <div className="mt-8 flex gap-4">
-          <a
-            href="mailto:DanielBerriel@elevate360systems.com"
-            className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white hover:bg-sky-500"
-          >
+          <a href="mailto:DanielBerriel@elevate360systems.com"
+            className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white hover:bg-sky-500">
             Email Elevate360 Systems
           </a>
 
@@ -213,13 +211,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FOOTER */}
       <footer className="border-t border-slate-800 py-8 text-center text-xs text-slate-500">
         © {new Date().getFullYear()} Elevate360 Systems LLC. Privacy-first engineering. No hype. No lies.
       </footer>
+
     </main>
   );
 }
 
+/* Reusable Cards */
 function PlatformCard({ title, desc }: { title: string; desc: string }) {
   return (
     <article className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">

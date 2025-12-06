@@ -1,20 +1,16 @@
-/* Tailwind base layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Optional: Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Optional: Improve font rendering */
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Remove focus outlines only for mouse users */
 :focus:not(:focus-visible) {
   outline: none;
 }

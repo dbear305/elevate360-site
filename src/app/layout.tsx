@@ -1,13 +1,15 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
-import "./globals.css";   // ← FIXED PATH
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Elevate360 Systems™",
-  description: "Privacy-first engineering for real-world operations.",
+  description:
+    "Privacy-first engineering for real-world operations, field systems, analytics, and decision clarity.",
   openGraph: {
     title: "Elevate360 Systems™",
-    description: "Privacy-first engineering for real-world operations.",
+    description:
+      "Privacy-first engineering for real-world operations, field teams, analytics, and real decision clarity.",
     url: "https://elevate360systems.com",
     siteName: "Elevate360 Systems™",
     type: "website",
@@ -24,7 +26,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
       <body className="bg-slate-950 text-slate-50 antialiased">
         {children}
       </body>
