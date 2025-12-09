@@ -186,30 +186,36 @@ export default function Home() {
           makes sense a year later when you are trying to understand what actually happened.
         </p>
       </section>
+    {/* CONTACT */}
+<section id="contact" className="mx-auto max-w-6xl px-4 py-16">
+  <h2 className="text-3xl font-semibold text-slate-50">
+    See if Elevate360 Systems is a fit
+  </h2>
 
-      {/* CONTACT */}
-      <section id="contact" className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-3xl font-semibold text-slate-50">
-          See if Elevate360 Systems is a fit
-        </h2>
-        <p className="mt-4 max-w-xl text-sm text-slate-300">
-          If you're running elevators, field teams, trading flows, or complex operations and want clarity instead of confusion, reach out anytime.
-        </p>
+  <p className="mt-4 max-w-xl text-sm text-slate-300">
+    If you're running elevators, field teams, trading flows, or complex operations 
+    and want clarity instead of confusion, reach out anytime.
+  </p>
 
-        <div className="mt-8 flex gap-4">
-          <a href="mailto:DanielBerriel@elevate360systems.com"
-            className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white hover:bg-sky-500">
-            Email Elevate360 Systems
-          </a>
+  <div className="mt-8 flex flex-wrap gap-4">
+    <a
+      href="mailto:contact@elevate360systems.com"
+      className="rounded-full bg-sky-600 px-6 py-2 text-sm font-semibold text-white 
+                 hover:bg-sky-500 transition-colors duration-150"
+    >
+      Email Elevate360 Systems
+    </a>
 
-          <a
-            href="#services"
-            className="rounded-full border border-slate-700 px-6 py-2 text-sm font-semibold text-slate-300 hover:border-slate-500 hover:text-slate-50"
-          >
-            Review service options
-          </a>
-        </div>
-      </section>
+    <a
+      href="#services"
+      className="rounded-full border border-slate-700 px-6 py-2 text-sm font-semibold 
+                 text-slate-300 hover:border-slate-500 hover:text-slate-50 transition-colors duration-150"
+    >
+      Review service options
+    </a>
+  </div>
+</section>
+
 
       {/* FOOTER */}
       <footer className="border-t border-slate-800 py-8 text-center text-xs text-slate-500">
