@@ -6,7 +6,7 @@ import React from "react";
 export const metadata: Metadata = {
   title: "Elevate360 Systems™",
   description:
-    "Privacy-first engineering for real-world systems. Secure software, automation, applied mathematics, and infrastructure — built with clarity, discipline, and real-world experience.",
+    "Privacy-first engineering for real-world systems. Secure software, automation, applied mathematics, and infrastructure — built with clarity and discipline.",
   metadataBase: new URL("https://elevate360systems.com"),
   alternates: {
     canonical: "https://elevate360systems.com",
@@ -18,12 +18,12 @@ export const metadata: Metadata = {
     url: "https://elevate360systems.com",
     siteName: "Elevate360 Systems™",
     type: "website",
-    images: ["/e360favicon.png"], // OG preview image
+    images: ["/e360.png"], // Crisp logo for social share
   },
   icons: {
-    icon: "/e360favicon.png", // Favicon + navbar logo source
-    shortcut: "/e360favicon.png",
-    apple: "/e360favicon.png",
+    icon: "/icon.png",       // 32x32 favicon
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
 };
 
@@ -35,19 +35,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-slate-950 text-slate-50 antialiased">
+        
         {/* === NAVBAR === */}
         <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-md sticky top-0 z-50">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
             
             {/* LEFT — LOGO + TITLE + MOTTO */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Image
-                src="/e360favicon.png"
+                src="/e360.png"   // HD Logo for navbar
                 alt="Elevate360 Systems Logo"
-                width={36}
-                height={36}
+                width={40}
+                height={40}
                 priority
-                className="rounded-xl shadow-sm"
+                className="rounded-xl"
+                style={{ objectFit: "cover" }}
               />
 
               <div className="flex flex-col leading-tight">
