@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     url: "https://elevate360systems.com",
     siteName: "Elevate360 Systems™",
     type: "website",
-    images: ["/e360.png"], // Crisp logo for social share
+    images: ["/e360.svg"], // Crisp logo for social share
   },
   icons: {
     icon: "/icon.png",       // 32x32 favicon
@@ -43,7 +43,7 @@ export default function RootLayout({
             {/* LEFT — LOGO + TITLE + MOTTO */}
             <div className="flex items-center gap-4">
               <Image
-                src="/e360.png"   // HD Logo for navbar
+                src="/e360.svg"   // HD Logo for navbar
                 alt="Elevate360 Systems Logo"
                 width={40}
                 height={40}
