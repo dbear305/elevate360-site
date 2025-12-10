@@ -45,12 +45,12 @@ export default function RootLayout({
               <Image
                 src="/logo.png"
                 alt="Elevate360 Systems Logo"
-                width={46}
-                height={46}
+                width={40}
+                height={40}
                 priority
-                className="w-auto h-11"
-                style={{ objectFit: "contain" }}
-              />
+                className="h-10 w-auto select-none"
+               />
+
 
               <div className="flex flex-col leading-none">
                 <span className="text-base font-semibold tracking-wide text-slate-100">
@@ -85,7 +85,7 @@ export default function RootLayout({
                src="/logo.png"
                alt="Elevate360 Systems Logo"
                height={46}
-               width={0}
+               width={46}
                priority
                className="h-11 w-auto select-none"
                style={{ objectFit: "contain" }}
