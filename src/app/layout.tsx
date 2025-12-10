@@ -18,12 +18,12 @@ export const metadata: Metadata = {
     url: "https://elevate360systems.com",
     siteName: "Elevate360 Systems™",
     type: "website",
-    images: ["/e360.svg"], // Crisp logo for social share
+    images: ["/logo.png"], // NEW SOCIAL PREVIEW IMAGE
   },
   icons: {
-    icon: "/icon.png",       // 32x32 favicon
-    shortcut: "/icon.png",
-    apple: "/icon.png",
+    icon: "/logo.png",       // 32x32 favicon
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
@@ -43,21 +43,21 @@ export default function RootLayout({
             {/* LEFT — LOGO + TITLE + MOTTO */}
             <div className="flex items-center gap-4">
               <Image
-                src="/e360.svg"   // HD Logo for navbar
+                src="/logo.png"   // HD Logo for navbar
                 alt="Elevate360 Systems Logo"
-                width={40}
-                height={40}
+                width={46}
+                height={46}
                 priority
-                className="rounded-xl"
-                style={{ objectFit: "cover" }}
+                className="w-auto h-11"
+                style={{ objectFit: "contain" }}
               />
 
-              <div className="flex flex-col leading-tight">
+              <div className="flex flex-col leading-none">
                 <span className="text-base font-semibold tracking-wide text-slate-100">
                   Elevate360 Systems™
                 </span>
                 <span className="text-[10px] tracking-[0.22em] uppercase text-slate-400">
-                  Predicting Tomorrow, Today.
+                  Predicting Tomorrow Today
                 </span>
               </div>
             </div>
