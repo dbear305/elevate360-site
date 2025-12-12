@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -9,11 +9,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: "https://elevate360systems.com/matchmetrics",
+      url: "https://elevate360systems.com/engineering-consulting",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    // Add more pages here as your site grows...
+    {
+      url: "https://elevate360systems.com/matchmetrics",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
   ];
 }
