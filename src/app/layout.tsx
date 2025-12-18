@@ -4,23 +4,22 @@ import Image from "next/image";
 import React from "react";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.elevate360systems.com"),
   title: "Elevate360 Systems™",
   description:
     "Privacy-first engineering for real-world systems. Secure software, automation, applied mathematics, cybersecurity, and infrastructure — built with clarity and discipline.",
-  metadataBase: new URL("https://www.elevate360systems.com"),
   alternates: {
     canonical: "https://www.elevate360systems.com",
   },
   openGraph: {
     title: "Elevate360 Systems™",
-    description:
-      "Engineering • Cybersecurity • Applied Mathematics — Privacy-first engineering for real-world systems.",
+    description: "Engineering real-world systems.",
     url: "https://www.elevate360systems.com",
     siteName: "Elevate360 Systems™",
     type: "website",
     images: [
       {
-        url: "/og.png",
+        url: "https://www.elevate360systems.com/og.jpg",
         width: 1200,
         height: 630,
         alt: "Elevate360 Systems™",
@@ -30,9 +29,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Elevate360 Systems™",
-    description:
-      "Privacy-first engineering for real-world systems.",
-    images: ["/og.png"],
+    description: "Engineering real-world systems.",
+    images: ["https://www.elevate360systems.com/og.jpg"],
   },
   icons: {
     icon: "/favicon.png",
@@ -59,8 +57,8 @@ export default function RootLayout({
               name: "Elevate360 Systems™",
               legalName: "Elevate360 Systems LLC",
               url: "https://www.elevate360systems.com",
-              logo: "https://www.elevate360systems.com/og.png",
-              image: "https://www.elevate360systems.com/og.png",
+              logo: "https://www.elevate360systems.com/og.jpg",
+              image: "https://www.elevate360systems.com/og.jpg",
               description:
                 "Privacy-first engineering studio specializing in secure software, automation, applied mathematics, cybersecurity, and resilient infrastructure.",
               telephone: "+1-305-209-0418",
@@ -111,7 +109,7 @@ export default function RootLayout({
               "@type": "Organization",
               name: "Elevate360 Systems™",
               url: "https://www.elevate360systems.com",
-              logo: "https://www.elevate360systems.com/og.png",
+              logo: "https://www.elevate360systems.com/og.jpg",
               contactPoint: [
                 {
                   "@type": "ContactPoint",
@@ -125,7 +123,7 @@ export default function RootLayout({
       </head>
 
       <body className="bg-slate-950 text-slate-50 antialiased">
-        {/* === NAVBAR === */}
+        {/* NAVBAR */}
         <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-md sticky top-0 z-50">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
             <div className="flex items-center gap-4">
@@ -166,7 +164,7 @@ export default function RootLayout({
 
         <main>{children}</main>
 
-        {/* === FOOTER === */}
+        {/* FOOTER */}
         <footer className="border-t border-slate-800 mt-28 py-12 bg-slate-950">
           <div className="mx-auto max-w-6xl px-4 flex flex-col md:flex-row justify-between gap-10">
             <div className="flex items-center gap-4">
