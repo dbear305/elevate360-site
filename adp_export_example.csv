@@ -1,0 +1,9 @@
+employee_id,date,adp_code,pay_code,hours,multiplier,notes
+1001,2025-11-10,E17,SERVICE_1_7,2.00,1.7,Service callback Mon–Sat (2h min)
+1001,2025-11-10,E01,REG,8.00,1.0,Service REG (first 8h Mon–Fri)
+1001,2025-11-10,E17,SERVICE_1_7,0.50,1.7,Service overtime Mon–Fri (>8h)
+1002,2025-11-13,E01,REG,10.00,1.0,Mod/Const REG hours (<=10h inside 06:00–18:00)
+1002,2025-11-13,E20,DT_2_0,2.00,2.0,Mod/Const DT (outside window or >10h)
+1003,2025-12-25,H01,HOLIDAY_REG,8.00,1.0,Paid holiday credit
+1003,2025-12-25,H20,HOLIDAY_DT,2.00,2.0,Holiday callback (2h min)
+1003,2025-12-25,H20,HOLIDAY_DT,4.00,2.0,Holiday work/travel
