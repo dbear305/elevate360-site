@@ -18,11 +18,11 @@ export default function HomePage() {
             className="text-sky-400 underline hover:text-sky-300 transition"
           >
             engineering consulting for real-world systems
-          </a>
-          {" "}across secure software, cybersecurity hardening, workflow automation,
-          applied mathematics, and infrastructure design. Every system is engineered
-          for clarity, durability, and operational integrity — built to perform where
-          most software breaks, with no hype, no noise, and no data selling.
+          </a>{" "}
+          across secure software, cybersecurity hardening, workflow automation,
+          applied mathematics, and infrastructure design. Every system is built
+          for clarity, durability, and operational integrity — with no hype, no
+          noise, and no data selling.
         </p>
 
         {/* PRIMARY CTAs */}
@@ -31,23 +31,15 @@ export default function HomePage() {
             href="/engineering-consulting"
             className="rounded-full bg-sky-600 px-8 py-3 text-sm font-semibold text-white hover:bg-sky-500 transition"
           >
-            Engineering Consulting Services
+            Engineering Consulting
           </a>
 
           <a
-            href="#products"
+            href="#platforms"
             className="rounded-full border border-slate-700 px-8 py-3 text-sm font-semibold
               text-slate-300 hover:border-slate-500 hover:text-slate-50 transition"
           >
             Explore Platforms
-          </a>
-
-          <a
-            href="/matchmetrics"
-            className="rounded-full border border-sky-600 px-8 py-3 text-sm font-semibold
-              text-sky-400 hover:bg-sky-600 hover:text-white transition"
-          >
-            MatchMetrics
           </a>
         </div>
 
@@ -56,7 +48,7 @@ export default function HomePage() {
           <div>
             <p className="text-xs uppercase tracking-widest text-slate-400">Focus</p>
             <p className="font-medium text-slate-100">
-              Engineering consulting, cybersecurity, automation systems
+              Engineering, cybersecurity, automation systems
             </p>
           </div>
 
@@ -84,7 +76,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================= */}
-      {/*       SERVICES HUB        */}
+      {/*        SERVICES           */}
       {/* ========================= */}
       <section className="mt-28" id="services">
         <h2 className="text-3xl font-bold tracking-tight text-slate-50">
@@ -92,15 +84,10 @@ export default function HomePage() {
         </h2>
 
         <p className="mt-4 max-w-2xl text-base text-slate-300">
-          Our{" "}
-          <a
-            href="/engineering-consulting"
-            className="text-sky-400 underline hover:text-sky-300 transition"
-          >
-            engineering consulting practice
-          </a>
-          {" "}supports teams operating in environments where reliability, security,
-          and clarity matter more than demos or slide decks.
+          We work with teams operating in environments where reliability,
+          security, and clarity matter more than demos or slide decks. Our
+          consulting engagements focus on systems that must perform under real
+          constraints.
         </p>
 
         <div className="mt-8">
@@ -109,47 +96,52 @@ export default function HomePage() {
             className="inline-block rounded-full border border-sky-600 px-6 py-3
               text-sm font-semibold text-sky-400 hover:bg-sky-600 hover:text-white transition"
           >
-            View Engineering Consulting Details
+            View Engineering Consulting
           </a>
         </div>
       </section>
 
       {/* ========================= */}
-      {/*         PLATFORMS         */}
+      {/*        PLATFORMS          */}
       {/* ========================= */}
-      <section id="products" className="mt-28">
+      <section id="platforms" className="mt-28">
         <h2 className="text-3xl font-bold tracking-tight text-slate-50">
-          Operational Platforms Built From the Field Up
+          Operational Platforms
         </h2>
 
         <p className="mt-4 max-w-2xl text-base text-slate-300">
-          The Elevate360 ecosystem includes operational platforms engineered from
-          scratch — no templates, no external dependencies, and no data harvesting.
+          In addition to consulting, Elevate360 builds internal platforms that
+          solve recurring operational problems with transparency and discipline.
+          These tools are designed from the field up — not as generic SaaS.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5">
+          {/* FieldPay */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
             <h3 className="text-sm font-semibold text-slate-50">FieldPay™</h3>
             <p className="mt-3 text-xs text-slate-300">
-              Rule-driven payroll and time logic for field teams with transparency,
-              structure, and accuracy.
+              Vendor-agnostic payroll logic for field operations. Technician-visible
+              pay previews, supervisor review and override, and audit-ready
+              breakdowns that prevent payroll disputes before they happen.
             </p>
+
+            <a
+              href="/fieldpay"
+              className="mt-4 inline-block rounded-full border border-sky-600 px-5 py-2
+                text-xs font-semibold text-sky-400 hover:bg-sky-600 hover:text-white transition"
+            >
+              Explore FieldPay
+            </a>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5">
-            <h3 className="text-sm font-semibold text-slate-50">Ledger360</h3>
-            <p className="mt-3 text-xs text-slate-300">
-              Local-first operational accounting with full data ownership and
-              verifiable structure.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5">
+          {/* MatchMetrics */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
             <h3 className="text-sm font-semibold text-slate-50">MatchMetrics™</h3>
             <p className="mt-3 text-xs text-slate-300">
-              Real-time alignment analytics scoring behavioral patterns, values,
-              and long-term stability.
+              Advisory-only analytics for decision clarity across relationships,
+              teams, and work. Privacy-first, non-diagnostic, and human-controlled
+              by design.
             </p>
 
             <a
@@ -160,36 +152,47 @@ export default function HomePage() {
               Explore MatchMetrics
             </a>
           </div>
+
+          {/* Placeholder / Future */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-6">
+            <h3 className="text-sm font-semibold text-slate-50">Additional Platforms</h3>
+            <p className="mt-3 text-xs text-slate-400">
+              Additional operational tooling and analytics platforms are developed
+              internally and introduced selectively through consulting engagements.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* ========================= */}
-      {/*          CONTACT          */}
+      {/*        CONTACT            */}
       {/* ========================= */}
       <section id="contact" className="mt-32 mb-20">
         <h2 className="text-3xl font-bold tracking-tight text-slate-50">
-          Start an Engineering Engagement
+          Start a Conversation
         </h2>
 
         <p className="mt-4 max-w-2xl text-base text-slate-300">
-          If you need clarity, security, or operational reliability, reach out and
-          we’ll define the fastest path to a durable solution.
+          If you’re dealing with fragile systems, unclear payroll logic, or
+          operational tooling that no longer scales, reach out. We’ll assess the
+          problem and determine whether an engineering engagement or platform
+          pilot makes sense.
         </p>
 
         <div className="mt-12 flex flex-wrap gap-4">
           <a
-            href="/engineering-consulting"
+            href="mailto:contact@elevate360systems.com"
             className="rounded-full bg-sky-600 px-8 py-3 text-sm font-semibold text-white hover:bg-sky-500 transition"
           >
-            Engineering Consulting
+            Contact Elevate360
           </a>
 
           <a
-            href="mailto:contact@elevate360systems.com"
+            href="/fieldpay"
             className="rounded-full border border-slate-700 px-8 py-3 text-sm font-semibold
               text-slate-300 hover:border-slate-500 hover:text-slate-50 transition"
           >
-            Contact Elevate360
+            View FieldPay
           </a>
         </div>
       </section>
