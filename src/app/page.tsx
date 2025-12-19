@@ -25,7 +25,6 @@ export default function HomePage() {
           noise, and no data selling.
         </p>
 
-        {/* PRIMARY CTAs */}
         <div className="mt-10 flex flex-wrap gap-4">
           <a
             href="/engineering-consulting"
@@ -43,7 +42,6 @@ export default function HomePage() {
           </a>
         </div>
 
-        {/* SUMMARY GRID */}
         <div className="mt-14 grid max-w-xl grid-cols-2 gap-6 text-sm text-slate-300">
           <div>
             <p className="text-xs uppercase tracking-widest text-slate-400">Focus</p>
@@ -117,7 +115,6 @@ export default function HomePage() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
 
-          {/* FieldPay */}
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
             <h3 className="text-sm font-semibold text-slate-50">FieldPay™</h3>
             <p className="mt-3 text-xs text-slate-300">
@@ -135,7 +132,6 @@ export default function HomePage() {
             </a>
           </div>
 
-          {/* MatchMetrics */}
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
             <h3 className="text-sm font-semibold text-slate-50">MatchMetrics™</h3>
             <p className="mt-3 text-xs text-slate-300">
@@ -153,7 +149,6 @@ export default function HomePage() {
             </a>
           </div>
 
-          {/* Placeholder / Future */}
           <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-6">
             <h3 className="text-sm font-semibold text-slate-50">Additional Platforms</h3>
             <p className="mt-3 text-xs text-slate-400">
@@ -161,6 +156,45 @@ export default function HomePage() {
               internally and introduced selectively through consulting engagements.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* ========================= */}
+      {/*   START AN ENGAGEMENT     */}
+      {/* ========================= */}
+      <section className="mt-28 rounded-2xl border border-slate-800 bg-slate-900/40 p-8">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-50">
+          A Simple Way to Start
+        </h2>
+
+        <p className="mt-4 max-w-3xl text-base text-slate-300">
+          Most engagements begin with a short monthly engagement. This provides
+          priority access, rapid response, and hands-on engineering support
+          without a long-term commitment.
+        </p>
+
+        <p className="mt-3 max-w-3xl text-sm text-slate-400">
+          This is typically how teams validate FieldPay and determine whether a
+          larger engagement makes sense.
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-4">
+          <a
+            href="https://buy.stripe.com/eVqaEY2I9fKx5ZE8ta8so02"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-sky-600 px-8 py-3 text-sm font-semibold text-white hover:bg-sky-500 transition"
+          >
+            Start Monthly Engagement — $1,195
+          </a>
+
+          <a
+            href="/fieldpay"
+            className="rounded-full border border-slate-700 px-8 py-3 text-sm font-semibold
+              text-slate-300 hover:border-slate-500 hover:text-slate-50 transition"
+          >
+            Learn About FieldPay
+          </a>
         </div>
       </section>
 
