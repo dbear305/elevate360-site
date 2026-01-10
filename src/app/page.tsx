@@ -74,6 +74,60 @@ export default function HomePage() {
       </section>
 
       {/* ========================= */}
+      {/*  SYSTEMS I DESIGN & BUILD */}
+      {/* ========================= */}
+      <section className="mt-28">
+        <h2 className="text-3xl font-bold tracking-tight text-slate-50">
+          Systems I Design and Build
+        </h2>
+
+        <p className="mt-4 max-w-3xl text-base text-slate-300">
+          I design and implement production systems end-to-end — from infrastructure
+          and backend logic to frontend interfaces and operational tooling.
+          Engagements are implementation-led and built to survive real-world
+          constraints, misuse, and failure modes.
+        </p>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+            <h3 className="text-sm font-semibold text-slate-50">
+              Backend & Logic
+            </h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
+              <li>Deterministic rule engines</li>
+              <li>APIs, data modeling, and state management</li>
+              <li>Event-driven workflows</li>
+              <li>Failure handling and edge cases</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+            <h3 className="text-sm font-semibold text-slate-50">
+              Infrastructure & Security
+            </h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
+              <li>Secure deployments and access control</li>
+              <li>Network isolation and hardening</li>
+              <li>Secrets and key management</li>
+              <li>Operational observability</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+            <h3 className="text-sm font-semibold text-slate-50">
+              Frontend & Interfaces
+            </h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
+              <li>Operator-facing production interfaces</li>
+              <li>Error-aware workflows</li>
+              <li>Performance-first UI design</li>
+              <li>Clarity over visual noise</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================= */}
       {/*        SERVICES           */}
       {/* ========================= */}
       <section className="mt-28" id="services">
