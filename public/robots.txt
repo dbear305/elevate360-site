@@ -1,4 +1,12 @@
-User-agent: *
-Allow: /
+import type { MetadataRoute } from "next";
 
-Sitemap: https://elevate360systems.com/sitemap.xml
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+    },
+    sitemap: "https://elevate360systems.com/sitemap.xml",
+    host: "https://elevate360systems.com",
+  };
+}
