@@ -5,11 +5,11 @@ export const metadata: Metadata = {
   title: "Elevate360 Systems",
   description:
     "Secure, low-latency network systems built for real environments. Network security, segmentation, and performance engineering.",
-
   icons: {
     icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
-
   openGraph: {
     title: "Elevate360 Systems",
     description:
@@ -21,11 +21,11 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
+        alt: "Elevate360 Systems",
       },
     ],
     type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
     title: "Elevate360 Systems",
@@ -34,3 +34,15 @@ export const metadata: Metadata = {
     images: ["/og.png"],
   },
 };
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
