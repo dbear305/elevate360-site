@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://elevate360systems.com"),
   title: "Elevate360 Systems",
   description:
     "Secure, low-latency network systems built for real environments. Network security, segmentation, and performance engineering.",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "Elevate360 Systems",
     images: [
       {
-        url: "/og.png",
+        url: "/opgraph.png",
         width: 1200,
         height: 630,
         alt: "Elevate360 Systems",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     title: "Elevate360 Systems",
     description:
       "Secure, low-latency network systems built for real environments.",
-    images: ["/og.png"],
+    images: ["/opgraph.png"],
   },
 };
 
