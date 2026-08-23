@@ -3,7 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
-const siteUrl = "https://elevate360systems.com";
+const siteUrl = "https://www.elevate360systems.com";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -17,7 +17,7 @@ const organizationJsonLd = {
   email: "contact@elevate360systems.com",
   telephone: "+1-786-312-7320",
   description:
-    "Secure, low-latency network systems, private routing, segmentation, firewall architecture, and performance engineering.",
+    "Secure infrastructure, custom software, workflow automation, network diagnostics, and operational systems built around real-world problems.",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Miami",
@@ -38,12 +38,17 @@ const organizationJsonLd = {
     "Latency optimization",
     "Bufferbloat reduction",
     "Custom network appliances",
+    "Custom software development",
+    "Workflow automation",
+    "Operational analytics",
+    "Field operations software",
+    "Decision support systems",
   ],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+1-786-312-7320",
     email: "contact@elevate360systems.com",
-    contactType: "sales and technical support",
+    contactType: "project inquiries",
     availableLanguage: "English",
   },
 };
@@ -53,12 +58,12 @@ export const metadata: Metadata = {
 
   title: {
     default:
-      "Elevate360 Systems | Network Security & Performance Engineering",
+      "Elevate360 Systems | Secure Infrastructure, Software & Automation",
     template: "%s | Elevate360 Systems",
   },
 
   description:
-    "Secure, low-latency network systems built for real environments. Network security, segmentation, private routing, and performance engineering.",
+    "Elevate360 Systems designs and builds secure infrastructure, custom software, workflow automation, network diagnostics, and operational systems for real-world environments.",
 
   alternates: {
     canonical: "/",
@@ -83,9 +88,10 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Elevate360 Systems",
+    title:
+      "Elevate360 Systems | Secure Infrastructure, Software & Automation",
     description:
-      "Secure, low-latency network systems built for real environments.",
+      "Secure infrastructure, custom software, workflow automation, diagnostics, and operational systems built for real-world environments.",
     url: siteUrl,
     siteName: "Elevate360 Systems",
     images: [
@@ -101,9 +107,10 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Elevate360 Systems",
+    title:
+      "Elevate360 Systems | Secure Infrastructure, Software & Automation",
     description:
-      "Secure, low-latency network systems built for real environments.",
+      "Secure infrastructure, custom software, workflow automation, diagnostics, and operational systems built for real-world environments.",
     images: ["/opgraph.png"],
   },
 };

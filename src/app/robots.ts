@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://elevate360systems.com/sitemap.xml",
-    host: "https://elevate360systems.com",
+    sitemap: "https://www.elevate360systems.com/sitemap.xml",
+    host: "https://www.elevate360systems.com",
   };
 }
