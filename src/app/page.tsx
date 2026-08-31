@@ -251,12 +251,12 @@ export default function HomePage() {
                 >
                   Discuss a Project
                 </TrackedLink>
-                <a
-                  href="#systems"
+                <Link
+                  href="/systems"
                   className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
                   View Built Systems
-                </a>
+                </Link>
               </div>
 
               <div className="mt-10 grid max-w-3xl gap-4 sm:grid-cols-3">
@@ -415,17 +415,15 @@ export default function HomePage() {
 
             <div className="mt-10 flex flex-col items-start gap-5 rounded-3xl border border-sky-400/20 bg-sky-400/[0.08] p-7 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-3xl text-sm leading-7 text-slate-300">
-                Selected systems are available through custom engineering,
-                pilot, or licensing discussions.
+                Explore sanitized system demonstrations, then discuss custom
+                engineering, pilot, or licensing opportunities.
               </p>
-              <TrackedLink
-                href="#contact"
-                eventName="Project Inquiry"
-                eventLocation="built-systems"
+              <Link
+                href="/systems"
                 className="shrink-0 rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
               >
-                Discuss an Opportunity
-              </TrackedLink>
+                View Systems in Action
+              </Link>
             </div>
           </div>
         </section>
