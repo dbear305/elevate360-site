@@ -756,9 +756,6 @@ export default function HomePage() {
                 </a>
               </div>
 
-              <p className="mt-6 text-sm text-slate-400">
-                Elevate360 Systems LLC • Miami, FL
-              </p>
             </div>
           </div>
         </section>
