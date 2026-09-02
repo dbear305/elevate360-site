@@ -10,7 +10,7 @@ export function SystemHeader() {
         <Link href="/" className="flex min-w-0 items-center gap-3 sm:gap-4">
           <Image
             src="/logo.png"
-            alt=""
+            alt="Elevate360 Systems logo"
             width={56}
             height={56}
             priority

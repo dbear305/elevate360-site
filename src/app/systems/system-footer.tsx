@@ -7,7 +7,7 @@ export function SystemFooter() {
         <div>
           <p>© {new Date().getFullYear()} Elevate360 Systems LLC</p>
           <p className="mt-1">
-            Licensed and insured. Florida CET licensed. Elevate360 Systems LLC.
+            Elevate360 Systems LLC • Miami, FL • Florida CET #6445
           </p>
         </div>
         <div className="flex flex-wrap gap-x-5 gap-y-2">

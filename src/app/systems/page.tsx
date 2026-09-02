@@ -15,6 +15,23 @@ export const metadata: Metadata = {
     description:
       "Observable proof of infrastructure, software, diagnostics, and automation built for real operations.",
     url: "/systems",
+    siteName: "Elevate360 Systems",
+    images: [
+      {
+        url: "/opgraph.png",
+        width: 1200,
+        height: 630,
+        alt: "Elevate360 Systems",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Built Systems & Demonstrations | Elevate360 Systems",
+    description:
+      "Observable proof of infrastructure, software, diagnostics, and automation built for real operations.",
+    images: ["/opgraph.png"],
   },
 };
 
@@ -106,7 +123,7 @@ export default function SystemsPage() {
                     aria-hidden="true"
                     className="rounded-3xl border border-white/10 bg-[#020817]/70 p-5"
                   >
-                    <div className="flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-500">
+                    <div className="flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">
                       <span>Path evidence</span>
                       <span className="text-emerald-300">Resolved</span>
                     </div>

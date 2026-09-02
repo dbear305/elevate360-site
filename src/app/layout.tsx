@@ -53,6 +53,23 @@ const organizationJsonLd = {
   },
 };
 
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${siteUrl}/#localbusiness`,
+  name: "Elevate360 Systems LLC",
+  url: siteUrl,
+  telephone: "+1-786-312-7320",
+  email: "contact@elevate360systems.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Miami",
+    addressRegion: "FL",
+    addressCountry: "US",
+  },
+  areaServed: "Miami, FL",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
@@ -122,7 +139,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -132,7 +149,18 @@ export default function RootLayout({
             ),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessJsonLd).replace(
+              /</g,
+              "\\u003c",
+            ),
+          }}
+        />
+      </head>
 
+      <body>
         {children}
 
         <Analytics />

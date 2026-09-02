@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ContactForm } from "./contact-form";
 import { TrackedLink } from "./tracked-link";
 
 const phoneDisplay = "786-312-7320";
@@ -9,9 +10,13 @@ const emailHref =
   "mailto:contact@elevate360systems.com?subject=Elevate360%20Project%20Inquiry";
 
 type CaseStudy = {
-  title: string;
-  summary: string;
+  client: string;
+  industry: string;
+  problem: string;
+  work: string;
   result: string;
+  metric: string;
+  date: string;
 };
 
 // Add the first referenceable customer result here when it is approved.
@@ -168,7 +173,7 @@ export default function HomePage() {
           <Link href="/" className="flex min-w-0 items-center gap-3 sm:gap-4">
             <Image
               src="/logo.png"
-              alt=""
+              alt="Elevate360 Systems logo"
               width={56}
               height={56}
               priority
@@ -336,13 +341,13 @@ export default function HomePage() {
 
               <div className="mt-6 space-y-5 text-lg leading-8 text-slate-400">
                 <p>
-                  Elevate360 Systems is run by Daniel, a licensed elevator
-                  mechanic and third generation tradesman with over a decade in
-                  the field. He holds Florida CET and CC licenses with 10,000+
-                  verified hours on the job, and has spent the last several
-                  years building networks, software, and diagnostics tooling
-                  around the same standard the trade demands: the system works,
-                  it&apos;s observable, and you can prove it.
+                  Elevate360 Systems is run by Daniel Berriel IV, a licensed
+                  elevator mechanic and third generation tradesman with over a
+                  decade in the field. He holds Florida CET and CC licenses with
+                  10,000+ verified hours on the job, and has spent the last
+                  several years building networks, software, and diagnostics
+                  tooling around the same standard the trade demands: the
+                  system works, it&apos;s observable, and you can prove it.
                 </p>
 
                 <p>
@@ -353,7 +358,8 @@ export default function HomePage() {
                 </p>
 
                 <p className="font-medium text-slate-200">
-                  Elevate360 Systems LLC is fully insured and bonded.
+                  Elevate360 Systems LLC is registered in SAM.gov for federal
+                  contracting.
                 </p>
               </div>
             </div>
@@ -365,74 +371,100 @@ export default function HomePage() {
           className="scroll-mt-20 border-t border-white/10 bg-[#020817]"
         >
           <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
-                  Reference Deployment
-                </p>
-
-                <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  Reference architecture, deployed and tested under real load.
-                </h2>
-
-                <p className="mt-4 text-lg leading-8 text-slate-400">
-                  Elevate360 operates its own hardened reference environment:
-                  dedicated firewall hardware, private routing, segmentation,
-                  access control, DNS policy, and traffic tuning.
-                </p>
-
-                <p className="mt-5 text-lg leading-8 text-slate-400">
-                  The goal is simple: make the system secure, observable,
-                  consistent, and predictable under real operating conditions.
-                </p>
-              </div>
-
-              <div className="grid gap-5 sm:grid-cols-2">
-                {proofPoints.map((item) => (
-                  <div
-                    key={item.title}
-                    className="rounded-3xl border border-white/10 bg-white/[0.04] p-6"
-                  >
-                    <h3 className="text-xl font-semibold text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-slate-400">
-                      {item.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {caseStudies.length > 0 ? (
-          <section className="border-t border-white/10 bg-[#020817]">
-            <div className="mx-auto max-w-7xl px-6 py-24">
+            <div className="max-w-4xl">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
-                Case Studies
+                Reference Deployment
               </p>
-              <div className="mt-10 grid gap-6 md:grid-cols-2">
+
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                Our own reference environment, deployed and tested under real
+                load.
+              </h2>
+
+              <p className="mt-4 text-lg leading-8 text-slate-400">
+                Elevate360 operates its own hardened reference environment:
+                dedicated firewall hardware, private routing, segmentation,
+                access control, DNS policy, and traffic tuning.
+              </p>
+
+              <p className="mt-5 text-lg leading-8 text-slate-400">
+                The goal is simple: make the system secure, observable,
+                consistent, and predictable under real operating conditions.
+              </p>
+            </div>
+
+            {caseStudies.length > 0 ? (
+              <div className="mt-12 space-y-6">
                 {caseStudies.map((study) => (
                   <article
-                    key={study.title}
-                    className="rounded-3xl border border-white/10 bg-white/[0.04] p-7"
+                    key={`${study.client}-${study.date}`}
+                    className="rounded-3xl border border-sky-300/20 bg-sky-300/[0.07] p-7 sm:p-8"
                   >
-                    <h2 className="text-2xl font-semibold text-white">
-                      {study.title}
-                    </h2>
-                    <p className="mt-3 text-sm leading-7 text-slate-400">
-                      {study.summary}
-                    </p>
-                    <p className="mt-5 text-lg font-semibold text-sky-200">
-                      {study.result}
-                    </p>
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-white">
+                          {study.client}
+                        </p>
+                        <p className="mt-1 text-sm text-slate-400">
+                          {study.industry}
+                        </p>
+                      </div>
+                      <time className="text-sm text-slate-400">
+                        {study.date}
+                      </time>
+                    </div>
+
+                    <dl className="mt-6 grid gap-5 md:grid-cols-3">
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">
+                          Problem
+                        </dt>
+                        <dd className="mt-2 text-sm leading-7 text-slate-300">
+                          {study.problem}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">
+                          Work
+                        </dt>
+                        <dd className="mt-2 text-sm leading-7 text-slate-300">
+                          {study.work}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">
+                          Result
+                        </dt>
+                        <dd className="mt-2 text-sm leading-7 text-slate-300">
+                          {study.result}
+                        </dd>
+                        <dd className="mt-3 text-2xl font-semibold text-white">
+                          {study.metric}
+                        </dd>
+                      </div>
+                    </dl>
                   </article>
                 ))}
               </div>
+            ) : null}
+
+            <div className="mt-12 grid gap-5 sm:grid-cols-2">
+              {proofPoints.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-3xl border border-white/10 bg-white/[0.04] p-6"
+                >
+                  <h3 className="text-xl font-semibold text-white">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-400">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
             </div>
-          </section>
-        ) : null}
+          </div>
+        </section>
 
         <section
           id="systems"
@@ -695,99 +727,7 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <form
-                action={`https://formsubmit.co/${email}`}
-                method="POST"
-                className="mt-10 grid max-w-4xl gap-5 rounded-3xl border border-white/10 bg-[#020817]/60 p-6 sm:grid-cols-2 sm:p-8"
-              >
-                <input
-                  type="hidden"
-                  name="_subject"
-                  value="New Elevate360 project inquiry"
-                />
-                <input type="hidden" name="_template" value="table" />
-                <input
-                  type="hidden"
-                  name="_next"
-                  value="https://www.elevate360systems.com/?submitted=true#contact"
-                />
-                <input
-                  type="text"
-                  name="_honey"
-                  className="hidden"
-                  tabIndex={-1}
-                  autoComplete="off"
-                />
-
-                <label className="text-sm font-medium text-slate-200">
-                  Name
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    autoComplete="name"
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
-                  />
-                </label>
-
-                <label className="text-sm font-medium text-slate-200">
-                  Company
-                  <input
-                    type="text"
-                    name="company"
-                    autoComplete="organization"
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
-                  />
-                </label>
-
-                <label className="text-sm font-medium text-slate-200">
-                  Email
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    autoComplete="email"
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
-                  />
-                </label>
-
-                <label className="text-sm font-medium text-slate-200">
-                  Budget range
-                  <select
-                    name="budget"
-                    required
-                    defaultValue=""
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-[#081224] px-4 py-3 text-white outline-none focus:border-sky-300"
-                  >
-                    <option value="" disabled>
-                      Select a range
-                    </option>
-                    <option value="$750–$2,499">$750–$2,499</option>
-                    <option value="$2,500–$4,999">$2,500–$4,999</option>
-                    <option value="$5,000–$9,999">$5,000–$9,999</option>
-                    <option value="$10,000–$24,999">$10,000–$24,999</option>
-                    <option value="$25,000+">$25,000+</option>
-                    <option value="Not sure yet">Not sure yet</option>
-                  </select>
-                </label>
-
-                <label className="text-sm font-medium text-slate-200 sm:col-span-2">
-                  What&apos;s broken?
-                  <textarea
-                    name="problem"
-                    required
-                    rows={5}
-                    className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
-                  />
-                </label>
-
-                <button
-                  type="submit"
-                  className="w-fit rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200 sm:col-span-2"
-                >
-                  Send Project Details
-                </button>
-              </form>
+              <ContactForm />
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <TrackedLink
@@ -829,8 +769,7 @@ export default function HomePage() {
           <div>
             <p>© {new Date().getFullYear()} Elevate360 Systems LLC</p>
             <p className="mt-1">
-              Licensed and insured. Florida CET licensed. Elevate360 Systems
-              LLC.
+              Elevate360 Systems LLC • Miami, FL • Florida CET #6445
             </p>
           </div>
           <p>Secure infrastructure, software &amp; automation</p>

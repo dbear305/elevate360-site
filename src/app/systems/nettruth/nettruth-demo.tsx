@@ -263,7 +263,7 @@ export function NetTruthDemo() {
               <span className="rounded-full border border-sky-300/25 bg-sky-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">
                 Sanitized playback
               </span>
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Synthetic evidence set NT-DEMO-0042
               </span>
             </div>
@@ -304,7 +304,7 @@ export function NetTruthDemo() {
         <div className="border-b border-white/10 p-5 sm:p-7 xl:border-b-0 xl:border-r">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                 Diagnostic verdict
               </p>
               <h3 className="mt-3 max-w-3xl text-2xl font-semibold leading-tight text-white sm:text-3xl">
@@ -323,10 +323,10 @@ export function NetTruthDemo() {
 
           <div className="mt-8">
             <div className="flex items-center justify-between gap-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                 Observed path
               </p>
-              <p className="text-xs text-slate-500">Left to right</p>
+              <p className="text-xs text-slate-400">Left to right</p>
             </div>
             <ol className="mt-4 grid gap-3 sm:grid-cols-5">
               {scenario.path.map((step, index) => (
@@ -338,7 +338,7 @@ export function NetTruthDemo() {
                     <span
                       className={`h-2.5 w-2.5 rounded-full ${dotClasses[step.tone]}`}
                     />
-                    <span className="text-[10px] font-semibold text-slate-600">
+                    <span className="text-xs font-semibold text-slate-400">
                       0{index + 1}
                     </span>
                   </div>
@@ -364,7 +364,7 @@ export function NetTruthDemo() {
                     <p className="text-sm font-medium text-slate-300">
                       {metric.label}
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-slate-400">
                       {metric.detail}
                     </p>
                   </div>
@@ -384,7 +384,7 @@ export function NetTruthDemo() {
         </div>
 
         <aside className="p-5 sm:p-7">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             Explainability log
           </p>
           <h3 className="mt-3 text-xl font-semibold text-white">
@@ -407,7 +407,7 @@ export function NetTruthDemo() {
 
           <div className="mt-6 rounded-2xl border border-white/10 bg-[#020817]/70 p-5">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                 Report state
               </span>
               <span className="flex items-center gap-2 text-xs font-semibold text-emerald-200">

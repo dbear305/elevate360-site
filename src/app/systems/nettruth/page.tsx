@@ -71,7 +71,7 @@ export default function NetTruthPage() {
               </div>
 
               <div className="rounded-[28px] border border-white/10 bg-white/[0.05] p-6 sm:p-7">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                   What this public page proves
                 </p>
                 <p className="mt-4 text-sm leading-7 text-slate-300">
