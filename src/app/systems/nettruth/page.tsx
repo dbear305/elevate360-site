@@ -133,7 +133,7 @@ export default function NetTruthPage() {
                 <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
                   <li>Sanitized path and metric visualization</li>
                   <li>Layer-by-layer fault isolation</li>
-                  <li>Explainability and decision evidence</li>
+                  <li>Explainability and diagnostic evidence</li>
                   <li>Report and history capabilities</li>
                 </ul>
               </div>
@@ -144,7 +144,7 @@ export default function NetTruthPage() {
                 </p>
                 <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-400">
                   <li>No source code, credentials, or customer information</li>
-                  <li>No internal thresholds or proprietary decision logic</li>
+                  <li>No internal thresholds or proprietary diagnostic logic</li>
                   <li>No real IP addresses, endpoints, or network topology</li>
                   <li>No testing is performed against the visitor</li>
                 </ul>

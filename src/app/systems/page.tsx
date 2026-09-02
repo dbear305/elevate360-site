@@ -6,7 +6,7 @@ import { SystemHeader } from "./system-header";
 export const metadata: Metadata = {
   title: "Built Systems & Demonstrations",
   description:
-    "Explore sanitized demonstrations of network diagnostics, field-pay validation, operational automation, and systems built by Elevate360.",
+    "Explore sanitized demonstrations of network diagnostics, field-pay validation, and systems built by Elevate360.",
   alternates: {
     canonical: "/systems",
   },
@@ -17,24 +17,6 @@ export const metadata: Metadata = {
     url: "/systems",
   },
 };
-
-const additionalSystems = [
-  {
-    title: "MatchMetrics™",
-    description:
-      "Privacy-first decision analytics that turns structured inputs into explainable compatibility and alignment insights.",
-  },
-  {
-    title: "Secure Infrastructure",
-    description:
-      "Firewall appliances, segmentation, private routing, access control, DNS policy, and traffic tuning validated under load.",
-  },
-  {
-    title: "Predictive Maintenance R&D",
-    description:
-      "Condition-monitoring and maintenance decision support grounded in operational data, trend analysis, and field knowledge.",
-  },
-];
 
 export default function SystemsPage() {
   return (
@@ -62,7 +44,7 @@ export default function SystemsPage() {
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
                 See how Elevate360 turns operational inputs into measured
                 evidence, deterministic calculations, controlled workflows,
-                and auditable decisions. Public demonstrations use sanitized
+                and auditable results. Public demonstrations use sanitized
                 or synthetic data and preserve proprietary implementation.
               </p>
             </div>
@@ -159,7 +141,7 @@ export default function SystemsPage() {
                   Field operations
                 </span>
                 <h2 className="mt-5 text-2xl font-semibold text-white">
-                  FieldPay™
+                  FieldPay
                 </h2>
                 <p className="mt-4 text-sm leading-7 text-slate-400">
                   Rules-driven pay validation with technician earnings
@@ -182,55 +164,6 @@ export default function SystemsPage() {
                     </span>
                   </div>
                 </div>
-                <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Interactive demonstration in development
-                </p>
-              </article>
-
-              <article
-                id="automation"
-                className="rounded-[30px] border border-white/10 bg-white/[0.04] p-7 sm:p-8 lg:col-span-3"
-              >
-                <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
-                  <div>
-                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-300">
-                      Operational automation
-                    </span>
-                    <h2 className="mt-5 text-2xl font-semibold text-white">
-                      Observable workflows, not black boxes.
-                    </h2>
-                    <p className="mt-4 text-sm leading-7 text-slate-400">
-                      Elevate360 automations validate inputs, apply controlled
-                      rules, surface exceptions, notify operators, and preserve
-                      a record of what happened.
-                    </p>
-                    <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                      Interactive demonstration in development
-                    </p>
-                  </div>
-
-                  <ol className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
-                    {[
-                      "Input received",
-                      "Validated",
-                      "Rules applied",
-                      "Exception surfaced",
-                      "Audit recorded",
-                    ].map((step, index) => (
-                      <li
-                        key={step}
-                        className="relative rounded-2xl border border-white/10 bg-[#020817]/60 p-4"
-                      >
-                        <span className="text-xs font-semibold text-sky-300">
-                          0{index + 1}
-                        </span>
-                        <p className="mt-3 text-sm font-medium leading-6 text-slate-200">
-                          {step}
-                        </p>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
               </article>
             </div>
           </div>
@@ -252,20 +185,22 @@ export default function SystemsPage() {
               </p>
             </div>
 
-            <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {additionalSystems.map((system) => (
-                <article
-                  key={system.title}
-                  className="rounded-3xl border border-white/10 bg-white/[0.035] p-6"
-                >
-                  <h3 className="text-xl font-semibold text-white">
-                    {system.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-400">
-                    {system.description}
-                  </p>
-                </article>
-              ))}
+            <div className="mt-10 max-w-2xl">
+              <Link
+                href="/#proof"
+                className="block rounded-3xl border border-white/10 bg-white/[0.035] p-6 hover:border-sky-300/30 hover:bg-white/[0.06]"
+              >
+                <h3 className="text-xl font-semibold text-white">
+                  Secure Infrastructure
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-400">
+                  Firewall appliances, segmentation, private routing, access
+                  control, DNS policy, and traffic tuning validated under load.
+                </p>
+                <p className="mt-5 text-sm font-semibold text-sky-200">
+                  View the reference deployment
+                </p>
+              </Link>
             </div>
 
             <div className="mt-12 flex flex-col items-start justify-between gap-6 rounded-[30px] border border-sky-300/20 bg-sky-300/[0.08] p-7 sm:flex-row sm:items-center sm:p-9">

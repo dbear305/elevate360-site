@@ -416,7 +416,7 @@ export function NetTruthDemo() {
               </span>
             </div>
             <p className="mt-4 text-sm leading-7 text-slate-400">
-              The production engine can preserve history, baselines, decision
+              The production engine can preserve history, baselines, diagnostic
               logs, and privacy-redacted JSON or HTML evidence reports.
             </p>
           </div>

@@ -42,7 +42,7 @@ const organizationJsonLd = {
     "Workflow automation",
     "Operational analytics",
     "Field operations software",
-    "Decision support systems",
+    "Diagnostic monitoring systems",
   ],
   contactPoint: {
     "@type": "ContactPoint",

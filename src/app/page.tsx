@@ -8,11 +8,20 @@ const email = "contact@elevate360systems.com";
 const emailHref =
   "mailto:contact@elevate360systems.com?subject=Elevate360%20Project%20Inquiry";
 
+type CaseStudy = {
+  title: string;
+  summary: string;
+  result: string;
+};
+
+// Add the first referenceable customer result here when it is approved.
+// The section stays out of the rendered page until a real case study exists.
+const caseStudies: CaseStudy[] = [];
+
 const systemsWork = [
-  "Secure infrastructure and network control",
+  "Secure infrastructure, network control, and observability",
   "Custom operational software and internal tools",
   "Workflow automation and data reconciliation",
-  "Diagnostics, observability, and decision support",
   "Applied R&D for field and industrial systems",
 ];
 
@@ -46,29 +55,14 @@ const builtSystems = [
       "High-resolution network diagnostics that captures latency, jitter, bufferbloat, path behavior, and connection health in one source of truth. Built for repeatable testing before and after infrastructure changes.",
   },
   {
-    title: "FieldPay™",
+    title: "FieldPay",
     description:
       "Rules-driven pay validation for field operations. Models time, lunch, differentials, overscale, and supervisor overrides, then produces transparent calculations and export-ready records.",
-  },
-  {
-    title: "MatchMetrics™",
-    description:
-      "Privacy-first decision analytics that turns structured profile inputs into explainable compatibility and alignment insights. Advisory only. People make the final decision.",
   },
   {
     title: "Secure Infrastructure",
     description:
       "Dedicated firewall appliances, segmentation, private routing, access control, DNS policy, and traffic tuning, deployed and validated under real load.",
-  },
-  {
-    title: "Automation and Operational Analytics",
-    description:
-      "Internal tools and prototypes that automate repeatable workflows, reconcile system state, surface exceptions, and give operators a clear record of what happened.",
-  },
-  {
-    title: "Predictive Maintenance R&D",
-    description:
-      "Applied R&D focused on condition monitoring and maintenance decision support for field equipment. Prototype work combines operational data, trend analysis, and field knowledge to surface potential maintenance signals.",
   },
 ];
 
@@ -89,15 +83,16 @@ const capabilities = [
       "Reliable workflows that replace repetitive manual processes and connect operational data, exports, and reporting.",
   },
   {
-    title: "Diagnostics & Decision Systems",
+    title: "Diagnostics & Monitoring",
     description:
-      "Measurement, monitoring, analytics, alerting, and decision support for systems that need measurable operational truth.",
+      "Measurement, monitoring, analytics, and alerting for systems that need measurable operational truth.",
   },
 ];
 
 const deploymentOptions = [
   {
     title: "Network Diagnostic",
+    price: "Starts at $750",
     description:
       "Review the current setup, identify bottlenecks, and determine whether the issue is ISP-side or inside the network.",
   },
@@ -144,17 +139,12 @@ const useCases = [
   {
     title: "Field & Industrial Operations",
     description:
-      "Operational software, automation, condition monitoring, and decision support grounded in how field work actually happens.",
+      "Operational software, automation, condition monitoring, and diagnostics grounded in how field work actually happens.",
   },
   {
     title: "Infrastructure-Dependent Businesses",
     description:
       "Secure, observable networks and systems for operations that cannot afford unstable internal infrastructure.",
-  },
-  {
-    title: "Founders & Product Owners",
-    description:
-      "Focused engineering that turns a defined operational or product requirement into a working, defensible system.",
   },
   {
     title: "Small and Midsize Businesses",
@@ -202,6 +192,9 @@ export default function HomePage() {
             <a href="#systems" className="transition hover:text-white">
               Systems
             </a>
+            <a href="#about" className="transition hover:text-white">
+              About
+            </a>
             <a href="#capabilities" className="transition hover:text-white">
               Capabilities
             </a>
@@ -238,8 +231,8 @@ export default function HomePage() {
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
                 Elevate360 Systems designs, builds, and deploys secure
-                infrastructure, custom software, automation, and decision
-                systems around real operational problems.
+                infrastructure, custom software, and automation around real
+                operational problems.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
@@ -285,8 +278,8 @@ export default function HomePage() {
                     Automation
                   </div>
                   <p className="mt-2 text-sm text-slate-400">
-                    Reliable workflows, diagnostics, and decision support that
-                    reduce operational friction.
+                    Reliable workflows, diagnostics, and monitoring that reduce
+                    operational friction.
                   </p>
                 </div>
               </div>
@@ -318,11 +311,50 @@ export default function HomePage() {
 
                 <div className="mt-8 rounded-2xl border border-blue-400/20 bg-blue-400/10 p-5">
                   <p className="text-sm leading-7 text-slate-200">
-                    Built from hands-on infrastructure, software, and
-                    operational systems work, then validated against real
-                    conditions.
+                    Built by a licensed field mechanic who writes code, then
+                    validated against real conditions.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="about"
+          className="scroll-mt-20 border-t border-white/10 bg-[#061022]"
+        >
+          <div className="mx-auto max-w-7xl px-6 py-24">
+            <div className="max-w-4xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
+                Who builds it
+              </p>
+
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                Ten years fixing systems that aren&apos;t allowed to fail.
+              </h2>
+
+              <div className="mt-6 space-y-5 text-lg leading-8 text-slate-400">
+                <p>
+                  Elevate360 Systems is run by Daniel, a licensed elevator
+                  mechanic and third generation tradesman with over a decade in
+                  the field. He holds Florida CET and CC licenses with 10,000+
+                  verified hours on the job, and has spent the last several
+                  years building networks, software, and diagnostics tooling
+                  around the same standard the trade demands: the system works,
+                  it&apos;s observable, and you can prove it.
+                </p>
+
+                <p>
+                  That background is the point. Field operations, industrial
+                  equipment, and infrastructure-dependent businesses don&apos;t
+                  need a dev shop that learned the domain from a briefing call.
+                  They need someone who has stood in the machine room.
+                </p>
+
+                <p className="font-medium text-slate-200">
+                  Elevate360 Systems LLC is fully insured and bonded.
+                </p>
               </div>
             </div>
           </div>
@@ -336,18 +368,17 @@ export default function HomePage() {
             <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
-                  Live System Proof
+                  Reference Deployment
                 </p>
 
                 <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  Built, deployed, and tested under real load.
+                  Reference architecture, deployed and tested under real load.
                 </h2>
 
                 <p className="mt-4 text-lg leading-8 text-slate-400">
-                  Elevate360 Systems is built from real infrastructure work. A
-                  complete control layer has been deployed in a live environment
-                  using dedicated firewall hardware, private routing,
-                  segmentation, access control, DNS policy, and traffic tuning.
+                  Elevate360 operates its own hardened reference environment:
+                  dedicated firewall hardware, private routing, segmentation,
+                  access control, DNS policy, and traffic tuning.
                 </p>
 
                 <p className="mt-5 text-lg leading-8 text-slate-400">
@@ -374,6 +405,34 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {caseStudies.length > 0 ? (
+          <section className="border-t border-white/10 bg-[#020817]">
+            <div className="mx-auto max-w-7xl px-6 py-24">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
+                Case Studies
+              </p>
+              <div className="mt-10 grid gap-6 md:grid-cols-2">
+                {caseStudies.map((study) => (
+                  <article
+                    key={study.title}
+                    className="rounded-3xl border border-white/10 bg-white/[0.04] p-7"
+                  >
+                    <h2 className="text-2xl font-semibold text-white">
+                      {study.title}
+                    </h2>
+                    <p className="mt-3 text-sm leading-7 text-slate-400">
+                      {study.summary}
+                    </p>
+                    <p className="mt-5 text-lg font-semibold text-sky-200">
+                      {study.result}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         <section
           id="systems"
@@ -498,6 +557,11 @@ export default function HomePage() {
                   <h3 className="text-xl font-semibold text-white">
                     {option.title}
                   </h3>
+                  {"price" in option ? (
+                    <p className="mt-3 text-sm font-semibold text-sky-200">
+                      {option.price}
+                    </p>
+                  ) : null}
                   <p className="mt-4 text-sm leading-7 text-slate-400">
                     {option.description}
                   </p>
@@ -581,7 +645,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {useCases.map((item) => (
                 <div
                   key={item.title}
@@ -631,6 +695,100 @@ export default function HomePage() {
                 </p>
               </div>
 
+              <form
+                action={`https://formsubmit.co/${email}`}
+                method="POST"
+                className="mt-10 grid max-w-4xl gap-5 rounded-3xl border border-white/10 bg-[#020817]/60 p-6 sm:grid-cols-2 sm:p-8"
+              >
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="New Elevate360 project inquiry"
+                />
+                <input type="hidden" name="_template" value="table" />
+                <input
+                  type="hidden"
+                  name="_next"
+                  value="https://www.elevate360systems.com/?submitted=true#contact"
+                />
+                <input
+                  type="text"
+                  name="_honey"
+                  className="hidden"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+
+                <label className="text-sm font-medium text-slate-200">
+                  Name
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    autoComplete="name"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
+                  />
+                </label>
+
+                <label className="text-sm font-medium text-slate-200">
+                  Company
+                  <input
+                    type="text"
+                    name="company"
+                    autoComplete="organization"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
+                  />
+                </label>
+
+                <label className="text-sm font-medium text-slate-200">
+                  Email
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    autoComplete="email"
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
+                  />
+                </label>
+
+                <label className="text-sm font-medium text-slate-200">
+                  Budget range
+                  <select
+                    name="budget"
+                    required
+                    defaultValue=""
+                    className="mt-2 w-full rounded-xl border border-white/10 bg-[#081224] px-4 py-3 text-white outline-none focus:border-sky-300"
+                  >
+                    <option value="" disabled>
+                      Select a range
+                    </option>
+                    <option value="$750–$2,499">$750–$2,499</option>
+                    <option value="$2,500–$4,999">$2,500–$4,999</option>
+                    <option value="$5,000–$9,999">$5,000–$9,999</option>
+                    <option value="$10,000–$24,999">$10,000–$24,999</option>
+                    <option value="$25,000+">$25,000+</option>
+                    <option value="Not sure yet">Not sure yet</option>
+                  </select>
+                </label>
+
+                <label className="text-sm font-medium text-slate-200 sm:col-span-2">
+                  What&apos;s broken?
+                  <textarea
+                    name="problem"
+                    required
+                    rows={5}
+                    className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-600 focus:border-sky-300"
+                  />
+                </label>
+
+                <button
+                  type="submit"
+                  className="w-fit rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200 sm:col-span-2"
+                >
+                  Send Project Details
+                </button>
+              </form>
+
               <div className="mt-8 flex flex-wrap gap-4">
                 <TrackedLink
                   href={phoneHref}
@@ -668,7 +826,13 @@ export default function HomePage() {
 
       <footer className="border-t border-white/10 bg-[#020817]">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Elevate360 Systems LLC</p>
+          <div>
+            <p>© {new Date().getFullYear()} Elevate360 Systems LLC</p>
+            <p className="mt-1">
+              Licensed and insured. Florida CET licensed. Elevate360 Systems
+              LLC.
+            </p>
+          </div>
           <p>Secure infrastructure, software &amp; automation</p>
         </div>
       </footer>

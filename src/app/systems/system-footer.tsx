@@ -4,7 +4,12 @@ export function SystemFooter() {
   return (
     <footer className="border-t border-white/10 bg-[#020817]">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-        <p>© {new Date().getFullYear()} Elevate360 Systems LLC</p>
+        <div>
+          <p>© {new Date().getFullYear()} Elevate360 Systems LLC</p>
+          <p className="mt-1">
+            Licensed and insured. Florida CET licensed. Elevate360 Systems LLC.
+          </p>
+        </div>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
           <Link href="/" className="hover:text-white">
             Company
