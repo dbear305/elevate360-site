@@ -12,10 +12,11 @@ Obtain the server's ED25519 fingerprint in the provider's authenticated web
 console, using this read-only Ubuntu command:
   ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub -E sha256
 
-Supply the full SHA256:... fingerprint below. The script compares it with the
-network-presented key before SSH authentication or any remote file changes.
-It refuses conflicting existing ED25519 known-host entries. Only the reviewed
-public service source is uploaded; the YubiKey identity stays on this PC.
+Supply the full SHA256:... fingerprint below. The script checks saved ED25519
+host keys against that fingerprint, or retrieves a public key when none is saved.
+Every SSH connection strictly verifies the pinned key before authentication.
+Conflicting existing ED25519 entries are rejected. Only the reviewed public
+service source is uploaded; the YubiKey identity stays on this PC.
 
 The provider firewall must allow TCP 22, 80, 443 and UDP 3478, 49160-49259.
 The installer configures the Ubuntu firewall. It does not create the server,
@@ -59,7 +60,7 @@ if ($MeasurementHostname.Length -gt 253 -or
 if ($NodeName -cnotmatch '^[A-Za-z0-9][A-Za-z0-9 .(),_-]{0,99}$' -or $NodeName -cne $NodeName.Trim()) {
     throw 'NodeName must contain 1-100 plain ASCII letters, numbers, spaces, or .(),_- characters.'
 }
-foreach ($command in @('ssh.exe', 'scp.exe', 'ssh-keyscan.exe', 'ssh-keygen.exe')) {
+foreach ($command in @('ssh.exe', 'scp.exe', 'ssh-keygen.exe')) {
     if (-not (Get-Command $command -CommandType Application -ErrorAction SilentlyContinue)) {
         throw "Missing $command. Install the Windows OpenSSH Client before continuing."
     }
@@ -122,28 +123,13 @@ $installationInvoked = $false
 [IO.Directory]::CreateDirectory($localWork) | Out-Null
 try {
     $utf8 = [Text.UTF8Encoding]::new($false)
-    $scanErrors = Join-Path $localWork 'keyscan-stderr.txt'
-    Write-Host 'Checking the presented SSH host key against your independently verified fingerprint...'
-    $scanned = @(& ssh-keyscan.exe -T 10 -t ed25519 $PublicIPv4 2> $scanErrors)
-    $scanExitCode = $LASTEXITCODE
-    if ($scanExitCode -ne 0) {
-        $scanDetail = if (Test-Path -LiteralPath $scanErrors -PathType Leaf) {
-            ((Get-Content -LiteralPath $scanErrors -Tail 12) -join [Environment]::NewLine).Trim()
-        } else { '' }
-        if (-not $scanDetail) { $scanDetail = 'ssh-keyscan returned no diagnostic text.' }
-        throw "SSH host-key retrieval failed (exit $scanExitCode). This check does not use the YubiKey. Nothing uploaded.`n$scanDetail"
-    }
-    $scanPattern = '^' + [regex]::Escape($PublicIPv4) + ' ssh-ed25519 [A-Za-z0-9+/]+={0,2}$'
-    $keyLines = @($scanned | ForEach-Object { $_.ToString().Trim() } |
-        Where-Object { $_ -cmatch $scanPattern } | Sort-Object -Unique)
-    if ($keyLines.Count -ne 1) { throw 'The server did not present one unambiguous ED25519 key. Nothing uploaded.' }
     $pinnedHosts = Join-Path $localWork 'known_hosts'
-    [IO.File]::WriteAllText($pinnedHosts, $keyLines[0] + "`n", $utf8)
-    if ((Get-Ed25519Fingerprint $pinnedHosts) -cne $HostFingerprint) {
-        throw 'HOST KEY MISMATCH. The network key does not match the provider-console fingerprint. Nothing uploaded.'
-    }
+    $pinnedKeyLine = $null
 
-    # Read standard Windows OpenSSH known-host stores before using the pin.
+    # Inspect every standard store before using a matching saved key. Regular
+    # SSH verifies the server's possession of this exact key on each connection.
+    # This also avoids the unsupported-KEX defect in Windows 9.5 ssh-keyscan
+    # when the owner already has a host key from a successful SSH connection.
     # A dedicated empty client config makes the connection independent of
     # user aliases, ProxyCommand settings, agents, or extra identities.
     $knownHostPaths = @(
@@ -155,6 +141,7 @@ try {
         $knownHostPaths += Join-Path $env:ProgramData 'ssh\ssh_known_hosts2'
     }
     $alreadyRecorded = $false
+    Write-Host 'Checking saved SSH host keys against the supplied fingerprint...'
     foreach ($knownFile in $knownHostPaths) {
         if (-not (Test-Path -LiteralPath $knownFile -PathType Leaf)) { continue }
         foreach ($lookup in @($PublicIPv4, $MeasurementHostname)) {
@@ -171,19 +158,52 @@ try {
                 $parts = $record -split '\s+'
                 if ($parts.Count -lt 3) { throw "Malformed host entry in $knownFile. Nothing uploaded." }
                 if ($parts[1] -cne 'ssh-ed25519') { continue }
+                if ($parts[2] -cnotmatch '^[A-Za-z0-9+/]+={0,2}$') {
+                    throw "Malformed ED25519 key in $knownFile. Nothing uploaded."
+                }
                 $existingKey = Join-Path $localWork 'existing_host_key'
                 [IO.File]::WriteAllText($existingKey, $record + "`n", $utf8)
                 if ((Get-Ed25519Fingerprint $existingKey) -cne $HostFingerprint) {
                     throw "EXISTING HOST KEY MISMATCH for $lookup in $knownFile. No keys were replaced; nothing uploaded."
                 }
+                # Canonicalize hashed names, hostname aliases and comments to
+                # the exact IPv4 destination used by the isolated SSH client.
+                $pinnedKeyLine = "$PublicIPv4 ssh-ed25519 $($parts[2])"
                 if ($lookup -ceq $PublicIPv4 -and $knownFile -ceq $knownHostPaths[0]) { $alreadyRecorded = $true }
             }
         }
     }
+    if ($pinnedKeyLine) {
+        Write-Host 'Saved server key matches. SSH will verify this exact key on every connection.'
+    } else {
+        if (-not (Get-Command 'ssh-keyscan.exe' -CommandType Application -ErrorAction SilentlyContinue)) {
+            throw 'No saved ED25519 host key and ssh-keyscan.exe is missing. Nothing uploaded.'
+        }
+        $scanErrors = Join-Path $localWork 'keyscan-stderr.txt'
+        Write-Host 'Retrieving the public SSH host key for fingerprint verification...'
+        $scanned = @(& ssh-keyscan.exe -T 10 -t ed25519 $PublicIPv4 2> $scanErrors)
+        $scanExitCode = $LASTEXITCODE
+        if ($scanExitCode -ne 0) {
+            $scanDetail = if (Test-Path -LiteralPath $scanErrors -PathType Leaf) {
+                ((Get-Content -LiteralPath $scanErrors -Tail 12) -join [Environment]::NewLine).Trim()
+            } else { '' }
+            if (-not $scanDetail) { $scanDetail = 'ssh-keyscan returned no diagnostic text.' }
+            throw "SSH host-key retrieval failed (exit $scanExitCode). This check does not use the YubiKey. Nothing uploaded.`n$scanDetail"
+        }
+        $scanPattern = '^' + [regex]::Escape($PublicIPv4) + ' ssh-ed25519 [A-Za-z0-9+/]+={0,2}$'
+        $keyLines = @($scanned | ForEach-Object { $_.ToString().Trim() } |
+            Where-Object { $_ -cmatch $scanPattern } | Sort-Object -Unique)
+        if ($keyLines.Count -ne 1) { throw 'The server did not present one unambiguous ED25519 key. Nothing uploaded.' }
+        $pinnedKeyLine = $keyLines[0]
+    }
+    [IO.File]::WriteAllText($pinnedHosts, $pinnedKeyLine + "`n", $utf8)
+    if ((Get-Ed25519Fingerprint $pinnedHosts) -cne $HostFingerprint) {
+        throw 'HOST KEY MISMATCH. The selected key does not match the supplied fingerprint. Nothing uploaded.'
+    }
     if (-not $alreadyRecorded) {
         $knownFile = $knownHostPaths[0]
         [IO.Directory]::CreateDirectory((Split-Path -Parent $knownFile)) | Out-Null
-        [IO.File]::AppendAllText($knownFile, "`n" + $keyLines[0] + "`n", $utf8)
+        [IO.File]::AppendAllText($knownFile, "`n" + $pinnedKeyLine + "`n", $utf8)
     }
 
     $clientConfig = Join-Path $localWork 'ssh_config'
@@ -214,7 +234,7 @@ try {
     $archive = Join-Path $localWork 'nettruth-node.zip'
     [IO.Compression.ZipFile]::CreateFromDirectory($bundleDirectory, $archive)
     $archiveHash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
-    Write-Host "Verified host: $HostFingerprint"
+    Write-Host "Pinned host fingerprint: $HostFingerprint"
     Write-Host "Source bundle SHA-256: $archiveHash"
     Write-Host 'Your YubiKey may request its PIN and a touch for each SSH/SCP connection.'
 
