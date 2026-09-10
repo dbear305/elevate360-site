@@ -3,6 +3,26 @@ import type { LossResult } from "./model";
 export type RelayCredentials = { urls: string; username: string; credential: string };
 export const unavailableLoss = (reason: string): LossResult => ({ status: "unavailable", sent: 0, received: 0, lost: 0, percent: null, reason, transport: "UDP relay", sampleWindowMs: 0 });
 
+// Resolve the transport's selected pair, not every previously nominated pair.
+// https://www.w3.org/TR/webrtc-stats/#dom-rtctransportstats-selectedcandidatepairid
+export function inspectSelectedUdpRelay(stats: RTCStatsReport): "confirmed" | "pending" | "rejected" {
+  const selected = new Set<string>();
+  stats.forEach(stat => {
+    if (stat.type === "transport" && typeof stat.selectedCandidatePairId === "string") selected.add(stat.selectedCandidatePairId);
+  });
+  if (selected.size !== 1) return "pending";
+  const pair = stats.get([...selected][0]);
+  if (!pair || pair.type !== "candidate-pair" || pair.state !== "succeeded") return "pending";
+  const local = stats.get(pair.localCandidateId);
+  const remote = stats.get(pair.remoteCandidateId);
+  if (!local || !remote) return "pending";
+  if ((local.candidateType && local.candidateType !== "relay") ||
+      (local.protocol && local.protocol !== "udp") ||
+      (remote.protocol && remote.protocol !== "udp") ||
+      (local.relayProtocol && local.relayProtocol !== "udp")) return "rejected";
+  return local.candidateType === "relay" && local.protocol === "udp" && remote.protocol === "udp" ? "confirmed" : "pending";
+}
+
 export async function measurePacketLoss(credentials: RelayCredentials, signal: AbortSignal, count = 600): Promise<LossResult> {
   if (typeof RTCPeerConnection === "undefined") return unavailableLoss("WebRTC is unavailable in this browser.");
   if (!/^turn:[a-z0-9.-]+:\d+\?transport=udp$/i.test(credentials.urls)) return unavailableLoss("The relay must explicitly support UDP.");
@@ -45,17 +65,18 @@ export async function measurePacketLoss(credentials: RelayCredentials, signal: A
     await waitFor(() => receiver.iceGatheringState === "complete");
     await sender.setRemoteDescription(receiver.localDescription!);
     await waitFor(() => channel.readyState === "open" && receivingChannel?.readyState === "open");
-    // Require relay candidates and UDP on the selected transport. No TCP fallback.
+    // A browser may expose the open channel before complete transport stats.
+    // Retry missing metadata briefly, but never accept an unverified/TCP path.
     for (const peer of [sender, receiver]) {
-      const stats = await peer.getStats();
-      let valid = false;
-      stats.forEach(s => {
-        if (s.type !== "candidate-pair" || s.state !== "succeeded" || !s.nominated) return;
-        const candidate = stats.get(s.localCandidateId);
-        const remote = stats.get(s.remoteCandidateId);
-        valid = candidate?.candidateType === "relay" && candidate?.protocol === "udp" && (!candidate.relayProtocol || candidate.relayProtocol === "udp") && remote?.protocol === "udp";
-      });
-      if (!valid) throw new Error("The browser did not confirm a UDP relay path.");
+      const deadline = performance.now() + 2000;
+      while (true) {
+        signal.throwIfAborted();
+        const path = inspectSelectedUdpRelay(await peer.getStats());
+        if (path === "confirmed") break;
+        if (path === "rejected") throw new Error("The selected connection was not confirmed as a UDP-only relay path.");
+        if (performance.now() >= deadline) throw new Error("The browser did not expose complete selected UDP relay details. Packet loss was not measured.");
+        await delay(50);
+      }
     }
     const start = performance.now();
     for (let i = 0; i < count; i++) {

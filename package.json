@@ -9,7 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check": "npm run lint && npm run typecheck && npm run build",
-    "test:nettruth": "node --experimental-strip-types --test tests/nettruth-model.test.mjs tests/nettruth-node.test.mjs tests/nettruth-selection.test.mjs"
+    "test:nettruth": "node --experimental-strip-types --test tests/nettruth-model.test.mjs tests/nettruth-node.test.mjs tests/nettruth-selection.test.mjs tests/nettruth-relay.test.mjs"
   },
   "dependencies": {
     "@cloudflare/speedtest": "1.13.1",

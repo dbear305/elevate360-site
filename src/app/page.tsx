@@ -190,7 +190,10 @@ export default function HomePage() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-8 text-sm text-slate-300 lg:flex">
+          <nav aria-label="Main navigation" className="hidden shrink-0 items-center gap-5 whitespace-nowrap text-sm text-slate-300 lg:flex">
+            <Link href="/systems/nettruth" className="font-semibold text-sky-200 transition hover:text-white">
+              Network Test
+            </Link>
             <a href="#proof" className="transition hover:text-white">
               Proof
             </a>
@@ -218,6 +221,11 @@ export default function HomePage() {
             <span className="hidden sm:inline">Call {phoneDisplay}</span>
           </TrackedLink>
         </div>
+        <nav aria-label="Network test" className="border-t border-white/10 px-4 py-2 lg:hidden">
+          <Link href="/systems/nettruth" className="flex min-h-11 items-center justify-center rounded-lg bg-sky-300/10 text-sm font-semibold text-sky-200 hover:bg-sky-300/20">
+            Run the free NetTruth network test
+          </Link>
+        </nav>
       </header>
 
       <div id="content">
