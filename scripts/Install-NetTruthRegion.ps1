@@ -118,13 +118,21 @@ function Get-Ed25519Fingerprint {
 
 $localWork = Join-Path ([IO.Path]::GetTempPath()) ('nettruth-region-' + [Guid]::NewGuid().ToString('N'))
 $remoteStage = $null
+$installationInvoked = $false
 [IO.Directory]::CreateDirectory($localWork) | Out-Null
 try {
     $utf8 = [Text.UTF8Encoding]::new($false)
     $scanErrors = Join-Path $localWork 'keyscan-stderr.txt'
     Write-Host 'Checking the presented SSH host key against your independently verified fingerprint...'
     $scanned = @(& ssh-keyscan.exe -T 10 -t ed25519 $PublicIPv4 2> $scanErrors)
-    if ($LASTEXITCODE -ne 0) { throw 'SSH host-key retrieval failed. Check TCP 22 and the server IP. Nothing uploaded.' }
+    $scanExitCode = $LASTEXITCODE
+    if ($scanExitCode -ne 0) {
+        $scanDetail = if (Test-Path -LiteralPath $scanErrors -PathType Leaf) {
+            ((Get-Content -LiteralPath $scanErrors -Tail 12) -join [Environment]::NewLine).Trim()
+        } else { '' }
+        if (-not $scanDetail) { $scanDetail = 'ssh-keyscan returned no diagnostic text.' }
+        throw "SSH host-key retrieval failed (exit $scanExitCode). This check does not use the YubiKey. Nothing uploaded.`n$scanDetail"
+    }
     $scanPattern = '^' + [regex]::Escape($PublicIPv4) + ' ssh-ed25519 [A-Za-z0-9+/]+={0,2}$'
     $keyLines = @($scanned | ForEach-Object { $_.ToString().Trim() } |
         Where-Object { $_ -cmatch $scanPattern } | Sort-Object -Unique)
@@ -262,6 +270,7 @@ os.execve('/usr/bin/bash', ['bash', str(root / 'install.sh')], environment)
     $arguments = @($bootstrapProgram, $remoteStage, $archiveHash, $PublicIPv4, $MeasurementHostname, $NodeName)
     $installCommand = 'python3 -c ' + (($arguments | ForEach-Object { ConvertTo-ShellLiteral $_ }) -join ' ')
     Write-Host "Installing $NodeName. Keep this PowerShell window open until the checks finish."
+    $installationInvoked = $true
     & ssh.exe @sshOptions -t $destination $installCommand
     if ($LASTEXITCODE -ne 0) {
         throw "Installation or verification returned an error. Keep the output above; source remains at $remoteStage."
@@ -275,9 +284,13 @@ os.execve('/usr/bin/bash', ['bash', str(root / 'install.sh')], environment)
     if ($remoteStage) {
         Write-Host "Review preserved installation source on the server: $remoteStage"
     }
-    Write-Host 'For service or TLS errors, run these commands in the provider Ubuntu web console:'
-    Write-Host 'bash /opt/nettruth-node/verify.sh'
-    Write-Host 'journalctl -u nettruth-node -u nettruth-turn -u caddy -n 80 --no-pager'
+    if ($installationInvoked) {
+        Write-Host 'For service or TLS errors, run these commands in the provider Ubuntu web console:'
+        Write-Host 'bash /opt/nettruth-node/verify.sh'
+        Write-Host 'journalctl -u nettruth-node -u nettruth-turn -u caddy -n 80 --no-pager'
+    } else {
+        Write-Host 'The Linux installer was not started. Service and TLS checks do not apply to this failure.'
+    }
     throw
 } finally {
     if (Test-Path -LiteralPath $localWork -PathType Container) {
