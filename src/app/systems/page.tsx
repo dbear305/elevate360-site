@@ -99,16 +99,17 @@ export default function SystemsPage() {
                       NetTruth Analyzer
                     </h2>
                     <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
-                      A local-first, path-aware diagnostic engine that separates
-                      endpoint, gateway, DNS, tunnel, WAN, and external-path
-                      conditions into one explainable record.
+                      Run a live browser check for speed, latency, jitter, and
+                      responsiveness under load. Export the evidence, then use
+                      a scoped diagnostic to investigate the layers a browser
+                      cannot inspect.
                     </p>
                     <div className="mt-7 flex flex-wrap gap-3">
                       <Link
                         href="/systems/nettruth"
                         className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-200"
                       >
-                        Open NetTruth Demonstration
+                        Run NetTruth Network Check
                       </Link>
                       <a
                         href="mailto:contact@elevate360systems.com?subject=Network%20Truth%20Audit"
@@ -124,8 +125,8 @@ export default function SystemsPage() {
                     className="rounded-3xl border border-white/10 bg-[#020817]/70 p-5"
                   >
                     <div className="flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">
-                      <span>Path evidence</span>
-                      <span className="text-emerald-300">Resolved</span>
+                      <span>Example path evidence</span>
+                      <span className="text-sky-300">Synthetic</span>
                     </div>
                     <div className="mt-5 space-y-3">
                       {[

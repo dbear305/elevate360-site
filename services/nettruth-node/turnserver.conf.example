@@ -1,0 +1,28 @@
+# TEMPLATE: replace PUBLIC_IPV4, DOMAIN, and RANDOM_SHARED_SECRET before use.
+# A directly assigned public IPv4 is assumed; NAT needs external-ip mapping.
+listening-port=3478
+listening-ip=PUBLIC_IPV4
+relay-ip=PUBLIC_IPV4
+realm=DOMAIN
+fingerprint
+use-auth-secret
+static-auth-secret=RANDOM_SHARED_SECRET
+no-tcp
+no-tls
+no-dtls
+no-tcp-relay
+no-cli
+no-multicast-peers
+min-port=49160
+max-port=49259
+user-quota=4
+total-quota=128
+max-allocate-lifetime=240
+stale-nonce=240
+# Only allow relay-to-relay traffic on this node's own public IP.
+# Coturn allowed-peer-ip takes precedence over denied-peer-ip.
+denied-peer-ip=0.0.0.0-255.255.255.255
+denied-peer-ip=::-ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
+allowed-peer-ip=PUBLIC_IPV4
+# Do not set max-bps/bps-capacity so low that the relay induces artificial loss.
+# Use provider egress alerts and session quotas. Production calibration required.

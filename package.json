@@ -8,9 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "check": "npm run lint && npm run typecheck && npm run build"
+    "check": "npm run lint && npm run typecheck && npm run build",
+    "test:nettruth": "node --experimental-strip-types --test tests/nettruth-model.test.mjs tests/nettruth-node.test.mjs"
   },
   "dependencies": {
+    "@cloudflare/speedtest": "1.13.1",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "next": "^16.3.2",

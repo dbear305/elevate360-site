@@ -1,0 +1,14 @@
+import Link from "next/link";
+
+const methods = [
+  ["Throughput", "Increasing payloads from 100 KB to 15 MB, or 25 MB in extended mode. The result is the 90th percentile of samples at least 10 ms long. This is a sequential HTTP test; it may under-read high-capacity links. It is not an ISP speed certificate."],
+  ["Latency & jitter", "Idle latency is the median HTTP round trip, using browser resource timings and server timing where available. Jitter is mean absolute difference between consecutive RTT samples. p95 captures slower samples; it is not the maximum."],
+  ["Loaded latency", "Additional timing requests run during downloads and uploads. Transfers shorter than 250 ms are excluded from loaded results. Added delay is the higher loaded median minus idle, floored at zero. Five loaded samples per direction and ten idle samples are needed for an interpretation."],
+  ["Packet loss", "600 or 1,000 numbered messages on an unordered WebRTC data channel with retransmission disabled, paced 5 ms apart. Both peers use a UDP relay. Missing messages are counted after a 3-second receive deadline. Loss is specific to this round-trip relay path. A failed connection or missing relay is unavailable, never 0% loss."],
+  ["Interpretation", "A loaded median increase above 40 ms or idle jitter above 10 ms triggers investigation guidance. These are product heuristics, not standards. The browser cannot locate an ISP, router, Wi-Fi, VPN, or device fault from these results alone."],
+  ["Use-case heuristics", "Calls: at least 10/5 Mbps, idle below 100 ms, jitter below 20 ms, loss below 1%, and added delay below 60 ms. Gaming: idle below 60 ms, jitter below 10 ms, loss below 1%, and added delay below 40 ms. One 4K stream: at least 30 Mbps down and loss below 2%. Positive guidance requires complete measurement coverage."],
+  ["Privacy & storage", "No account or email is needed to test. Endpoint providers see the public IP and test traffic. Raw results and imported posture files are not sent to Elevate360 or analytics. Saving is opt-in; exports contain the displayed evidence and samples. No session tokens or relay credentials are included."],
+];
+export function Methodology() {
+  return <div className="nt-method"><h2>Measurements you can inspect.</h2><p>NetTruth uses the MIT-licensed Cloudflare speedtest engine for HTTP throughput and timing, plus a separate cancellable WebRTC relay test when an operator-owned relay is configured. The default endpoint is Cloudflare’s edge; a NetTruth node can replace it.</p><dl>{methods.map(([title, body]) => <div key={title}><dt>{title}</dt><dd>{body}</dd></div>)}</dl><div className="nt-method-links"><a href="https://github.com/cloudflare/speedtest" target="_blank" rel="noreferrer">Measurement engine ↗</a><a href="https://www.w3.org/TR/webrtc/" target="_blank" rel="noreferrer">WebRTC specification ↗</a><Link href="/systems/nettruth/demo">View synthetic fault scenarios ↗</Link></div></div>;
+}

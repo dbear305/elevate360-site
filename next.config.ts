@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+const measurementOrigin = process.env.NETTRUTH_NODE_ORIGIN
+  ? new URL(process.env.NETTRUTH_NODE_ORIGIN).origin
+  : "";
+if (measurementOrigin && !measurementOrigin.startsWith("https://")) {
+  throw new Error("NetTruth measurement origin must use HTTPS");
+}
 
 const contentSecurityPolicy = `
   default-src 'self';
@@ -12,7 +18,7 @@ const contentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob:;
   font-src 'self' data:;
-  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co;
+  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co https://speed.cloudflare.com ${measurementOrigin};
   manifest-src 'self';
   media-src 'self';
   worker-src 'self' blob:;

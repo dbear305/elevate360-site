@@ -1,0 +1,8 @@
+# Replace with the DNS-only hostname pointing to your measurement VPS.
+# Do not enable Caddy encode, a CDN proxy, response caching, or access logging.
+measure.example.com {
+    reverse_proxy 127.0.0.1:8090 {
+        header_up X-Real-IP {remote_host}
+        flush_interval -1
+    }
+}
