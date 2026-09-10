@@ -31,10 +31,13 @@ export function ContactForm() {
     formData.set("_captcha", "false");
     formData.set("_replyto", String(formData.get("email") ?? ""));
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
     try {
       const response = await fetch(formEndpoint, {
         method: "POST",
         body: formData,
+        signal: controller.signal,
         headers: {
           Accept: "application/json",
         },
@@ -42,6 +45,11 @@ export function ContactForm() {
 
       if (!response.ok) {
         throw new Error("Form submission failed");
+      }
+      const result: unknown = await response.json();
+      if (!result || typeof result !== "object" || !("success" in result) ||
+          (result.success !== true && result.success !== "true")) {
+        throw new Error("The form provider did not accept the submission");
       }
 
       track("Contact Form Submitted", {
@@ -52,6 +60,8 @@ export function ContactForm() {
     } catch {
       track("Contact Form Failed");
       setSubmitState("error");
+    } finally {
+      clearTimeout(timeout);
     }
   }
 

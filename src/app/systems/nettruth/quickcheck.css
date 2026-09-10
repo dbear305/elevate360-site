@@ -16,15 +16,18 @@
 .nt-separator { padding: 0 8px; color: #658094; }
 .nt-run { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 56px; padding: 16px 24px; flex-shrink: 0; background: #67e8f9; color: #072028; border-radius: 9px; font-weight: 650; font-size: 16px; box-shadow: 0 0 28px #67e8f912; }
 .nt-run:hover, .nt-button:hover { background: #a5f3fc; }
-.nt-run span { font-size: 23px; line-height: 1; }
+.nt-run svg, .nt-button svg { flex-shrink: 0; }
+.nt-page button, .nt-page summary { cursor: pointer; }
+.nt-page :is(button, a, select, input):focus-visible { outline: 2px solid #a5f3fc; outline-offset: 4px; }
+.nt-page :disabled { cursor: not-allowed; opacity: .65; }
 .nt-stop { background: #fda4af; color: #420713; }
 .nt-stop:hover { background: #fecdd3; }
 .nt-options { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; padding: 18px 32px; background: #02081740; border-top: 1px solid var(--nt-line); font-size: 14px; }
 .nt-options fieldset { display: flex; gap: 16px; flex-wrap: wrap; }
 .nt-options legend { float: left; margin-right: 16px; color: var(--nt-muted); }
-.nt-options label { display: inline-flex; gap: 7px; align-items: center; min-height: 32px; }
+.nt-options label { display: inline-flex; gap: 7px; align-items: center; min-height: 44px; }
 .nt-options input { accent-color: #67e8f9; width: 16px; height: 16px; }
-.nt-options select { background: #102136; padding: 7px; border: 1px solid #40506a; border-radius: 5px; min-height: 38px; }
+.nt-options select { background: #102136; padding: 9px 12px; border: 1px solid #40506a; border-radius: 7px; min-height: 44px; }
 .nt-connection { gap: 12px !important; color: var(--nt-muted); }
 .nt-connection select { max-width: 100%; min-width: 0; }
 .nt-server-detail { padding: 14px 32px; border-top: 1px solid var(--nt-line); font-size: 13px; line-height: 1.7; color: #b3c1d4; }
@@ -42,13 +45,15 @@
 .nt-speeds > div + div { border-left: 1px solid var(--nt-line); }
 .nt-metric-label { display: flex; align-items: center; gap: 9px; font-size: 16px; color: #dbeafe; }
 .nt-metric-label span { color: #67e8f9; font: 24px ui-monospace, monospace; }
-.nt-speed-value { font: 500 clamp(38px, 5vw, 62px)/1.15 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: -.055em; color: #f0f9ff; margin: 14px 0 8px; overflow-wrap: anywhere; }
+.nt-speed-value { display: flex; align-items: baseline; flex-wrap: wrap; font: 500 clamp(38px, 5vw, 62px)/1.15 ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric: tabular-nums; letter-spacing: -.055em; color: #f0f9ff; margin: 14px 0 8px; overflow-wrap: anywhere; }
 .nt-speed-value span { font: 15px sans-serif; color: #b3c1d4; margin-left: 12px; letter-spacing: 0; }
 .nt-metrics { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--nt-line); }
 .nt-metrics > div { padding: 21px 26px; min-width: 0; }
 .nt-metrics > div + div { border-left: 1px solid var(--nt-line); }
 .nt-metrics h3 { font-size: 14px; color: #c5d3e5; }
-.nt-metrics p { font: 500 30px/1.4 ui-monospace, monospace; letter-spacing: -.03em; margin: 8px 0 4px; overflow-wrap: anywhere; }
+.nt-metrics p { font: 500 30px/1.4 ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -.03em; margin: 8px 0 4px; overflow-wrap: anywhere; }
+.nt-speeds > div:first-child { background: linear-gradient(160deg, #67e8f908, transparent); }
+.nt-speeds > div:last-child .nt-metric-label span { color: #c4b5fd; }
 .nt-metrics p span { font: 14px sans-serif; color: var(--nt-muted); margin-left: 7px; }
 .nt-console-foot { padding: 12px 28px; border-top: 1px solid var(--nt-line); display: flex; justify-content: space-between; gap: 14px; font: 12px/1.5 ui-monospace, monospace; color: #a9bacd; }
 .nt-privacy { margin-top: 16px; color: #a9bacd; font-size: 13px; line-height: 1.7; max-width: 1080px; }
@@ -130,4 +135,7 @@
 .nt-print-only { display: none; }
 @media (max-width: 1000px) { .nt-options .nt-fine { width: 100%; } .nt-export { flex-direction: column; align-items: start; } .nt-diagnostic { grid-template-columns: 1fr; } .nt-diagnostic > div:last-child { align-items: start; } }
 @media (max-width: 760px) { .nt-shell { padding: 24px 16px 45px; } .nt-title-row { display: block; } .nt-title-row > a { display: inline-block; margin-top: 18px; } .nt-control-row { padding: 24px 20px; align-items: stretch; flex-direction: column; } .nt-options { padding: 18px 20px; } .nt-speeds > div { padding: 23px 18px; } .nt-speed-value { font-size: clamp(28px, 8vw, 46px); } .nt-speed-value span { font-size: 12px; margin-left: 6px; } .nt-metrics { grid-template-columns: 1fr 1fr; } .nt-metrics > div { padding: 20px 18px; } .nt-metrics > div:nth-child(3) { border-left: 0; } .nt-metrics > div:nth-child(n+3) { border-top: 1px solid var(--nt-line); } .nt-analysis-grid { grid-template-columns: 1fr; } .nt-chart svg { min-height: 170px; } .nt-tab-panel { padding: 22px 20px; } .nt-tabs button { padding: 16px 17px; } .nt-finding { grid-template-columns: 1fr; gap: 7px; } .nt-usecases, .nt-coverage-grid { grid-template-columns: 1fr; } .nt-section-head { align-items: start; } .nt-method dl > div { grid-template-columns: 1fr; gap: 10px; } .nt-diagnostic { padding: 26px 22px; } .nt-chart-empty { min-height: 195px; } .nt-price span { display: block; margin-top: 9px; } .nt-console-foot { padding: 12px 18px; } }
+@media (max-width: 760px) { .nt-options .nt-connection { width: 100%; display: flex; align-items: stretch; flex-direction: column; gap: 8px !important; } .nt-options .nt-connection select { width: 100%; } .nt-options legend { line-height: 44px; } }
+@media (max-width: 380px) { .nt-speeds { grid-template-columns: 1fr; } .nt-speeds > div + div { border-left: 0; border-top: 1px solid var(--nt-line); } }
+@media (prefers-reduced-motion: reduce) { .nt-progress span { transition: none; } }
 @media print { @page { margin: 15mm; } body, .nt-page, .nt-console, .nt-chart, .nt-summary { background: white !important; color: #111 !important; } body::before, header, footer, .nt-topline, .nt-title-row > a, .nt-control-row, .nt-options, .nt-progress, .nt-stages, .nt-tabs, .nt-details, .nt-export, .nt-history, .nt-diagnostic, .nt-notice { display: none !important; } .nt-shell { padding: 0; max-width: none; } .nt-page p, .nt-page h1, .nt-page h2, .nt-page h3, .nt-page span, .nt-page dt, .nt-page dd { color: #111 !important; } .nt-print-only { display: block; line-height: 1.6; font-size: 12px; } .nt-print-only > div { margin: 14px 0; break-inside: avoid; } .nt-print-only h2 { margin: 24px 0 12px; font-weight: 700; font-size: 20px; } .nt-print-only h3 { font-weight: 700; } .nt-chart, .nt-summary, .nt-console { box-shadow: none; border: 1px solid #aaa; break-inside: avoid; } .nt-speed-value { font-size: 36px; } .nt-analysis-grid { grid-template-columns: 2fr 1fr; gap: 15px; } }

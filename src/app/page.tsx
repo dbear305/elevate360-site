@@ -55,9 +55,9 @@ const proofPoints = [
 
 const builtSystems = [
   {
-    title: "NetTruth Analyzer",
+    title: "NetTruth QuickCheck",
     description:
-      "High-resolution network diagnostics that captures latency, jitter, bufferbloat, path behavior, and connection health in one source of truth. Built for repeatable testing before and after infrastructure changes.",
+      "A free browser test for download, upload, latency, jitter, delay under load, and UDP packet loss. See what the measurements suggest and export the evidence before changing your equipment or service.",
   },
   {
     title: "FieldPay",
@@ -248,6 +248,14 @@ export default function HomePage() {
                   className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
                 >
                   Discuss a Project
+                </TrackedLink>
+                <TrackedLink
+                  href="/systems/nettruth"
+                  eventName="NetTruth Opened"
+                  eventLocation="home-hero"
+                  className="rounded-full border border-sky-300/40 bg-sky-300/10 px-6 py-3 text-sm font-semibold text-sky-100 transition hover:bg-sky-300/20"
+                >
+                  Free Network Test
                 </TrackedLink>
                 <Link
                   href="/systems"
@@ -500,13 +508,18 @@ export default function HomePage() {
                   <p className="mt-3 text-sm leading-7 text-slate-400">
                     {system.description}
                   </p>
+                  {system.title === "NetTruth QuickCheck" && (
+                    <Link href="/systems/nettruth" className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-sky-200 underline underline-offset-4">
+                      Run the free network test
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>
 
             <div className="mt-10 flex flex-col items-start gap-5 rounded-3xl border border-sky-400/20 bg-sky-400/[0.08] p-7 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-3xl text-sm leading-7 text-slate-300">
-                Explore sanitized system demonstrations, then discuss custom
+                Run the live network test or explore system demonstrations, then discuss custom
                 engineering, pilot, or licensing opportunities.
               </p>
               <Link

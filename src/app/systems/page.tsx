@@ -6,14 +6,14 @@ import { SystemHeader } from "./system-header";
 export const metadata: Metadata = {
   title: "Built Systems & Demonstrations",
   description:
-    "Explore sanitized demonstrations of network diagnostics, field-pay validation, and systems built by Elevate360.",
+    "Run the free NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
   alternates: {
     canonical: "/systems",
   },
   openGraph: {
     title: "Built Systems & Demonstrations | Elevate360 Systems",
     description:
-      "Observable proof of infrastructure, software, diagnostics, and automation built for real operations.",
+      "Run the free NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
     url: "/systems",
     siteName: "Elevate360 Systems",
     images: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Built Systems & Demonstrations | Elevate360 Systems",
     description:
-      "Observable proof of infrastructure, software, diagnostics, and automation built for real operations.",
+      "Run the free NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
     images: ["/opgraph.png"],
   },
 };
@@ -61,20 +61,20 @@ export default function SystemsPage() {
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
                 See how Elevate360 turns operational inputs into measured
                 evidence, deterministic calculations, controlled workflows,
-                and auditable results. Public demonstrations use sanitized
-                or synthetic data and preserve proprietary implementation.
+                and auditable results. NetTruth measures your live connection.
+                Product demonstrations use synthetic data.
               </p>
             </div>
 
             <div className="mt-10 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
               <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                Synthetic data
+                Live network test
               </span>
               <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                No customer information
+                Exportable evidence
               </span>
               <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                Proprietary logic protected
+                Synthetic demo data
               </span>
             </div>
           </div>
@@ -86,7 +86,7 @@ export default function SystemsPage() {
               <article className="group relative overflow-hidden rounded-[30px] border border-sky-300/25 bg-gradient-to-br from-sky-400/[0.14] to-white/[0.03] p-7 lg:col-span-2 sm:p-9">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <span className="rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                    Interactive proof available
+                    Free live network test
                   </span>
                   <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Diagnostics and evidence
@@ -96,7 +96,7 @@ export default function SystemsPage() {
                 <div className="mt-8 grid gap-8 md:grid-cols-[1.05fr_0.95fr] md:items-end">
                   <div>
                     <h2 className="text-3xl font-semibold text-white">
-                      NetTruth Analyzer
+                      NetTruth QuickCheck
                     </h2>
                     <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
                       Run a live browser check for speed, latency, jitter, and
@@ -109,7 +109,7 @@ export default function SystemsPage() {
                         href="/systems/nettruth"
                         className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-200"
                       >
-                        Run NetTruth Network Check
+                        Run the free test
                       </Link>
                       <a
                         href="mailto:contact@elevate360systems.com?subject=Network%20Truth%20Audit"
@@ -121,26 +121,24 @@ export default function SystemsPage() {
                   </div>
 
                   <div
-                    aria-hidden="true"
                     className="rounded-3xl border border-white/10 bg-[#020817]/70 p-5"
                   >
                     <div className="flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">
-                      <span>Example path evidence</span>
-                      <span className="text-sky-300">Synthetic</span>
+                      <span>What it measures</span>
+                      <span className="text-sky-300">Live</span>
                     </div>
                     <div className="mt-5 space-y-3">
                       {[
-                        ["Endpoint", "Verified", "bg-emerald-300"],
-                        ["Controlled edge", "1.8 ms", "bg-emerald-300"],
-                        ["DNS and TLS", "97 ms", "bg-sky-300"],
-                        ["External path", "Healthy", "bg-emerald-300"],
-                      ].map(([label, value, color]) => (
+                        ["Download / upload", "Mbps"],
+                        ["Latency / jitter", "ms"],
+                        ["Delay under load", "ms"],
+                        ["UDP packet loss", "%"],
+                      ].map(([label, value]) => (
                         <div
                           key={label}
                           className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.03] px-4 py-3 text-sm"
                         >
                           <span className="flex items-center gap-3 text-slate-300">
-                            <span className={`h-2.5 w-2.5 rounded-full ${color}`} />
                             {label}
                           </span>
                           <span className="font-medium text-white">{value}</span>

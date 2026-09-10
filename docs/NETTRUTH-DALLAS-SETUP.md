@@ -1,6 +1,6 @@
 # Dallas node: owner deployment
 
-The website's automatic selector is implemented. Dallas and NYC are registered on the preview branch for browser validation. On September 10, 2026, the owner confirmed Dallas rebooted onto kernel `6.8.0-139-generic`, all three services were active, DNS resolved to `155.138.252.237`, and public HTTPS health passed. Browser UDP delivery, measurement calibration and production rollout remain separate gates. The following procedure documents how the Dallas node was deployed and can be maintained.
+The website's automatic selector is implemented. Dallas and NYC are registered on the preview branch for browser validation. On September 10, 2026, the owner confirmed Dallas rebooted onto kernel `6.8.0-139-generic`, all three services were active, DNS resolved to `155.138.252.237`, and public HTTPS health passed. The owner subsequently completed a Dallas browser run with all six metrics and 1,000 of 1,000 UDP messages received; raw-sample arithmetic and automatic selection were reviewed. The two-node website is ready for an owner-authorized public beta. Controlled repeatability and capacity calibration remain requirements before comparative accuracy claims. The following procedure documents how the Dallas node was deployed and can be maintained.
 
 ## 1. Create the server in Vultr
 
