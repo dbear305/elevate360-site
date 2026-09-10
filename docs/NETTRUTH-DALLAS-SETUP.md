@@ -71,6 +71,10 @@ The defaults are `measure-dfw.elevate360systems.com` and `Elevate360 - Dallas (D
 
 Windows OpenSSH 9.5 can fail in `ssh-keyscan` with `choose_kex: unsupported KEX method sntrup761x25519-sha512@openssh.com` even when ordinary SSH works ([Microsoft issue](https://github.com/PowerShell/Win32-OpenSSH/issues/2140)). Using a saved key that matches the owner-supplied fingerprint avoids that helper defect. No server algorithms or host-verification settings are weakened. A missing saved key still requires successful retrieval and fingerprint verification.
 
+A fresh install opens three SSH connections: prepare, upload, install. Answer the passphrase/PIN/touch prompts promptly; the server can close a connection while authentication is still pending. `User presence confirmed` confirms the local hardware-key operation, not completion of server authentication.
+
+If the upload finished but SSH closed before the bootstrap extracted it, rerun this script with the original IP/fingerprint plus `-ResumeStage` and `-ResumeArchiveSHA256`, using the exact staging directory and source-bundle hash printed by that run. This performs one SSH authentication and rechecks the preserved archive's checksum and complete inventory before starting the installer. It does not upload or create a new staging directory. It refuses existing extracted files rather than overwriting a partially started installation; inspect those files and the server logs if that check fails.
+
 The installer updates Ubuntu packages, installs the pinned runtime/Caddy/coturn, configures restricted service accounts and relay peers, and opens the service ports through the host firewall. It requires a dedicated measurement VM. A provider firewall, if attached, must also permit TCP 22 for administration, TCP 80/443, UDP 3478 and UDP 49160–49259; additional unrelated inbound ports are unnecessary.
 
 If the installer reports a pending HTTPS check, keep its output and rerun the verifier after resolving the reported DNS/TLS/firewall issue. Do not recreate keys or reinstall repeatedly to treat a certificate problem. No automatic reboot is performed.

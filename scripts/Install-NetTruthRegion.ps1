@@ -21,6 +21,12 @@ service source is uploaded; the YubiKey identity stays on this PC.
 The provider firewall must allow TCP 22, 80, 443 and UDP 3478, 49160-49259.
 The installer configures the Ubuntu firewall. It does not create the server,
 change provider firewall rules, publish the website, or certify accuracy.
+
+If SSH closes after upload but before extraction, provide ResumeStage and
+ResumeArchiveSHA256 using the exact directory and archive hash printed by the
+failed run. Resume uses one authenticated connection and repeats all host-pin,
+archive integrity and file-inventory checks. Existing extracted files are not
+overwritten; inspect a partially started installation before retrying it.
 .EXAMPLE
 .\scripts\Install-NetTruthRegion.ps1 -PublicIPv4 'THE_NEW_SERVER_IP' -HostFingerprint 'SHA256:THE_VERIFIED_SERVER_FINGERPRINT'
 #>
@@ -34,7 +40,9 @@ param(
 
     [string]$MeasurementHostname = 'measure-dfw.elevate360systems.com',
     [string]$NodeName = 'Elevate360 - Dallas (DFW)',
-    [string]$IdentityFile = (Join-Path $env:USERPROFILE '.ssh\nettruth_yubi_02')
+    [string]$IdentityFile = (Join-Path $env:USERPROFILE '.ssh\nettruth_yubi_02'),
+    [string]$ResumeStage = '',
+    [string]$ResumeArchiveSHA256 = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -42,6 +50,13 @@ $PSNativeCommandUseErrorActionPreference = $false
 $PSNativeCommandArgumentPassing = 'Standard'
 Set-StrictMode -Version Latest
 if (-not $IsWindows) { throw 'Run this owner handoff in PowerShell 7 on your Windows PC.' }
+if ([string]::IsNullOrEmpty($ResumeStage) -ne [string]::IsNullOrEmpty($ResumeArchiveSHA256)) {
+    throw 'ResumeStage and ResumeArchiveSHA256 must be supplied together.'
+}
+if ($ResumeStage -and ($ResumeStage -cnotmatch '^/root/nettruth-install-[A-Za-z0-9_-]+\z' -or
+    $ResumeArchiveSHA256 -cnotmatch '^[0-9a-f]{64}\z')) {
+    throw 'Resume requires the exact preserved staging directory and lowercase SHA-256 printed during upload.'
+}
 
 $parsedIP = $null
 if ($PublicIPv4 -notmatch '^[0-9]{1,3}(\.[0-9]{1,3}){3}$' -or
@@ -226,29 +241,37 @@ try {
         '-i', $IdentityFile
     )
     $destination = "root@$PublicIPv4"
-    $bundleDirectory = Join-Path $localWork 'bundle'
-    [IO.Directory]::CreateDirectory($bundleDirectory) | Out-Null
-    foreach ($file in $sourceFiles) {
-        Copy-Item -LiteralPath (Join-Path $sourceRoot $file) -Destination (Join-Path $bundleDirectory $file)
-    }
-    $archive = Join-Path $localWork 'nettruth-node.zip'
-    [IO.Compression.ZipFile]::CreateFromDirectory($bundleDirectory, $archive)
-    $archiveHash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
     Write-Host "Pinned host fingerprint: $HostFingerprint"
-    Write-Host "Source bundle SHA-256: $archiveHash"
-    Write-Host 'Your YubiKey may request its PIN and a touch for each SSH/SCP connection.'
+    if ($ResumeStage) {
+        $remoteStage = $ResumeStage
+        $archiveHash = $ResumeArchiveSHA256
+        Write-Host "Resuming the preserved upload at $remoteStage."
+        Write-Host "Required archive SHA-256: $archiveHash"
+        Write-Host 'One SSH authentication is needed. Respond to the passphrase/PIN/touch prompts promptly.'
+    } else {
+        $bundleDirectory = Join-Path $localWork 'bundle'
+        [IO.Directory]::CreateDirectory($bundleDirectory) | Out-Null
+        foreach ($file in $sourceFiles) {
+            Copy-Item -LiteralPath (Join-Path $sourceRoot $file) -Destination (Join-Path $bundleDirectory $file)
+        }
+        $archive = Join-Path $localWork 'nettruth-node.zip'
+        [IO.Compression.ZipFile]::CreateFromDirectory($bundleDirectory, $archive)
+        $archiveHash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+        Write-Host "Source bundle SHA-256: $archiveHash"
+        Write-Host 'Three SSH authentications are needed: prepare, upload, install. Respond to each passphrase/PIN/touch prompt promptly.'
 
-    $stageProgram = 'import os,tempfile; assert os.geteuid()==0, "Root login required"; print(tempfile.mkdtemp(prefix="nettruth-install-", dir="/root"))'
-    $stageCommand = 'python3 -c ' + (ConvertTo-ShellLiteral $stageProgram)
-    $stageOutput = @(& ssh.exe @sshOptions $destination $stageCommand)
-    if ($LASTEXITCODE -ne 0) { throw 'Could not authenticate and create the installation staging directory. No service configuration was changed.' }
-    if ($stageOutput.Count -ne 1 -or $stageOutput[0] -cnotmatch '^/root/nettruth-install-[A-Za-z0-9_-]+$') {
-        throw 'Could not identify one new remote staging directory. No installer was started.'
+        $stageProgram = 'import os,tempfile; assert os.geteuid()==0, "Root login required"; print(tempfile.mkdtemp(prefix="nettruth-install-", dir="/root"))'
+        $stageCommand = 'python3 -c ' + (ConvertTo-ShellLiteral $stageProgram)
+        $stageOutput = @(& ssh.exe @sshOptions $destination $stageCommand)
+        if ($LASTEXITCODE -ne 0) { throw 'Could not authenticate and create the installation staging directory. No service configuration was changed.' }
+        if ($stageOutput.Count -ne 1 -or $stageOutput[0] -cnotmatch '^/root/nettruth-install-[A-Za-z0-9_-]+$') {
+            throw 'Could not identify one new remote staging directory. No installer was started.'
+        }
+        $remoteStage = $stageOutput[0].ToString()
+        Write-Host "Uploading the reviewed source to $remoteStage..."
+        & scp.exe @sshOptions $archive "${destination}:$remoteStage/nettruth-node.zip"
+        if ($LASTEXITCODE -ne 0) { throw "Source upload failed. The installer was not started. Staging: $remoteStage" }
     }
-    $remoteStage = $stageOutput[0].ToString()
-    Write-Host "Uploading the reviewed source to $remoteStage..."
-    & scp.exe @sshOptions $archive "${destination}:$remoteStage/nettruth-node.zip"
-    if ($LASTEXITCODE -ne 0) { throw "Source upload failed. The installer was not started. Staging: $remoteStage" }
 
     # Arguments are validated above and shell-quoted. The bootstrap uses only
     # Python's standard library, checks the complete ZIP before extraction, and
