@@ -3,5 +3,10 @@
     "id": "nyc1",
     "name": "Elevate360 - New York (NYC1)",
     "origin": "https://measure.elevate360systems.com"
+  },
+  {
+    "id": "dfw1",
+    "name": "Elevate360 - Dallas (DFW)",
+    "origin": "https://measure-dfw.elevate360systems.com"
   }
 ]

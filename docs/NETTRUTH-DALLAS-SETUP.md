@@ -1,6 +1,6 @@
 # Dallas node: owner deployment
 
-The website's automatic selector is implemented. NYC is the only deployed node until this procedure is completed. These steps add Dallas without moving the existing NYC service. No Dallas server, account charge, DNS record or regional calibration is created by this document.
+The website's automatic selector is implemented. Dallas and NYC are registered on the preview branch for browser validation. On September 10, 2026, the owner confirmed Dallas rebooted onto kernel `6.8.0-139-generic`, all three services were active, DNS resolved to `155.138.252.237`, and public HTTPS health passed. Browser UDP delivery, measurement calibration and production rollout remain separate gates. The following procedure documents how the Dallas node was deployed and can be maintained.
 
 ## 1. Create the server in Vultr
 
@@ -87,8 +87,8 @@ At the **Dallas Ubuntu shell**:
 bash /opt/nettruth-node/verify.sh
 ```
 
-If the verifier reports a reboot requirement, schedule the reboot while no tests are running, reconnect, and repeat verification. Caddy must present a valid public certificate. Confirm public API health, exact download/upload byte counts, timing headers and actual browser UDP delivery.
+If the verifier reports a reboot requirement, schedule the reboot while no tests are running, reconnect, and repeat verification. Caddy must present a valid public certificate and public API health must pass before registering a node for preview validation.
 
-Only after those checks pass, add this node's actual ID/name/origin to `src/lib/nettruth/nodes.json`, deploy a preview, and authorize its exact origin on both nodes with `scripts/allow-nettruth-preview.py`. Use Auto and manual runs from Texas, export the reports, and verify which node was selected. DNS proximity does not override the measured response-time selector.
+Add the deployed node's actual ID/name/origin to `src/lib/nettruth/nodes.json` on the preview branch, deploy that preview, and authorize its exact origin on both nodes with `scripts/allow-nettruth-preview.py`. Check that no legacy `NETTRUTH_NODE_ORIGIN` or `NETTRUTH_NODES` build override hides the committed inventory. Confirm exact download/upload byte counts, timing headers and actual browser UDP delivery. Use Auto and manual runs from Texas, export the reports, and verify which node was selected. DNS proximity does not override the measured response-time selector. Do not promote the preview until these checks pass.
 
 Before making premium accuracy claims, record repeatability, known-bandwidth/delay/loss cases and concurrent-load capacity separately for NYC and Dallas. A successful health check or a faster result alone is not calibration. Source and maintenance instructions remain in Daniel's existing GitHub repository.
