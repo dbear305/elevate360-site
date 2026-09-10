@@ -6,7 +6,7 @@ Status (2026-09-10): implemented for the existing Elevate360 Next.js site. Danie
 
 Use PowerShell 7 with the existing Vercel login, Node/npm and the working YubiKey identity at `%USERPROFILE%\.ssh\nettruth_yubi_02`. From a clean copy of this branch, run `./scripts/Deploy-NetTruthPreview.ps1`. Review the script before running it; it uses Vercel CLI 59.15.1, checks the existing `elevate360-site` project in `dbear305s-projects`, links that project, and builds a preview with both owned-node variables. It does not promote production.
 
-After the build it uses SSH with strict host verification to add only the returned preview origin to `/etc/nettruth/node.env`. This briefly restarts `nettruth-node`, preserves other origins and settings, backs up the prior configuration, and rolls back on a failed health check. The YubiKey PIN/touch remains on Daniel's PC. No private key or relay secret is uploaded. The preview URL is saved locally under `.vercel/nettruth-preview-url.txt`; send that URL and the exported test JSON for review. An automatic Git preview without these build variables is not the owned-node validation deployment.
+After the build it uses SSH with strict host verification to add only the returned preview origin to `/etc/nettruth/node.env`. This briefly restarts `nettruth-node`, preserves other origins and settings, backs up the prior configuration, and rolls back on a failed health check. The YubiKey PIN/touch remains on Daniel's PC. No private key or relay secret is uploaded. The preview URL is saved locally under `.vercel/nettruth-preview-url.txt`; send that URL and the exported test JSON for review. Git-based previews now use the same owned endpoint by default through `src/lib/nettruth/config.ts`; an operator still needs to authorize each exact preview origin before running measurements.
 
 Start with one Quick Check. Confirm the node label is New York, run completes, HTTP samples are present, packet loss is either measured with counts or explicitly unavailable, and JSON export succeeds. Fast links can lack loaded-latency samples with the current bounded payload plan; that is a calibration issue to resolve before accuracy claims. Never interpret missing metrics as a clean bill of health.
 
@@ -25,11 +25,11 @@ Measure starts, finishes, report exports, diagnostic email clicks, and contact-f
 - Print/PDF via browser print, JSON, up to five opt-in device-local summaries, coverage-aware use-case guidance.
 - Dedicated Node HTTP service with exact CORS origins, short-lived client/origin-bound sessions, session/IP/global resource quotas, streaming bounded downloads, capped streaming uploads, and optional coturn credentials.
 
-## Two operating modes
+## Endpoint configuration
 
-Reference mode works with no server secrets. It uses `@cloudflare/speedtest` 1.13.1 and Cloudflare's published HTTP endpoints. Cloudflare is identified in the interface. Both vendor measurement logging and result logging are explicitly disabled. The provider still sees public IPs and test traffic, and may retain its own operational data. This dependency has no guaranteed commercial SLA for this product; use your own endpoint before treating it as revenue-critical infrastructure.
+The website defaults to the owned NYC1 node at `https://measure.elevate360systems.com`. The page and CSP read one shared public configuration so automatic Git previews work without separately entered build variables. The engine uses `@cloudflare/speedtest` 1.13.1 with vendor measurement logging and result logging disabled. The internal reference-endpoint implementation remains available for development comparisons but is not selected by the website and is never an outage fallback. Infrastructure providers still see IPs and test traffic and may retain operational data.
 
-Owned-node mode is selected at build time with `NETTRUTH_NODE_ORIGIN=https://<measurement-host>` and optional `NETTRUTH_NODE_NAME`. Rebuild the site after changing either. A node outage stays an error; it is not silently replaced with reference data. Node configuration is server-side; relay secrets never enter the Next.js build. The client receives only scoped short-lived credentials for a test.
+The defaults can be overridden at build time with `NETTRUTH_NODE_ORIGIN=https://<measurement-host>` and optional `NETTRUTH_NODE_NAME`. Rebuild the site after changing either. A node outage stays an error; it is not silently replaced with reference data. Relay secrets never enter the Next.js build. The client receives only scoped short-lived credentials for a test.
 
 ## Deploy the owned measurement service
 

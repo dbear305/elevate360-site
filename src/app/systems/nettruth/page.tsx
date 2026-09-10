@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SystemHeader } from "../system-header";
 import { SystemFooter } from "../system-footer";
 import { QuickCheck } from "./quickcheck";
+import { getMeasurementConfig } from "@/lib/nettruth/config";
 import "./quickcheck.css";
 
 export const metadata: Metadata = {
@@ -13,16 +14,11 @@ export const metadata: Metadata = {
 };
 
 export default function NetTruthPage() {
-  let nodeOrigin: string | null = null;
-  if (process.env.NETTRUTH_NODE_ORIGIN) {
-    const url = new URL(process.env.NETTRUTH_NODE_ORIGIN);
-    if (url.protocol !== "https:" || url.username || url.password || url.pathname !== "/" || url.search || url.hash) throw new Error("NETTRUTH_NODE_ORIGIN must be a bare HTTPS origin.");
-    nodeOrigin = url.origin;
-  }
+  const measurementConfig = getMeasurementConfig();
   return <main className="nt-page min-h-screen bg-[#020817] text-white">
     <a href="#network-check" className="nt-skip">Skip to network test</a>
     <SystemHeader />
-    <QuickCheck config={{ nodeOrigin, nodeName: process.env.NETTRUTH_NODE_NAME || "NetTruth measurement node" }} />
+    <QuickCheck config={measurementConfig} />
     <SystemFooter />
   </main>;
 }

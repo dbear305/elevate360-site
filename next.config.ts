@@ -1,12 +1,8 @@
 import type { NextConfig } from "next";
+import { getMeasurementConfig } from "./src/lib/nettruth/config";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const measurementOrigin = process.env.NETTRUTH_NODE_ORIGIN
-  ? new URL(process.env.NETTRUTH_NODE_ORIGIN).origin
-  : "";
-if (measurementOrigin && !measurementOrigin.startsWith("https://")) {
-  throw new Error("NetTruth measurement origin must use HTTPS");
-}
+const measurementOrigin = getMeasurementConfig().nodeOrigin;
 
 const contentSecurityPolicy = `
   default-src 'self';
