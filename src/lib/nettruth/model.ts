@@ -1,5 +1,7 @@
+import type { MeasurementNode, NodeSelection } from "./node-selection";
+
 export type TestMode = "quick" | "extended";
-export type TestPhase = "connecting" | "latency" | "download" | "upload" | "packetLoss" | "complete";
+export type TestPhase = "selecting" | "connecting" | "latency" | "download" | "upload" | "packetLoss" | "complete";
 export type TestStatus = "running" | "complete" | "partial" | "cancelled" | "error";
 export type Finding = { id: string; tone: "good" | "warn" | "info"; title: string; evidence: string; action: string };
 export type BandwidthSample = { mbps: number; durationMs: number; bytes: number };
@@ -12,6 +14,7 @@ export type CheckReport = {
   mode: TestMode;
   status: TestStatus;
   endpoint: { name: string; origin: string; provider: "cloudflare-reference" | "nettruth-node" };
+  selection?: NodeSelection;
   connection: "Unknown" | "Ethernet" | "Wi-Fi" | "Cellular";
   samples: { idle: number[]; downloadLatency: number[]; uploadLatency: number[]; download: BandwidthSample[]; upload: BandwidthSample[] };
   loss: LossResult;
@@ -21,6 +24,7 @@ export type CheckReport = {
   elapsedMs: number;
 };
 export type EndpointConfig = { nodeOrigin: string | null; nodeName: string };
+export type FleetConfig = { nodes: MeasurementNode[] };
 export type LocalCheck = { id: string; status: "pass" | "warn" | "unknown"; title: string; evidence: string; action: string };
 export type LocalReport = { schema: "nettruth.windows-posture.v1"; collectedAt: string; checks: LocalCheck[] };
 
@@ -66,7 +70,7 @@ export function findings(r: CheckReport): Finding[] {
   return out;
 }
 
-export function useCases(r: CheckReport) {
+export function evaluateUseCases(r: CheckReport) {
   const m = metrics(r);
   const full = r.status === "complete" && r.samples.idle.length >= 10 && r.loss.status === "measured" && r.samples.uploadLatency.length >= 5 && r.samples.downloadLatency.length >= 5;
   return [

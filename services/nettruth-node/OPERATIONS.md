@@ -1,14 +1,18 @@
 # Owner-operated NetTruth measurement node
 
-This package installs a beta measurement endpoint on Daniel's existing Ubuntu 24.04 x64 Droplet, 137.184.214.71. It does not publish the frontend, configure DNS, change SSH authentication, certify capacity, or perform vulnerability scanning.
+This package installs a beta measurement endpoint on a dedicated Ubuntu 24.04 x64 VM. The default identity is Daniel's NYC1 Droplet, 137.184.214.71. It does not publish the frontend, configure DNS, change SSH authentication, certify capacity, or perform vulnerability scanning.
 
 ## Install
 
 Extract the complete bundle on the server. From its directory, run `bash install.sh`. It checks the OS and assigned IP before modifying anything, installs OS updates, Caddy from its official stable APT repository, Ubuntu coturn, and the checksum-pinned Node 24.21.0 runtime. Keep the authenticated SSH connection and DigitalOcean Web Console available. No automatic reboot is performed.
 
+For a new region, supply all three nonsecret environment parameters to `bash install.sh`: `NETTRUTH_PUBLIC_IP` (that VM's directly assigned public IPv4), `NETTRUTH_HOSTNAME` (its DNS-only hostname), and `NETTRUTH_NODE_NAME` (its actual region label). Never reuse NYC's address for a different VM. The installer validates identity before changes, saves it, preserves existing preview origins and the relay secret on reruns, and refuses a conflicting regional identity. On a previously configured node, a plain rerun uses its saved identity. The updated verifier reads that identity and distinguishes DNS, TLS, connection, and HTTP failures.
+
 The installer permits TCP 22/80/443 and UDP 3478/49160-49259 through UFW. Existing firewall rules are preserved and require review if this server was used for other purposes. It starts restricted Node and TURN service accounts, creates the relay secret only on the server, retains that secret on reruns, and backs up replaced configuration under `/var/backups/nettruth/`. The default coturn unit is disabled in favor of the dedicated `nettruth-turn` unit. This installer is for this dedicated test node, not a shared production server.
 
 In the authoritative DNS provider, add the A record `measure` pointing to `137.184.214.71`. Do not change the website's existing A/CNAME records, mail records or nameservers. The measurement record must resolve directly to this server; do not proxy it through a CDN. Caddy obtains and renews its TLS certificate after the DNS record resolves and ports 80/443 are reachable.
+
+That record is for NYC. A regional VM gets its own A record, for example `measure-dfw`, pointing to its actual new address. After endpoint and browser checks pass, add its public identity to the website's `src/lib/nettruth/nodes.json`. The page and CSP derive the same node list. Authorize each exact preview origin on every listed node. Auto probes the configured nodes before each run; manual selection remains available for comparison. Selection is based on HTTP response time, not a capacity certification or a guaranteed geographically nearest route.
 
 ## Commands you own
 
@@ -34,7 +38,7 @@ The $12 shared-CPU NYC1 node is a pilot. It must not be advertised as a certifie
 
 Before public release, record endpoint, node specifications, client/browser, connection type, test version, UTC time, sample counts, payload volume, and raw samples. Establish repeatability and measurement error with controlled known bandwidth limits, delay, jitter, and loss on an authorized lab path. Compare against an independent reference on the SAME path, accounting for queue discipline and UDP versus TCP semantics. Test concurrent users and monitor server CPU, NIC, and event-loop capacity. Record the maximum validated link speed and concurrency. Mark runs with insufficient samples or server saturation inconclusive; do not blame the customer's connection.
 
-Do not claim the benchmark has run until its data exist. Public browser/device checks, UDP relay connectivity, fault injection, capacity calibration and privacy/export checks remain outstanding. If the shared host is a bottleneck, move to a dedicated-CPU plan or suitable dedicated node before claiming premium measurement quality. A more expensive host alone does not validate the algorithm.
+Do not claim the benchmark has run until its data exist. Daniel's initial Texas browser run against NYC displayed all six metrics, including 0 of 1,000 UDP messages lost. That single screenshot is not calibration. Broader browser/device checks, fault injection, capacity calibration and privacy/export checks remain outstanding for every region. If the shared host is a bottleneck, move to a dedicated-CPU plan or suitable dedicated node before claiming premium measurement quality. A more expensive host alone does not validate the algorithm.
 
 ## Costs and recovery
 

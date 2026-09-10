@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import { getMeasurementConfig } from "./src/lib/nettruth/config";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const measurementOrigin = getMeasurementConfig().nodeOrigin;
+const measurementOrigins = getMeasurementConfig().nodes.map(node => node.origin).join(" ");
 
 const contentSecurityPolicy = `
   default-src 'self';
@@ -14,7 +14,7 @@ const contentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob:;
   font-src 'self' data:;
-  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co https://speed.cloudflare.com ${measurementOrigin};
+  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co ${measurementOrigins};
   manifest-src 'self';
   media-src 'self';
   worker-src 'self' blob:;

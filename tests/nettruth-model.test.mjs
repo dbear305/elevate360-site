@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { metrics, findings, percentile, jitter, parseLocalReport, useCases } from '../src/lib/nettruth/model.ts';
+import { metrics, findings, percentile, jitter, parseLocalReport, evaluateUseCases } from '../src/lib/nettruth/model.ts';
 const fixture = () => ({
   schema: 'nettruth.quickcheck.v1', id: 'test', startedAt: '2026-09-10T10:00:00Z', status: 'complete', mode: 'quick', connection: 'Ethernet', elapsedMs: 12000,
   endpoint: { name: 'Test only', origin: 'https://measurement.example', provider: 'nettruth-node' },
@@ -29,7 +29,7 @@ test('missing UDP coverage cannot become zero loss or a positive use-case verdic
   const r = fixture();
   assert.equal(r.loss.percent, null);
   assert.ok(findings(r).some(f => f.id === 'loss' && f.tone === 'info'));
-  assert.ok(useCases(r).every(c => c.verdict === 'Incomplete evidence'));
+  assert.ok(evaluateUseCases(r).every(c => c.verdict === 'Incomplete evidence'));
 });
 test('insufficient loaded samples do not establish a healthy loaded path', () => {
   const r = fixture(); r.samples.downloadLatency = [10]; r.samples.uploadLatency = [10];
@@ -41,7 +41,7 @@ test('real measured loss is surfaced; partial results remain incomplete', () => 
   r.loss = { status: 'measured', sent: 1000, received: 980, lost: 20, percent: 2, transport: 'UDP relay', sampleWindowMs: 8000 };
   assert.equal(findings(r).find(f => f.id === 'loss')?.tone, 'warn');
   r.status = 'cancelled';
-  assert.ok(useCases(r).every(c => c.verdict === 'Incomplete evidence'));
+  assert.ok(evaluateUseCases(r).every(c => c.verdict === 'Incomplete evidence'));
 });
 test('local imports reject wrong schemas, unknown IDs, duplicate IDs, and oversized evidence', () => {
   const r = { schema: 'nettruth.windows-posture.v1', collectedAt: '2026-09-10T10:00:00Z', checks: [{ id: 'defender', status: 'unknown', title: 'Not available', evidence: 'No access', action: 'Ask admin' }] };

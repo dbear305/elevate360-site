@@ -24,12 +24,8 @@ try {
     $link = Get-Content -Raw '.vercel/project.json' | ConvertFrom-Json
     if ($link.projectName -ne $project) { throw 'Linked project name does not match elevate360-site.' }
 
-    Write-Host 'Building a preview against your New York measurement node...'
-    $deploymentOutput = & npx.cmd --yes $cli deploy --target preview --scope $scope --yes `
-        --build-env 'NETTRUTH_NODE_ORIGIN=https://measure.elevate360systems.com' `
-        --build-env 'NETTRUTH_NODE_NAME=Elevate360 - New York (NYC1)' `
-        --env 'NETTRUTH_NODE_ORIGIN=https://measure.elevate360systems.com' `
-        --env 'NETTRUTH_NODE_NAME=Elevate360 - New York (NYC1)'
+    Write-Host 'Building a preview using the configured measurement-node inventory...'
+    $deploymentOutput = & npx.cmd --yes $cli deploy --target preview --scope $scope --yes
     if ($LASTEXITCODE -ne 0) { throw 'Preview deployment failed. The live site was not promoted.' }
     $urls = @($deploymentOutput | ForEach-Object { $_.ToString().Trim() } | Where-Object { $_ -match '^https://[a-z0-9-]+\.vercel\.app/?$' })
     if ($urls.Count -ne 1) { throw 'Could not identify one deployment URL. Send the Vercel output.' }
@@ -43,6 +39,7 @@ try {
     Write-Host "OPEN: $preview/systems/nettruth"
     Write-Host 'Select Ethernet if connected by cable. Run one Quick Check, then export JSON and send the file back.'
     Write-Host 'If Vercel asks you to sign in to view the preview, use your existing account.'
+    Write-Host 'This helper authorized NYC only. Additional configured nodes must authorize the same exact preview origin.'
     Write-Host 'This is a preview. No production promotion or accuracy certification has occurred.'
 } finally {
     Pop-Location

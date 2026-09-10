@@ -1,12 +1,12 @@
 # NetTruth QuickCheck: implementation and launch
 
-Status (2026-09-10): implemented for the existing Elevate360 Next.js site. Daniel installed the owned NYC1 node and TURN service on 137.184.214.71. Public HTTPS health, session issuance, upload/download byte counts and timing/CORS headers passed endpoint smoke checks. Real browser measurements, actual UDP relay delivery, Windows execution, and multi-device calibration remain launch gates. This is a beta, not a calibrated competitor to Cloudflare or Ookla.
+Status (2026-09-10): implemented for the existing Elevate360 Next.js site. Daniel installed the owned NYC1 node and TURN service on 137.184.214.71. Endpoint smoke checks passed. Daniel's Texas browser completed an extended run with six metrics and 0 of 1,000 UDP messages lost in that sample. The screenshot shows 46.4 ms idle RTT and 160.3 ms added delay under load; distance alone does not establish the cause of that increase. Raw report review, Windows collector execution, repeatability and capacity calibration remain launch gates. This is a beta, not a calibrated competitor to Cloudflare or Ookla.
 
 ## Preview from Daniel's Windows PC
 
-Use PowerShell 7 with the existing Vercel login, Node/npm and the working YubiKey identity at `%USERPROFILE%\.ssh\nettruth_yubi_02`. From a clean copy of this branch, run `./scripts/Deploy-NetTruthPreview.ps1`. Review the script before running it; it uses Vercel CLI 59.15.1, checks the existing `elevate360-site` project in `dbear305s-projects`, links that project, and builds a preview with both owned-node variables. It does not promote production.
+The working deployment path is the existing GitHub-to-Vercel integration for `feat/nettruth-quickcheck`. A branch push builds a preview automatically. Production remains a separate promotion. The local CLI deployment previously failed with generic `fetch failed`; its cause is not established, so do not repeatedly retry it or change DNS/TLS to work around it. `Deploy-NetTruthPreview.ps1` remains an optional CLI path; it now builds from the same node inventory and only authorizes NYC.
 
-After the build it uses SSH with strict host verification to add only the returned preview origin to `/etc/nettruth/node.env`. This briefly restarts `nettruth-node`, preserves other origins and settings, backs up the prior configuration, and rolls back on a failed health check. The YubiKey PIN/touch remains on Daniel's PC. No private key or relay secret is uploaded. The preview URL is saved locally under `.vercel/nettruth-preview-url.txt`; send that URL and the exported test JSON for review. Git-based previews now use the same owned endpoint by default through `src/lib/nettruth/config.ts`; an operator still needs to authorize each exact preview origin before running measurements.
+Use PowerShell 7, the existing Vercel login and `%USERPROFILE%\.ssh\nettruth_yubi_02` to retrieve the READY preview for its exact Git commit. Then pipe `scripts/allow-nettruth-preview.py` over SSH to each configured node, passing that exact preview origin. Strict host verification and the YubiKey PIN/touch remain on Daniel's PC. The helper preserves settings, backs up the prior configuration, restarts only `nettruth-node`, and rolls back on failed local health. No private key or relay secret is uploaded. Do not authorize all `vercel.app` origins. Git previews read `src/lib/nettruth/nodes.json` by default.
 
 Start with one Quick Check. Confirm the node label is New York, run completes, HTTP samples are present, packet loss is either measured with counts or explicitly unavailable, and JSON export succeeds. Fast links can lack loaded-latency samples with the current bounded payload plan; that is a calibration issue to resolve before accuracy claims. Never interpret missing metrics as a clean bill of health.
 
@@ -18,6 +18,7 @@ Measure starts, finishes, report exports, diagnostic email clicks, and contact-f
 
 ## Delivered
 
+- Automatic server choice before each run, manual server selection, and server-selection evidence in exports. Only the deployed NYC node is active initially.
 - Download/upload HTTP throughput, idle RTT median/p95, jitter, loaded latency in both directions, sample counts, raw sample export, cautious next-step findings.
 - Quick and extended plans (~96.6 MB/~296.6 MB payload before retries), 90/180-second wall-clock limits; stop on background tab/offline and explicit cancel.
 - Operator-owned UDP packet-loss implementation with mandatory relay transport and no retransmissions. Missing relay/unsupported browser/failed connection stays unknown.
@@ -29,7 +30,22 @@ Measure starts, finishes, report exports, diagnostic email clicks, and contact-f
 
 The website defaults to the owned NYC1 node at `https://measure.elevate360systems.com`. The page and CSP read one shared public configuration so automatic Git previews work without separately entered build variables. The engine uses `@cloudflare/speedtest` 1.13.1 with vendor measurement logging and result logging disabled. The internal reference-endpoint implementation remains available for development comparisons but is not selected by the website and is never an outage fallback. Infrastructure providers still see IPs and test traffic and may retain operational data.
 
-The defaults can be overridden at build time with `NETTRUTH_NODE_ORIGIN=https://<measurement-host>` and optional `NETTRUTH_NODE_NAME`. Rebuild the site after changing either. A node outage stays an error; it is not silently replaced with reference data. Relay secrets never enter the Next.js build. The client receives only scoped short-lived credentials for a test.
+The page and Content Security Policy read the same validated inventory in `src/lib/nettruth/nodes.json`. Add only deployed and verified nodes. Alternatively, set `NETTRUTH_NODES` to a JSON array with `id`, `name`, and bare HTTPS `origin` fields. One to eight nodes are supported; IDs and origins must be unique. The legacy `NETTRUTH_NODE_ORIGIN` plus optional `NETTRUTH_NODE_NAME` override still selects a single node. Remove that legacy override when using the fleet inventory; configuring both override forms fails the build. Rebuild after inventory changes. Relay secrets never enter the Next.js build. The client receives only scoped short-lived credentials for a test.
+
+Auto contacts each configured node from the visitor's current connection without GPS or IP-geolocation lookup. It discards one warmup response, takes three HTTP health samples, requires at least two successful timed responses, and selects the lowest median. At most three nodes are probed concurrently, with a 1.5-second deadline per request and response body. Selection runs again on every test. All speed, idle/loaded latency and packet-loss measurements then stay on the chosen node. Manual choice probes only that server and never silently falls back. An unavailable fleet produces an error, never synthetic results.
+
+Selection probe times include browser/HTTP processing and are not the reported idle RTT. A responsive health endpoint does not establish spare throughput or UDP availability. The export records selection mode, selected ID, timestamp, probe samples and availability; the normal test records its measured coverage separately.
+
+## Add a regional node
+
+Auto selection needs real geographic coverage. The initial registry contains NYC only; a Dallas label without a deployed Dallas server must never be added. DigitalOcean's current Droplet locations do not include Dallas. Vultr's Dallas (`dfw`) region is a candidate second pilot, subject to checkout availability and capacity validation. Existing NYC stays available for East Coast visitors and comparisons.
+
+1. Provision a dedicated Ubuntu 24.04 x64 measurement VM in the chosen region, using Daniel's public SSH key. Confirm provider price and traffic allowance. Record its actual public IPv4; do not reuse NYC's IP.
+2. Point a DNS-only A record, for example `measure-dfw.elevate360systems.com`, to that new address. Keep the website and mail records intact.
+3. On that VM, run the complete node installer with `NETTRUTH_PUBLIC_IP`, `NETTRUTH_HOSTNAME`, and `NETTRUTH_NODE_NAME` set to its verified identity. These are nonsecret parameters. Use the server's separate generated relay secret and existing restrictive firewall/peer rules.
+4. Verify valid public HTTPS, byte counts, timing headers, actual browser UDP delivery, resource limits, and the same exact preview origin on both nodes. Keep a node out of the registry until these checks pass.
+5. Add its actual `id`, `name`, and HTTPS `origin` to `nodes.json`, push a preview, and authorize the new preview origin on every registered node. The example Dallas hostname is not a deployed endpoint until steps 1–4 are complete.
+6. Compare Auto and manual runs from Texas and the East Coast; export raw reports. Verify fresh selection after changing networks, unavailable-node exclusion, and manual failure without fallback. Calibrate each node independently and record its validated capacity before making accuracy claims.
 
 ## Deploy the owned measurement service
 
@@ -66,4 +82,4 @@ Before public release, run it on supported Windows 10/11 machines with and witho
 - Confirm report export/print readability and local import behavior. Confirm existing contact-form provider activation and real inbox delivery (not just HTTP 200). No test email has been sent by this implementation.
 - Confirm hostname, pricing, provider operating limits, and production readiness. Preview source is maintained in Daniel's existing public GitHub repository; private credentials must remain outside source control.
 
-Do not add accounts, subscriptions, multi-region orchestration, a CVE scanner, or an AI narrator before the first paid diagnostic validates demand. The immediate bottlenecks are a calibrated owned node and a credible real-customer outcome.
+Regional selection is requested functionality; fleet provisioning and capacity validation remain operational work. Accounts, subscriptions, a CVE scanner and an AI narrator remain outside this release. The commercial goal is a calibrated service and a credible paid diagnostic outcome.

@@ -1,19 +1,106 @@
 #!/usr/bin/env bash
-# Owner-operated beta installer. Run only on Daniel's provisioned measurement node.
+# Owner-operated beta installer. Defaults to NYC; a new region requires all three
+# NETTRUTH_PUBLIC_IP, NETTRUTH_HOSTNAME, and NETTRUTH_NODE_NAME environment values.
 set -Eeuo pipefail
 umask 027
 trap 'printf "\nInstallation stopped at line %s. Keep your SSH session open.\n" "$LINENO" >&2' ERR
 NODE_VERSION=24.21.0
 NODE_SHA256=fd8e59d5a511510f6a298afb548f18c7d2b1be404d8b4a27d94fbe49f56cb2d6
-PUBLIC_IPV4=137.184.214.71
-MEASUREMENT_HOST=measure.elevate360systems.com
 SOURCE_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
-[[ $EUID == 0 ]] || { echo 'Run as root on nettruth-01.' >&2; exit 1; }
+[[ $EUID == 0 ]] || { echo 'Run as root on the provisioned measurement node.' >&2; exit 1; }
 . /etc/os-release
 [[ $ID == ubuntu && $VERSION_ID == 24.04 && $(uname -m) == x86_64 ]] || { echo 'Requires Ubuntu 24.04 x64.' >&2; exit 1; }
+# This read-only preflight precedes the lock file, backups, or package changes.
+# Never source node.env: it contains a secret and is data, not shell code.
+command -v python3 >/dev/null || { echo 'Python 3 is required for configuration preflight; nothing changed.' >&2; exit 1; }
+NODE_SETTINGS=$(python3 - /etc/nettruth/node.env /etc/nettruth/turnserver.conf <<'PY'
+import ipaddress, os, pathlib, re, sys
+
+def stop(message):
+    raise SystemExit(message + ' Nothing changed.')
+
+def dns_name(value):
+    return (len(value) <= 253 and '.' in value and
+            all(re.fullmatch(r'[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?', part)
+                for part in value.split('.')) and
+            not value.rsplit('.', 1)[-1].isdigit())
+
+def read_environment(path):
+    if path.is_symlink() or not path.is_file() or path.stat().st_uid != 0:
+        stop('Expected a root-owned regular node.env file.')
+    result = {}
+    for line in path.read_text(encoding='utf-8').splitlines():
+        if not line or line.startswith('#'):
+            continue
+        key, separator, value = line.partition('=')
+        if not separator or not re.fullmatch(r'[A-Z][A-Z0-9_]*', key) or key in result:
+            stop('Existing node.env format is ambiguous; inspect it before reinstalling.')
+        result[key] = value
+    return result
+
+defaults = ('137.184.214.71', 'measure.elevate360systems.com', 'Elevate360 - New York (NYC1)')
+keys = ('NETTRUTH_PUBLIC_IP', 'NETTRUTH_HOSTNAME', 'NETTRUTH_NODE_NAME')
+env_path, turn_path = map(pathlib.Path, sys.argv[1:])
+has_existing = env_path.exists() or env_path.is_symlink()
+existing = read_environment(env_path) if has_existing else {}
+saved = tuple(existing.get(key) for key in keys)
+if has_existing:
+    if not re.fullmatch(r'[0-9a-f]{64}', existing.get('TURN_SHARED_SECRET', '')):
+        stop('Existing relay secret is unrecognized; refusing to rotate it silently.')
+    origins = existing.get('ALLOWED_ORIGINS', '').split(',')
+    if any(not value.startswith('https://') or not dns_name(value[8:]) for value in origins):
+        stop('Existing ALLOWED_ORIGINS must contain exact bare HTTPS DNS origins.')
+    if any(value is not None for value in saved) and not all(saved):
+        stop('Existing node identity is incomplete; inspect node.env before reinstalling.')
+    if not all(saved):
+        # Legacy installs did not persist an identity. Recover it from both
+        # service configurations, never assume a non-NYC machine is NYC.
+        host_match = re.fullmatch(r'([^:]+):3478', existing.get('TURN_HOST', ''))
+        if not host_match or not turn_path.is_file() or turn_path.is_symlink():
+            stop('Cannot determine the legacy node identity safely.')
+        addresses = re.findall(r'^listening-ip=(.+)$', turn_path.read_text(), re.M)
+        if len(addresses) != 1:
+            stop('Cannot determine one legacy listening IPv4.')
+        saved_ip, saved_host = addresses[0], host_match.group(1)
+        saved_name = defaults[2] if (saved_ip, saved_host) == defaults[:2] else os.environ.get(keys[2])
+        if not saved_name:
+            stop('Legacy non-NYC node needs an explicit NETTRUTH_NODE_NAME.')
+        saved = (saved_ip, saved_host, saved_name)
+    values = tuple(os.environ.get(key, value) for key, value in zip(keys, saved))
+    if values != saved:
+        stop('Requested identity conflicts with this existing node; refusing to overwrite its region.')
+else:
+    supplied = [key in os.environ for key in keys]
+    if any(supplied) and not all(supplied):
+        stop('A new regional node requires all three NETTRUTH identity values.')
+    values = tuple(os.environ.get(key, value) for key, value in zip(keys, defaults))
+public_ip, hostname, node_name = values
+try:
+    address = ipaddress.IPv4Address(public_ip)
+    if not address.is_global or address.is_multicast or address.is_reserved:
+        raise ValueError()
+except ValueError:
+    stop('NETTRUTH_PUBLIC_IP must be a directly assigned public IPv4 address.')
+if not dns_name(hostname):
+    stop('NETTRUTH_HOSTNAME must be a lowercase DNS hostname, without scheme, port, or path.')
+if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9 .(),_-]{0,99}', node_name) or node_name != node_name.strip():
+    stop('NETTRUTH_NODE_NAME must be 1-100 plain ASCII letters, numbers, spaces, or .(),_- characters.')
+if has_existing and existing.get('TURN_HOST') != hostname + ':3478':
+    stop('Saved identity and relay hostname disagree; inspect configuration before reinstalling.')
+print(public_ip)
+print(hostname)
+print(node_name)
+PY
+)
+mapfile -t NODE_IDENTITY <<< "$NODE_SETTINGS"
+PUBLIC_IPV4=${NODE_IDENTITY[0]}
+MEASUREMENT_HOST=${NODE_IDENTITY[1]}
+NODE_NAME=${NODE_IDENTITY[2]}
 ip -4 -o addr show | awk '{print $4}' | cut -d/ -f1 | grep -Fxq "$PUBLIC_IPV4" || { echo 'Wrong server: expected the assigned NetTruth public IPv4.' >&2; exit 1; }
-[[ -f "$SOURCE_DIR/server.mjs" && -f "$SOURCE_DIR/turnserver.conf.example" ]] || { echo 'Extract the complete installer bundle first.' >&2; exit 1; }
+for source in server.mjs turnserver.conf.example verify.sh OPERATIONS.md; do
+    [[ -f "$SOURCE_DIR/$source" ]] || { echo 'Extract the complete installer bundle first.' >&2; exit 1; }
+done
 exec 9>/run/nettruth-install.lock
 flock -n 9 || { echo 'Another NetTruth installation is already running.' >&2; exit 1; }
 install -d -m 700 /var/backups/nettruth
@@ -68,18 +155,25 @@ install -m 644 "$SOURCE_DIR/server.mjs" /opt/nettruth-node/server.mjs
 install -m 755 "$SOURCE_DIR/verify.sh" /opt/nettruth-node/verify.sh
 install -m 644 "$SOURCE_DIR/OPERATIONS.md" /opt/nettruth-node/OPERATIONS.md
 /opt/nettruth-runtime/bin/node --check /opt/nettruth-node/server.mjs
-python3 - "$SOURCE_DIR" "$PUBLIC_IPV4" "$MEASUREMENT_HOST" <<'PY'
+python3 - "$SOURCE_DIR" "$PUBLIC_IPV4" "$MEASUREMENT_HOST" "$NODE_NAME" <<'PY'
 import grp, pathlib, re, secrets, sys, os
-source, ip, host = sys.argv[1:]
+source, ip, host, name = sys.argv[1:]
 env_path = pathlib.Path('/etc/nettruth/node.env')
 secret = None
+origins = 'https://www.elevate360systems.com,https://elevate360systems.com'
 if env_path.exists():
-    found = re.search(r'^TURN_SHARED_SECRET=([0-9a-f]{64})$', env_path.read_text(), re.M)
-    if not found:
+    previous = env_path.read_text()
+    found = re.findall(r'^TURN_SHARED_SECRET=([0-9a-f]{64})$', previous, re.M)
+    allowed = re.findall(r'^ALLOWED_ORIGINS=(.+)$', previous, re.M)
+    if len(found) != 1 or len(allowed) != 1:
         raise SystemExit('Existing relay secret is unrecognized; refusing to rotate it silently.')
-    secret = found.group(1)
+    secret = found[0]
+    origins = allowed[0]
 secret = secret or secrets.token_hex(32)
-env_path.write_text(f'''ALLOWED_ORIGINS=https://www.elevate360systems.com,https://elevate360systems.com
+env_path.write_text(f'''ALLOWED_ORIGINS={origins}
+NETTRUTH_PUBLIC_IP={ip}
+NETTRUTH_HOSTNAME={host}
+NETTRUTH_NODE_NAME={name}
 BIND_HOST=127.0.0.1
 PORT=8090
 TRUST_LOOPBACK_PROXY=true
@@ -196,6 +290,11 @@ systemctl reload-or-restart caddy.service
 curl -fsS --retry 5 --retry-connrefused --retry-delay 1 --max-time 5 -H 'Origin: https://www.elevate360systems.com' http://127.0.0.1:8090/health >/dev/null
 
 echo '6/6 Verifying local services and reporting remaining launch gates...'
-bash /opt/nettruth-node/verify.sh
+VERIFY_STATUS=0
+bash /opt/nettruth-node/verify.sh || VERIFY_STATUS=$?
 printf '\nConfiguration backups: %s\n' "$BACKUP_DIR"
 echo 'Installation does not publish the website or certify measurement accuracy.'
+if [[ $VERIFY_STATUS != 0 ]]; then
+    echo 'Installation steps finished, but verification is pending. Resolve the reported check and rerun /opt/nettruth-node/verify.sh.'
+fi
+exit "$VERIFY_STATUS"
