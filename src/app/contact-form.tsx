@@ -9,7 +9,8 @@ type SubmitState = "idle" | "submitting" | "success" | "error";
 const formEndpoint =
   "https://formsubmit.co/ajax/contact@elevate360systems.com";
 
-export function ContactForm() {
+export function ContactForm({ intent = "project" }: { intent?: "project" | "diagnostic" }) {
+  const isDiagnostic = intent === "diagnostic";
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -26,7 +27,8 @@ export function ContactForm() {
     }
 
     setSubmitState("submitting");
-    formData.set("_subject", "New Elevate360 project inquiry");
+    formData.set("_subject", isDiagnostic ? "NetTruth paid diagnostic scope request" : "New Elevate360 project inquiry");
+    formData.set("inquiry_type", intent);
     formData.set("_template", "table");
     formData.set("_captcha", "false");
     formData.set("_replyto", String(formData.get("email") ?? ""));
@@ -54,11 +56,12 @@ export function ContactForm() {
 
       track("Contact Form Submitted", {
         budget: String(formData.get("budget") || "Not provided"),
+        inquiryType: intent,
       });
       form.reset();
       setSubmitState("success");
     } catch {
-      track("Contact Form Failed");
+      track("Contact Form Failed", { inquiryType: intent });
       setSubmitState("error");
     } finally {
       clearTimeout(timeout);
@@ -68,6 +71,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
+      aria-label={isDiagnostic ? "Request a paid network diagnostic scope" : "Project inquiry"}
       className="relative mt-10 grid max-w-4xl gap-5 rounded-3xl border border-white/10 bg-[#020817]/60 p-6 sm:grid-cols-2 sm:p-8"
     >
       <div
@@ -100,6 +104,7 @@ export function ContactForm() {
         <input
           type="text"
           name="company"
+          required={isDiagnostic}
           autoComplete="organization"
           className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-sky-300"
         />
@@ -133,15 +138,47 @@ export function ContactForm() {
         </select>
       </label>
 
+      {isDiagnostic && <>
+        <label className="text-sm font-medium text-slate-200">
+          Business location (city and state)
+          <input type="text" name="business_location" required maxLength={160}
+            placeholder="Miami, FL"
+            className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-sky-300" />
+        </label>
+        <label className="text-sm font-medium text-slate-200">
+          When does the problem happen?
+          <input type="text" name="problem_timing" required maxLength={240}
+            placeholder="During calls, each afternoon, under load…"
+            className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-sky-300" />
+        </label>
+      </>}
+
       <label className="text-sm font-medium text-slate-200 sm:col-span-2">
-        What&apos;s broken?
+        {isDiagnostic ? "What is failing, and how does it affect the business?" : "What's broken?"}
         <textarea
           name="message"
           required
           rows={5}
+          maxLength={5000}
+          aria-describedby={isDiagnostic ? "diagnostic-privacy" : undefined}
           className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-sky-300"
         />
       </label>
+
+      {isDiagnostic && <>
+        <p id="diagnostic-privacy" className="text-sm leading-6 text-slate-400 sm:col-span-2">
+          Include the affected devices, connection type, and what you have tried.
+          Keep passwords, keys, customer data, and configuration files out of this form.
+          Your NetTruth results are not attached automatically. Keep your JSON export;
+          we can agree how to share relevant evidence after scoping.
+        </p>
+        <label className="flex items-start gap-3 text-sm leading-6 text-slate-200 sm:col-span-2">
+          <input type="checkbox" name="paid_scope_acknowledged" value="yes" required
+            className="mt-1 h-5 w-5 shrink-0 accent-sky-300" />
+          <span>I understand that diagnostics start at $750. This is a scope request;
+            work begins only after we agree the written scope, price, and payment terms.</span>
+        </label>
+      </>}
 
       <div className="flex flex-col items-start gap-4 sm:col-span-2 sm:flex-row sm:items-center">
         <button
@@ -151,13 +188,15 @@ export function ContactForm() {
         >
           {submitState === "submitting"
             ? "Sending..."
-            : "Send Project Details"}
+            : isDiagnostic ? "Request diagnostic scope" : "Send Project Details"}
         </button>
 
         <p aria-live="polite" className="text-sm leading-6">
           {submitState === "success" ? (
             <span className="text-emerald-200">
-              Project details sent. We&apos;ll follow up by email.
+              {isDiagnostic
+                ? "Scope request sent. We'll follow up by email. No appointment or payment has been made."
+                : "Project details sent. We'll follow up by email."}
             </span>
           ) : null}
           {submitState === "error" ? (

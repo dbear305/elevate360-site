@@ -6,14 +6,14 @@ import { SystemHeader } from "./system-header";
 export const metadata: Metadata = {
   title: "Built Systems & Demonstrations",
   description:
-    "Run the free NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
+    "Run the NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
   alternates: {
     canonical: "/systems",
   },
   openGraph: {
     title: "Built Systems & Demonstrations | Elevate360 Systems",
     description:
-      "Run the free NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
+      "Run the NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
     url: "/systems",
     siteName: "Elevate360 Systems",
     images: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Built Systems & Demonstrations | Elevate360 Systems",
     description:
-      "Run the free NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
+      "Run the NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
     images: ["/opgraph.png"],
   },
 };
@@ -86,7 +86,7 @@ export default function SystemsPage() {
               <article className="group relative overflow-hidden rounded-[30px] border border-sky-300/25 bg-gradient-to-br from-sky-400/[0.14] to-white/[0.03] p-7 lg:col-span-2 sm:p-9">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <span className="rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                    Free live network test
+                    Automated network test
                   </span>
                   <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Diagnostics and evidence
@@ -101,7 +101,7 @@ export default function SystemsPage() {
                     <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
                       Run a live browser check for speed, latency, jitter, and
                       responsiveness under load. Export the evidence, then use
-                      a scoped diagnostic to investigate the layers a browser
+                      a paid diagnostic, starting at $750, to investigate the layers a browser
                       cannot inspect.
                     </p>
                     <div className="mt-7 flex flex-wrap gap-3">
@@ -109,14 +109,14 @@ export default function SystemsPage() {
                         href="/systems/nettruth"
                         className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-200"
                       >
-                        Run the free test
+                        Run the test
                       </Link>
-                      <a
-                        href="mailto:contact@elevate360systems.com?subject=Network%20Truth%20Audit"
+                      <Link
+                        href="/systems/nettruth/diagnostic"
                         className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
                       >
-                        Request an Audit
-                      </a>
+                        Paid diagnostic scope
+                      </Link>
                     </div>
                   </div>
 

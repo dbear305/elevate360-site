@@ -57,7 +57,7 @@ const builtSystems = [
   {
     title: "NetTruth QuickCheck",
     description:
-      "A free browser test for download, upload, latency, jitter, delay under load, and UDP packet loss. See what the measurements suggest and export the evidence before changing your equipment or service.",
+      "A browser test for speed, latency, jitter, delay under load, and UDP packet loss when measurable. Test against Miami or Dallas, export the evidence, and request a paid diagnostic when your business needs investigation.",
   },
   {
     title: "FieldPay",
@@ -99,7 +99,7 @@ const deploymentOptions = [
     title: "Network Diagnostic",
     price: "Starts at $750",
     description:
-      "Review the current setup, identify bottlenecks, and determine whether the issue is ISP-side or inside the network.",
+      "One location, one agreed network problem. Guided remote measurements, authorized configuration review, written findings, and a prioritized correction plan. Scope and total price agreed before work begins.",
   },
   {
     title: "Secure Performance Network",
@@ -223,7 +223,7 @@ export default function HomePage() {
         </div>
         <nav aria-label="Network test" className="border-t border-white/10 px-4 py-2 lg:hidden">
           <Link href="/systems/nettruth" className="flex min-h-11 items-center justify-center rounded-lg bg-sky-300/10 text-sm font-semibold text-sky-200 hover:bg-sky-300/20">
-            Run the free NetTruth network test
+            Run the NetTruth network test
           </Link>
         </nav>
       </header>
@@ -263,7 +263,7 @@ export default function HomePage() {
                   eventLocation="home-hero"
                   className="rounded-full border border-sky-300/40 bg-sky-300/10 px-6 py-3 text-sm font-semibold text-sky-100 transition hover:bg-sky-300/20"
                 >
-                  Free Network Test
+                  Network Test
                 </TrackedLink>
                 <Link
                   href="/systems"
@@ -518,7 +518,7 @@ export default function HomePage() {
                   </p>
                   {system.title === "NetTruth QuickCheck" && (
                     <Link href="/systems/nettruth" className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-sky-200 underline underline-offset-4">
-                      Run the free network test
+                      Run the network test
                     </Link>
                   )}
                 </div>
@@ -618,6 +618,7 @@ export default function HomePage() {
                   <p className="mt-4 text-sm leading-7 text-slate-400">
                     {option.description}
                   </p>
+                  {option.title === "Network Diagnostic" && <Link href="/systems/nettruth/diagnostic" className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-sky-200 underline underline-offset-4">See scope and request a diagnostic</Link>}
                 </div>
               ))}
             </div>
@@ -735,16 +736,6 @@ export default function HomePage() {
                   Tell us what is failing, slowing the business down, or still
                   being handled manually. Include the current environment,
                   target outcome, timeline, and budget range.
-                </p>
-              </div>
-
-              <div className="mt-8 max-w-3xl rounded-3xl border border-sky-400/20 bg-sky-400/[0.08] p-6">
-                <p className="text-lg font-semibold text-white">
-                  Custom engineering engagements start at $5,000.
-                </p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">
-                  Focused diagnostics and component-level work are scoped
-                  separately.
                 </p>
               </div>
 
