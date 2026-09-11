@@ -739,16 +739,6 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="mt-8 max-w-3xl rounded-3xl border border-sky-400/20 bg-sky-400/[0.08] p-6">
-                <p className="text-lg font-semibold text-white">
-                  Custom engineering engagements start at $5,000.
-                </p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">
-                  Focused diagnostics and component-level work are scoped
-                  separately.
-                </p>
-              </div>
-
               <ContactForm />
 
               <div className="mt-8 flex flex-wrap gap-4">
