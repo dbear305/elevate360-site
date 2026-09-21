@@ -1,7 +1,7 @@
 import type { MeasurementNode, NodeSelection } from "./node-selection";
 
 export type TestMode = "quick" | "extended";
-export type TestPhase = "selecting" | "connecting" | "latency" | "download" | "upload" | "packetLoss" | "complete";
+export type TestPhase = "verifying" | "selecting" | "connecting" | "latency" | "download" | "upload" | "packetLoss" | "complete";
 export type TestStatus = "running" | "complete" | "partial" | "cancelled" | "error";
 export type Finding = { id: string; tone: "good" | "warn" | "info"; title: string; evidence: string; action: string };
 export type BandwidthSample = { mbps: number; durationMs: number; bytes: number };

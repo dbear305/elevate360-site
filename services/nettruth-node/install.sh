@@ -44,6 +44,14 @@ keys = ('NETTRUTH_PUBLIC_IP', 'NETTRUTH_HOSTNAME', 'NETTRUTH_NODE_NAME')
 env_path, turn_path = map(pathlib.Path, sys.argv[1:])
 has_existing = env_path.exists() or env_path.is_symlink()
 existing = read_environment(env_path) if has_existing else {}
+verification_required = os.environ.get('NETTRUTH_REQUIRE_VERIFICATION', existing.get('NETTRUTH_REQUIRE_VERIFICATION', 'true'))
+turnstile_secret = os.environ.get('TURNSTILE_SECRET_KEY', existing.get('TURNSTILE_SECRET_KEY', ''))
+if verification_required not in ('true', 'false'):
+    stop('NETTRUTH_REQUIRE_VERIFICATION must be true or false.')
+if turnstile_secret and not re.fullmatch(r'[A-Za-z0-9_-]{1,2048}', turnstile_secret):
+    stop('TURNSTILE_SECRET_KEY contains unsupported characters or exceeds its size limit.')
+if verification_required == 'true' and not turnstile_secret:
+    stop('Human verification requires TURNSTILE_SECRET_KEY before installation.')
 saved = tuple(existing.get(key) for key in keys)
 if has_existing:
     if not re.fullmatch(r'[0-9a-f]{64}', existing.get('TURN_SHARED_SECRET', '')):
@@ -161,14 +169,25 @@ source, ip, host, name = sys.argv[1:]
 env_path = pathlib.Path('/etc/nettruth/node.env')
 secret = None
 origins = 'https://www.elevate360systems.com,https://elevate360systems.com'
+existing = {}
 if env_path.exists():
     previous = env_path.read_text()
+    existing = dict(line.split('=', 1) for line in previous.splitlines() if line and not line.startswith('#'))
     found = re.findall(r'^TURN_SHARED_SECRET=([0-9a-f]{64})$', previous, re.M)
     allowed = re.findall(r'^ALLOWED_ORIGINS=(.+)$', previous, re.M)
     if len(found) != 1 or len(allowed) != 1:
         raise SystemExit('Existing relay secret is unrecognized; refusing to rotate it silently.')
     secret = found[0]
     origins = allowed[0]
+# Repeat validation immediately before writing; never print either secret.
+verification_required = os.environ.get('NETTRUTH_REQUIRE_VERIFICATION', existing.get('NETTRUTH_REQUIRE_VERIFICATION', 'true'))
+turnstile_secret = os.environ.get('TURNSTILE_SECRET_KEY', existing.get('TURNSTILE_SECRET_KEY', ''))
+if verification_required not in ('true', 'false'):
+    raise SystemExit('NETTRUTH_REQUIRE_VERIFICATION must be true or false.')
+if turnstile_secret and not re.fullmatch(r'[A-Za-z0-9_-]{1,2048}', turnstile_secret):
+    raise SystemExit('TURNSTILE_SECRET_KEY contains unsupported characters or exceeds its size limit.')
+if verification_required == 'true' and not turnstile_secret:
+    raise SystemExit('Human verification requires TURNSTILE_SECRET_KEY; node.env was not rewritten.')
 secret = secret or secrets.token_hex(32)
 env_path.write_text(f'''ALLOWED_ORIGINS={origins}
 NETTRUTH_PUBLIC_IP={ip}
@@ -180,6 +199,8 @@ TRUST_LOOPBACK_PROXY=true
 HOURLY_BYTE_LIMIT=2147483648
 TURN_HOST={host}:3478
 TURN_SHARED_SECRET={secret}
+NETTRUTH_REQUIRE_VERIFICATION={verification_required}
+TURNSTILE_SECRET_KEY={turnstile_secret}
 ''')
 os.chmod(env_path, 0o600)
 conf = pathlib.Path(source, 'turnserver.conf.example').read_text()

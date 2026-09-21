@@ -10,7 +10,8 @@ const contentSecurityPolicy = `
   form-action 'self' mailto:;
   frame-ancestors 'none';
   object-src 'none';
-  script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com;
+  script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://challenges.cloudflare.com;
+  frame-src https://challenges.cloudflare.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob:;
   font-src 'self' data:;
