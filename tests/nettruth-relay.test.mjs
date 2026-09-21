@@ -43,21 +43,26 @@ test('missing or ambiguous selected transport evidence remains unverified', () =
   assert.equal(inspectSelectedUdpRelay(ambiguous), 'pending');
 });
 
-function fakePeers(t, snapshots) {
+function fakePeers(t, snapshots, sendMessage) {
   const original = globalThis.RTCPeerConnection;
   const peers = [];
   let messages = 0;
   class Peer {
     iceGatheringState = 'complete';
+    connectionState = 'connected';
     reads = 0;
     localDescription = {};
     incoming = { readyState: 'open', close() {} };
     constructor() { peers.push(this); }
     createDataChannel() {
-      return { readyState: 'open', bufferedAmount: 0, close() {}, send(data) {
+      const channel = { readyState: 'open', bufferedAmount: 0, close() {}, send(data) {
         messages++;
-        queueMicrotask(() => peers[1].incoming.onmessage({ data }));
+        queueMicrotask(() => {
+          if (sendMessage) sendMessage({ data, channel, peers });
+          else peers[1].incoming.onmessage({ data });
+        });
       } };
+      return channel;
     }
     async createOffer() { return {}; }
     async createAnswer() { return {}; }
@@ -95,4 +100,64 @@ test('abort during path verification sends no measurement messages', async t => 
   const fake = fakePeers(t, () => new Map());
   await assert.rejects(measurePacketLoss(credentials, AbortSignal.timeout(20), 3), { name: 'TimeoutError' });
   assert.equal(fake.messages(), 0);
+});
+
+test('a channel closing after the last send is unavailable, not fabricated network loss', async t => {
+  fakePeers(t, () => relayStats(), ({ channel }) => { channel.readyState = 'closed'; });
+  const result = await measurePacketLoss(credentials, new AbortController().signal, 1);
+  assert.equal(result.status, 'unavailable');
+  assert.equal(result.percent, null);
+  assert.match(result.reason, /connection interrupted/);
+});
+
+test('a failed peer during the receive window cannot be reported as measured loss', async t => {
+  fakePeers(t, () => relayStats(), ({ peers }) => { peers[1].connectionState = 'failed'; });
+  const result = await measurePacketLoss(credentials, new AbortController().signal, 1);
+  assert.equal(result.status, 'unavailable');
+  assert.equal(result.percent, null);
+});
+
+test('messages stuck in the local send queue are not counted as path loss', async t => {
+  fakePeers(t, () => relayStats(), ({ channel }) => { channel.bufferedAmount = 64; });
+  const result = await measurePacketLoss(credentials, new AbortController().signal, 1);
+  assert.equal(result.status, 'unavailable');
+  assert.equal(result.percent, null);
+  assert.match(result.reason, /send queue/);
+});
+
+test('a path change after transmission invalidates a UDP-only result', async t => {
+  fakePeers(t, reads => relayStats(reads === 0 ? {} : { relayProtocol: 'tcp' }));
+  const result = await measurePacketLoss(credentials, new AbortController().signal, 1);
+  assert.equal(result.status, 'unavailable');
+  assert.equal(result.percent, null);
+  assert.match(result.reason, /verified at completion/);
+});
+
+test('abort while waiting for undelivered messages never becomes a percentage', async t => {
+  fakePeers(t, () => relayStats(), () => {});
+  await assert.rejects(measurePacketLoss(credentials, AbortSignal.timeout(20), 1), { name: 'TimeoutError' });
+});
+
+test('undelivered messages on an open, verified and drained relay path remain visible', async t => {
+  fakePeers(t, () => relayStats(), ({ data, peers }) => {
+    if (!data.startsWith('0:')) peers[1].incoming.onmessage({ data });
+  });
+  const result = await measurePacketLoss(credentials, new AbortController().signal, 3);
+  assert.equal(result.status, 'measured');
+  assert.equal(result.sent, 3);
+  assert.equal(result.received, 2);
+  assert.equal(result.lost, 1);
+  assert.equal(result.percent, 100 / 3);
+});
+
+test('late arrivals during final transport verification do not extend the receive deadline', async t => {
+  const fake = fakePeers(t, reads => {
+    if (reads > 0) queueMicrotask(() => fake.peers[1].incoming.onmessage({ data: '0:late' }));
+    return relayStats();
+  }, () => {});
+  const result = await measurePacketLoss(credentials, new AbortController().signal, 1);
+  assert.equal(result.status, 'measured');
+  assert.equal(result.received, 0);
+  assert.equal(result.lost, 1);
+  assert.equal(result.percent, 100);
 });

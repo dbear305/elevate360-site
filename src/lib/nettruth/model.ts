@@ -44,12 +44,14 @@ export function metrics(r: CheckReport) {
   const idle = percentile(r.samples.idle, .5);
   const down = percentile(r.samples.downloadLatency, .5);
   const up = percentile(r.samples.uploadLatency, .5);
-  const loaded = [down, up].filter(finite);
+  // The headline must use the same coverage threshold as the interpretation.
+  // A single short direction cannot establish the higher loaded median.
+  const enoughLoaded = numbers(r.samples.idle).length >= 10 && numbers(r.samples.downloadLatency).length >= 5 && numbers(r.samples.uploadLatency).length >= 5;
   return {
     idle, down, up, jitter: jitter(r.samples.idle), p95: percentile(r.samples.idle, .95),
     download: percentile(r.samples.download.filter(s => s.durationMs >= 10).map(s => s.mbps), .9),
     upload: percentile(r.samples.upload.filter(s => s.durationMs >= 10).map(s => s.mbps), .9),
-    increase: idle !== null && loaded.length ? Math.max(0, Math.max(...loaded) - idle) : null,
+    increase: enoughLoaded && idle !== null && down !== null && up !== null ? Math.max(0, Math.max(down, up) - idle) : null,
   };
 }
 export const format = (n: number | null, places = 1) => n === null ? "—" : n.toLocaleString("en-US", { maximumFractionDigits: places, minimumFractionDigits: places });
@@ -64,8 +66,8 @@ export function findings(r: CheckReport): Finding[] {
     : { id: "load", tone: "good", title: "Load added little delay in this run", evidence: `Loaded median increased by ${format(m.increase)} ms on the tested path.`, action: "Save this as a comparison point. A single run cannot establish long-term reliability." });
   else out.push({ id: "load", tone: "info", title: "More loaded samples are needed", evidence: `${r.samples.downloadLatency.length} download and ${r.samples.uploadLatency.length} upload latency samples. Short transfers may not load a fast connection long enough.`, action: "Use the extended test. Missing loaded samples cannot establish that bufferbloat is absent." });
   if (r.samples.idle.length >= 10 && m.jitter !== null && m.jitter > 10) out.push({ id: "jitter", tone: "warn", title: "Idle response times vary", evidence: `Mean consecutive RTT variation is ${format(m.jitter)} ms across ${r.samples.idle.length} samples.`, action: "Compare Ethernet and Wi-Fi on the same device and endpoint. Repeat at the time calls or games usually suffer." });
-  if (r.loss.status === "measured") out.push({ id: "loss", tone: r.loss.lost ? "warn" : "good", title: r.loss.lost ? "UDP messages did not all arrive" : "No UDP messages lost in this sample", evidence: `${r.loss.lost} of ${r.loss.sent} messages were not received before the deadline (${format(r.loss.percent, 2)}%). This measures a relay path, not every destination.`, action: r.loss.lost ? "Repeat over Ethernet. Persistent loss warrants a path investigation; this run does not prove ISP fault." : "A zero-loss sample does not guarantee a loss-free connection. Repeat during the problem period." });
-  else out.push({ id: "loss", tone: "info", title: "Packet loss was not measured", evidence: r.loss.reason || "A UDP relay was unavailable.", action: "HTTP request failures are not a substitute for a packet-loss measurement." });
+  if (r.loss.status === "measured") out.push({ id: "loss", tone: r.loss.lost ? "warn" : "good", title: r.loss.lost ? "UDP messages did not all arrive" : "No UDP messages lost in this sample", evidence: `${r.loss.lost} of ${r.loss.sent} messages were not received before the deadline (${format(r.loss.percent, 2)}%). This is WebRTC message loss on a round-trip relay path, not a count of lost IP packets.`, action: r.loss.lost ? "Repeat over Ethernet and compare both test servers. The browser, relay, and route can affect this result; this run does not prove ISP fault." : "A zero-loss sample does not guarantee a loss-free connection. Repeat during the problem period." });
+  else out.push({ id: "loss", tone: "info", title: "UDP message loss was not measured", evidence: r.loss.reason || "A UDP relay was unavailable.", action: "HTTP request failures are not a substitute for a UDP message-loss measurement." });
   if (!r.secureContext) out.push({ id: "https", tone: "warn", title: "This page is not in a secure browser context", evidence: "The browser did not report a secure context.", action: "Open the HTTPS version before running or sharing a test." });
   return out;
 }

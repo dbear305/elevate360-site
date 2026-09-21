@@ -57,7 +57,7 @@ const builtSystems = [
   {
     title: "NetTruth QuickCheck",
     description:
-      "A browser test for speed, latency, jitter, delay under load, and UDP packet loss when measurable. Test against Miami or Dallas, export the evidence, and request a paid diagnostic when your business needs investigation.",
+      "A browser test for speed, latency, jitter, delay under load, and UDP message loss when measurable. Test against Miami or Dallas, export the evidence, and request a paid diagnostic when your business needs investigation.",
   },
   {
     title: "FieldPay",

@@ -1,0 +1,43 @@
+name: NetTruth integrity verification
+on:
+  push:
+    branches: [fix/nettruth-integrity-20260921]
+    paths: ['.github/workflows/nettruth-integrity-check.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run test:nettruth
+      - run: npm run check
+      - name: Inspect public node TLS and health without throughput traffic
+        run: |
+          python3 - <<'PY'
+          import json, socket, ssl, urllib.request
+          from pathlib import Path
+          for node in json.loads(Path('src/lib/nettruth/nodes.json').read_text()):
+              host = node['origin'].removeprefix('https://')
+              context = ssl.create_default_context()
+              context.set_alpn_protocols(['h2', 'http/1.1'])
+              with socket.create_connection((host, 443), timeout=10) as raw:
+                  with context.wrap_socket(raw, server_hostname=host) as tls:
+                      print('ORIGIN_TLS', node['id'], tls.selected_alpn_protocol(), tls.version(), flush=True)
+              request = urllib.request.Request(node['origin'] + '/health', headers={'Origin': 'https://www.elevate360systems.com'})
+              with urllib.request.urlopen(request, timeout=10) as response:
+                  health = json.loads(response.read(4096))
+                  assert response.status == 200 and health.get('status') == 'ok'
+                  assert health.get('protocol') == 'nettruth-node.v1'
+                  print('NODE_HEALTH', node['id'], health['status'], 'UDP configured:', health.get('udpRelayConfigured'), flush=True)
+          PY

@@ -35,6 +35,22 @@ test('insufficient loaded samples do not establish a healthy loaded path', () =>
   const r = fixture(); r.samples.downloadLatency = [10]; r.samples.uploadLatency = [10];
   const f = findings(r).find(f => f.id === 'load');
   assert.equal(f?.tone, 'info');
+  assert.equal(metrics(r).increase, null);
+});
+test('added delay is unavailable until both directions and idle have sufficient valid samples', () => {
+  for (const [field, samples] of [
+    ['idle', Array(9).fill(10)],
+    ['downloadLatency', Array(4).fill(10)],
+    ['uploadLatency', []],
+    ['uploadLatency', [10, 10, 10, 10, NaN, Infinity, -1]],
+  ]) {
+    const r = fixture(); r.samples[field] = samples;
+    assert.equal(metrics(r).increase, null, field);
+    assert.equal(findings(r).find(f => f.id === 'load')?.tone, 'info', field);
+  }
+  const healthy = fixture();
+  healthy.samples.downloadLatency = healthy.samples.uploadLatency = Array(5).fill(10);
+  assert.equal(metrics(healthy).increase, 0);
 });
 test('real measured loss is surfaced; partial results remain incomplete', () => {
   const r = fixture();

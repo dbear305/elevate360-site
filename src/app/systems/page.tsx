@@ -132,7 +132,7 @@ export default function SystemsPage() {
                         ["Download / upload", "Mbps"],
                         ["Latency / jitter", "ms"],
                         ["Delay under load", "ms"],
-                        ["UDP packet loss", "%"],
+                        ["UDP message loss", "%"],
                       ].map(([label, value]) => (
                         <div
                           key={label}
