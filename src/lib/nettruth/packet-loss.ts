@@ -33,6 +33,12 @@ export async function measurePacketLoss(credentials: RelayCredentials, signal: A
   const arrived = new Set<number>();
   let sent = 0;
   let receivingChannel: RTCDataChannel | undefined;
+  const assertOpen = () => {
+    if (channel.readyState !== "open" || receivingChannel?.readyState !== "open" ||
+        [sender, receiver].some(peer => ["disconnected", "failed", "closed"].includes(peer.connectionState))) {
+      throw new Error("The browser or relay connection interrupted the UDP message test. Message loss was not measured.");
+    }
+  };
   const close = () => { channel.close(); receivingChannel?.close(); sender.close(); receiver.close(); };
   signal.addEventListener("abort", close, { once: true });
   const delay = (ms: number) => new Promise<void>((resolve, reject) => {
@@ -74,22 +80,37 @@ export async function measurePacketLoss(credentials: RelayCredentials, signal: A
         const path = inspectSelectedUdpRelay(await peer.getStats());
         if (path === "confirmed") break;
         if (path === "rejected") throw new Error("The selected connection was not confirmed as a UDP-only relay path.");
-        if (performance.now() >= deadline) throw new Error("The browser did not expose complete selected UDP relay details. Packet loss was not measured.");
+        if (performance.now() >= deadline) throw new Error("The browser did not expose complete selected UDP relay details. UDP message loss was not measured.");
         await delay(50);
       }
     }
     const start = performance.now();
     for (let i = 0; i < count; i++) {
       signal.throwIfAborted();
-      if (channel.readyState !== "open" || channel.bufferedAmount > 64 * 1024) throw new Error("The local send buffer or relay connection interrupted the loss measurement.");
+      assertOpen();
+      if (channel.bufferedAmount > 64 * 1024) throw new Error("The local send buffer interrupted the UDP message test. Message loss was not measured.");
       channel.send(`${i}:${"x".repeat(60)}`);
       sent++;
       await delay(5);
     }
     const deadline = performance.now() + 3000;
-    while (arrived.size < sent && performance.now() < deadline) await delay(25);
-    const lost = sent - arrived.size;
-    return { status: "measured", sent, received: arrived.size, lost, percent: 100 * lost / sent, transport: "UDP relay", sampleWindowMs: performance.now() - start };
+    while (arrived.size < sent && performance.now() < deadline) {
+      assertOpen();
+      await delay(25);
+    }
+    assertOpen();
+    // send() enqueues messages locally. A blocked SCTP queue is not evidence
+    // that these messages traversed the tested path and were lost on it.
+    if (channel.bufferedAmount > 0) throw new Error("Messages remained in the browser's send queue. UDP message loss was not measured.");
+    const received = arrived.size;
+    const sampleWindowMs = performance.now() - start;
+    for (const peer of [sender, receiver]) {
+      if (inspectSelectedUdpRelay(await peer.getStats()) !== "confirmed") throw new Error("The selected UDP relay path could not be verified at completion. Message loss was not measured.");
+    }
+    signal.throwIfAborted();
+    assertOpen();
+    const lost = sent - received;
+    return { status: "measured", sent, received, lost, percent: 100 * lost / sent, transport: "UDP relay", sampleWindowMs };
   } catch (error) {
     signal.throwIfAborted();
     return unavailableLoss(error instanceof Error ? error.message : "UDP relay measurement failed.");
