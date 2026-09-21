@@ -20,13 +20,16 @@ preview origin for preview tests.
 
 | Location | Variable | Value |
 | --- | --- | --- |
-| Vercel Preview and Production | `NEXT_PUBLIC_NETTRUTH_TURNSTILE_SITE_KEY` | Public widget site key; rebuild after setting it |
+| Website public configuration | `src/lib/nettruth/verification-config.ts` | Public widget site key supplied by the owner |
+| Optional deployment override | `NEXT_PUBLIC_NETTRUTH_TURNSTILE_SITE_KEY` | Public key for a separate widget; rebuild after changing it |
 | Both measurement nodes | `TURNSTILE_SECRET_KEY` | Corresponding private widget secret |
 | Both measurement nodes | `NETTRUTH_REQUIRE_VERIFICATION` | `true` |
 
 Keep secrets in the hosting environment or the existing private node environment
 file. Never commit them, put them in frontend variables, or print them in logs.
-The site key is public, but keep its deployment-specific value out of the repo.
+The public site key is intentionally stored with the website configuration. Only
+the secret must remain outside the repository. An explicit empty deployment
+override disables new runs instead of falling back to the configured public key.
 If separate preview and production widgets are used, each backend must have the
 secret matching the widget from which it accepts requests.
 
@@ -35,7 +38,7 @@ that the returned hostname equals the hostname of the allowed browser `Origin`.
 Adding only a browser checkbox or a Vercel page challenge does not protect direct
 requests to the separate measurement nodes.
 
-Verification defaults to required. Missing server secrets or a missing public site
+Verification defaults to required. Missing server secrets or an empty public site
 key prevent new tests from starting. `NETTRUTH_REQUIRE_VERIFICATION=false` is an
 explicit legacy opt-out that removes the node's human-verification gate; it is not
 an automatic fallback or a safe response to a verification failure.

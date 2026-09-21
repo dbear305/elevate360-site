@@ -9,8 +9,9 @@ import { selectMeasurementNode } from "@/lib/nettruth/node-selection";
 import { Methodology } from "./methodology";
 import { HumanVerification } from "./human-verification";
 import { createMeasurementSession } from "@/lib/nettruth/session";
+import { NETTRUTH_TURNSTILE_SITE_KEY } from "@/lib/nettruth/verification-config";
 
-const verificationSiteKey = process.env.NEXT_PUBLIC_NETTRUTH_TURNSTILE_SITE_KEY?.trim() || "";
+const verificationSiteKey = process.env.NEXT_PUBLIC_NETTRUTH_TURNSTILE_SITE_KEY?.trim() ?? NETTRUTH_TURNSTILE_SITE_KEY;
 
 const stages: { id: TestPhase; label: string }[] = [{ id: "latency", label: "Idle latency" }, { id: "download", label: "Download" }, { id: "upload", label: "Upload" }, { id: "packetLoss", label: "UDP message loss" }];
 const phaseLabel: Record<TestPhase, string> = { verifying: "Complete verification to start your test", selecting: "Checking test servers from your connection", connecting: "Connecting to measurement endpoint", latency: "Measuring response time", download: "Measuring download and loaded latency", upload: "Measuring upload and loaded latency", packetLoss: "Checking the UDP relay", complete: "Test finished" };
