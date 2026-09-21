@@ -1,6 +1,7 @@
 import type { BandwidthPoint, MeasurementConfig, Results } from "@cloudflare/speedtest";
 import { numbers, type CheckReport, type EndpointConfig, type TestMode, type TestPhase } from "./model";
-import { measurePacketLoss, unavailableLoss, type RelayCredentials } from "./packet-loss";
+import { measurePacketLoss, unavailableLoss } from "./packet-loss";
+import type { MeasurementSession } from "./session";
 
 export function measurementPlan(mode: TestMode): MeasurementConfig[] {
   const sizes = mode === "extended" ? [100000, 1000000, 5000000, 15000000, 25000000] : [100000, 1000000, 5000000, 15000000];
@@ -20,11 +21,11 @@ export function initialReport(mode: TestMode, config: EndpointConfig, connection
 }
 
 type Progress = { report: CheckReport; phase: TestPhase; progress: number };
-export async function runMeasurement(report: CheckReport, config: EndpointConfig, signal: AbortSignal, onProgress: (p: Progress) => void): Promise<CheckReport> {
+export async function runMeasurement(report: CheckReport, session: MeasurementSession, signal: AbortSignal, onProgress: (p: Progress) => void): Promise<CheckReport> {
   const start = performance.now();
   let phase: TestPhase = "connecting";
   let progress = 0;
-  let relay: RelayCredentials | undefined;
+  const relay = session.relay;
   let engine: import("@cloudflare/speedtest").default | undefined;
   const publish = () => onProgress({ report: structuredClone({ ...report, elapsedMs: performance.now() - start }), phase, progress });
   const stopEngine = () => engine?.pause();
@@ -32,17 +33,9 @@ export async function runMeasurement(report: CheckReport, config: EndpointConfig
   try {
     signal.throwIfAborted();
     publish();
-    let downloadApiUrl = "https://speed.cloudflare.com/__down";
-    let uploadApiUrl = "https://speed.cloudflare.com/__up";
-    if (config.nodeOrigin) {
-      const response = await fetch(`${config.nodeOrigin}/session`, { method: "POST", credentials: "omit", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: report.mode }), signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]), cache: "no-store" });
-      if (!response.ok) throw new Error(response.status === 429 ? "This test node is busy. Wait a few minutes before trying again." : "The measurement node could not start a session.");
-      const session = await response.json();
-      if (typeof session.token !== "string" || !/^[a-f0-9]{48}$/.test(session.token)) throw new Error("The measurement node returned an invalid session.");
-      downloadApiUrl = `${config.nodeOrigin}/__down?token=${session.token}`;
-      uploadApiUrl = `${config.nodeOrigin}/__up?token=${session.token}`;
-      if (session.relay && typeof session.relay.urls === "string" && typeof session.relay.username === "string" && typeof session.relay.credential === "string") relay = session.relay;
-    }
+    if (session.origin !== report.endpoint.origin || !/^[a-f0-9]{48}$/.test(session.token) || !Number.isFinite(Date.parse(session.expiresAt)) || Date.parse(session.expiresAt) <= Date.now()) throw new Error("The verified measurement session is invalid or expired. Run the test again.");
+    const downloadApiUrl = `${session.origin}/__down?token=${session.token}`;
+    const uploadApiUrl = `${session.origin}/__up?token=${session.token}`;
     signal.throwIfAborted();
     const { default: SpeedTest } = await import("@cloudflare/speedtest");
     signal.throwIfAborted();

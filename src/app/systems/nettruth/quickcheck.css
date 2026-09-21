@@ -141,3 +141,13 @@
 @media (max-width: 380px) { .nt-speeds { grid-template-columns: 1fr; } .nt-speeds > div + div { border-left: 0; border-top: 1px solid var(--nt-line); } }
 @media (prefers-reduced-motion: reduce) { .nt-progress span { transition: none; } }
 @media print { @page { margin: 15mm; } body, .nt-page, .nt-console, .nt-chart, .nt-summary { background: white !important; color: #111 !important; } body::before, header, footer, .nt-topline, .nt-title-row > a, .nt-service-boundary, .nt-control-row, .nt-options, .nt-progress, .nt-stages, .nt-tabs, .nt-details, .nt-export, .nt-history, .nt-diagnostic, .nt-notice { display: none !important; } .nt-shell { padding: 0; max-width: none; } .nt-page p, .nt-page h1, .nt-page h2, .nt-page h3, .nt-page span, .nt-page dt, .nt-page dd { color: #111 !important; } .nt-print-only { display: block; line-height: 1.6; font-size: 12px; } .nt-print-only > div { margin: 14px 0; break-inside: avoid; } .nt-print-only h2 { margin: 24px 0 12px; font-weight: 700; font-size: 20px; } .nt-print-only h3 { font-weight: 700; } .nt-chart, .nt-summary, .nt-console { box-shadow: none; border: 1px solid #aaa; break-inside: avoid; } .nt-speed-value { font-size: 36px; } .nt-analysis-grid { grid-template-columns: 2fr 1fr; gap: 15px; } }
+
+.nt-verification { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: 24px 30px; border-top: 1px solid var(--nt-line); background: #102030; }
+.nt-verification > div:first-child { flex: 1 1 280px; }
+.nt-verification h3 { font-size: 18px; font-weight: 600; margin-bottom: 7px; }
+.nt-verification p, .nt-verification-unavailable { color: var(--nt-muted); font-size: 14px; line-height: 1.7; }
+.nt-verification-widget { width: 100%; max-width: 380px; min-width: 0; }
+.nt-verification-unavailable { padding: 18px 30px; border-top: 1px solid var(--nt-line); }
+.nt-run:disabled { opacity: .6; cursor: not-allowed; box-shadow: none; }
+@media (max-width: 760px) { .nt-verification, .nt-verification-unavailable { padding: 20px; } }
+@media print { .nt-verification, .nt-verification-unavailable { display: none !important; } }

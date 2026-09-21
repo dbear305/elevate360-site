@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
 import { findings, format, metrics, parseLocalReport, percentile, evaluateUseCases, type CheckReport, type FleetConfig, type LocalReport, type TestMode, type TestPhase } from "@/lib/nettruth/model";
 import { initialReport, runMeasurement } from "@/lib/nettruth/measurement";
 import { selectMeasurementNode } from "@/lib/nettruth/node-selection";
 import { Methodology } from "./methodology";
+import { HumanVerification } from "./human-verification";
+import { createMeasurementSession } from "@/lib/nettruth/session";
+import { NETTRUTH_TURNSTILE_SITE_KEY } from "@/lib/nettruth/verification-config";
+
+const verificationSiteKey = process.env.NEXT_PUBLIC_NETTRUTH_TURNSTILE_SITE_KEY?.trim() ?? NETTRUTH_TURNSTILE_SITE_KEY;
 
 const stages: { id: TestPhase; label: string }[] = [{ id: "latency", label: "Idle latency" }, { id: "download", label: "Download" }, { id: "upload", label: "Upload" }, { id: "packetLoss", label: "UDP message loss" }];
-const phaseLabel: Record<TestPhase, string> = { selecting: "Checking test servers from your connection", connecting: "Connecting to measurement endpoint", latency: "Measuring response time", download: "Measuring download and loaded latency", upload: "Measuring upload and loaded latency", packetLoss: "Checking the UDP relay", complete: "Test finished" };
+const phaseLabel: Record<TestPhase, string> = { verifying: "Complete verification to start your test", selecting: "Checking test servers from your connection", connecting: "Connecting to measurement endpoint", latency: "Measuring response time", download: "Measuring download and loaded latency", upload: "Measuring upload and loaded latency", packetLoss: "Checking the UDP relay", complete: "Test finished" };
 
 function ActionIcon({ stop = false }: { stop?: boolean }) {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{stop ? <rect x="6" y="6" width="12" height="12" rx="1" /> : <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>}</svg>;
@@ -54,6 +59,7 @@ export function QuickCheck({ config }: { config: FleetConfig }) {
   const [phase, setPhase] = useState<TestPhase>("connecting");
   const [progress, setProgress] = useState(0);
   const [running, setRunning] = useState(false);
+  const [verification, setVerification] = useState<{ attempt: number; signal: AbortSignal } | null>(null);
   const [tab, setTab] = useState<"findings" | "security" | "method">("findings");
   const [notice, setNotice] = useState("");
   const [local, setLocal] = useState<LocalReport | null>(null);
@@ -61,40 +67,69 @@ export function QuickCheck({ config }: { config: FleetConfig }) {
   const abortRef = useRef<AbortController | null>(null);
   const reportRef = useRef<CheckReport | null>(null);
   const importRef = useRef<HTMLInputElement | null>(null);
+  const verificationSequence = useRef(0);
+  const verificationRef = useRef<{ resolve: (token: string) => void; reject: (error: Error) => void } | null>(null);
+  const onVerified = useCallback((token: string) => verificationRef.current?.resolve(token), []);
+  const onVerificationError = useCallback((error: Error) => verificationRef.current?.reject(error), []);
+  const cancel = useCallback(() => abortRef.current?.abort(), []);
   useEffect(() => () => abortRef.current?.abort(), []);
 
   async function start() {
     if (abortRef.current) return;
-    setNotice(""); setRunning(true); setProgress(0); setPhase("selecting");
+    if (!verificationSiteKey) { setNotice("New tests are temporarily unavailable while verification is being configured. Saved reports remain available."); return; }
     const controller = new AbortController(); abortRef.current = controller;
-    setReport(null); reportRef.current = null;
+    setNotice(""); setRunning(true); setProgress(0); setPhase("verifying");
     let interruption = "";
+    let measurementStarted = false;
+    let deadline: ReturnType<typeof setTimeout> | undefined;
+    let verificationAbort = () => {};
     const stopForVisibility = () => { if (document.hidden) { interruption = "The tab moved to the background. The test stopped to avoid distorted results."; controller.abort(); } };
     const stopOffline = () => { interruption = "The browser went offline. Completed samples are still available."; controller.abort(); };
     document.addEventListener("visibilitychange", stopForVisibility);
     window.addEventListener("offline", stopOffline);
-    const deadline = setTimeout(() => { interruption = "The test reached its time limit. Try again on a quiet connection."; controller.abort(); }, mode === "quick" ? 90000 : 180000);
     try {
-      track("NetTruth Test Started", { mode, endpoint: "owned" });
+      let turnstileToken = await new Promise<string>((resolve, reject) => {
+        verificationAbort = () => reject(controller.signal.reason);
+        controller.signal.addEventListener("abort", verificationAbort, { once: true });
+        verificationRef.current = { resolve, reject };
+        setVerification({ attempt: ++verificationSequence.current, signal: controller.signal });
+      });
+      verificationRef.current = null;
+      controller.signal.removeEventListener("abort", verificationAbort);
+      setVerification(null);
+      controller.signal.throwIfAborted();
+      setPhase("selecting");
       const chosen = await selectMeasurementNode(config.nodes, serverPreference, controller.signal);
       controller.signal.throwIfAborted();
+      setPhase("connecting");
       const endpoint = { nodeOrigin: chosen.node.origin, nodeName: chosen.node.name };
+      const session = await createMeasurementSession(chosen.node.origin, mode, turnstileToken, controller.signal);
+      turnstileToken = "";
+      controller.signal.throwIfAborted();
+      // Verification, node selection, and Siteverify/session latency are setup.
+      // Start the test clock and create its report only after setup succeeds.
       const initial = initialReport(mode, endpoint, connection);
       initial.selection = chosen.selection;
       initial.caveats.push(chosen.selection.mode === "auto"
         ? "Auto selection compares HTTP health response times, not physical distance or maximum throughput. All metrics in this run use the selected endpoint."
         : "The server was selected manually. All metrics in this run use that endpoint.");
       setReport(initial); reportRef.current = initial;
-      const result = await runMeasurement(initial, endpoint, controller.signal, state => { setReport(state.report); reportRef.current = state.report; setPhase(state.phase); setProgress(state.progress); });
+      measurementStarted = true;
+      deadline = setTimeout(() => { interruption = "The test reached its time limit. Try again on a quiet connection."; controller.abort(); }, mode === "quick" ? 90000 : 180000);
+      track("NetTruth Test Started", { mode, endpoint: "owned" });
+      const result = await runMeasurement(initial, session, controller.signal, state => { setReport(state.report); reportRef.current = state.report; setPhase(state.phase); setProgress(state.progress); });
       if (interruption) result.caveats.push(interruption);
       setReport(result); reportRef.current = result;
       setNotice(interruption || (result.status === "cancelled" ? "Test stopped. The report keeps completed measurements." : ""));
       track("NetTruth Test Finished", { mode, status: result.status, packetLoss: result.loss.status });
     } catch (error) {
-      setNotice(interruption || (controller.signal.aborted ? "Test stopped." : error instanceof Error ? error.message : "The test could not finish. Please retry."));
-      if (reportRef.current) setReport({ ...reportRef.current, status: controller.signal.aborted ? "cancelled" : "error" });
+      setNotice(interruption || (controller.signal.aborted ? "Test cancelled." : error instanceof Error ? error.message : "The test could not finish. Please retry."));
+      if (measurementStarted && reportRef.current) setReport({ ...reportRef.current, status: controller.signal.aborted ? "cancelled" : "error" });
     } finally {
-      clearTimeout(deadline); document.removeEventListener("visibilitychange", stopForVisibility); window.removeEventListener("offline", stopOffline); abortRef.current = null; setRunning(false);
+      clearTimeout(deadline); controller.signal.removeEventListener("abort", verificationAbort);
+      verificationRef.current = null; setVerification(null);
+      document.removeEventListener("visibilitychange", stopForVisibility); window.removeEventListener("offline", stopOffline);
+      abortRef.current = null; setRunning(false);
     }
   }
 
@@ -130,8 +165,10 @@ export function QuickCheck({ config }: { config: FleetConfig }) {
     <section className="nt-console" aria-label="Network test controls and measurements">
       <div className="nt-control-row">
         <div><p className="nt-kicker">NETTRUTH NETWORK CHECK</p><h2>{running ? phaseLabel[phase] : completed ? report.status === "complete" ? "Your connection, measured." : "Partial results are available." : "Run a live connection test."}</h2><p className="nt-muted">{report?.endpoint.name || (serverPreference === "auto" ? "Auto · Select a responsive server when you start" : config.nodes.find(node => node.id === serverPreference)?.name)} <span className="nt-separator">/</span> Elevate360-operated nodes</p></div>
-        <button className={`nt-run ${running ? "nt-stop" : ""}`} onClick={running ? () => abortRef.current?.abort() : start}>{running ? "Stop test" : report ? "Run again" : "Run test"}<ActionIcon stop={running} /></button>
+        <button className={`nt-run ${running ? "nt-stop" : ""}`} disabled={!verificationSiteKey && !running} onClick={running ? cancel : start}>{running ? phase === "verifying" ? "Cancel verification" : "Stop test" : !verificationSiteKey ? "Tests unavailable" : report ? "Run again" : "Run test"}<ActionIcon stop={running} /></button>
       </div>
+      {!verificationSiteKey ? <p className="nt-verification-unavailable" role="status">New tests are temporarily unavailable while verification is being configured. Saved reports remain available.</p> : null}
+      {verification ? <HumanVerification key={verification.attempt} siteKey={verificationSiteKey} attempt={verification.attempt} signal={verification.signal} onVerified={onVerified} onError={onVerificationError} onCancel={cancel} /> : null}
       <div className="nt-options">
         <fieldset disabled={running}><legend>Test length</legend><label><input type="radio" name="mode" value="quick" checked={mode === "quick"} onChange={() => setMode("quick")} /> Quick</label><label><input type="radio" name="mode" value="extended" checked={mode === "extended"} onChange={() => setMode("extended")} /> Extended</label></fieldset>
         <label className="nt-connection">Connection <select value={connection} disabled={running} onChange={e => setConnection(e.target.value as CheckReport["connection"])}><option>Unknown</option><option>Ethernet</option><option>Wi-Fi</option><option>Cellular</option></select></label>
@@ -145,7 +182,7 @@ export function QuickCheck({ config }: { config: FleetConfig }) {
       <div className="nt-metrics">{[{ label: "Idle latency", value: m?.idle ?? null, unit: "ms", detail: "Median response time" }, { label: "Jitter", value: m?.jitter ?? null, unit: "ms", detail: "Consecutive RTT variation" }, { label: "Added delay under load", value: m?.increase ?? null, unit: "ms", detail: m?.increase === null || !m ? "Needs loaded samples" : "Higher loaded median − idle" }, { label: "UDP message loss", value: report?.loss.percent ?? null, unit: "%", detail: report?.loss.status === "measured" ? `${report.loss.lost} / ${report.loss.sent} messages lost` : "Not measured" }].map(s => <div key={s.label}><h3>{s.label}</h3><p>{format(s.value, s.unit === "%" ? 2 : 1)}<span>{s.unit}</span></p><span className="nt-fine">{s.detail}</span></div>)}</div>
       <div className="nt-console-foot"><span>{report ? `${measuredCount}/6 metrics available · ${Math.round(report.elapsedMs / 1000)} seconds` : "No measurements yet"}</span><span>{report ? `Run ${report.id.slice(0, 8)}` : "No account required"}</span></div>
     </section>
-    <p className="nt-privacy">Auto sends small health probes to configured test nodes; manual selection probes only your chosen node. Each contacted node sees your public IP. The speed, latency and loss test then uses {report?.endpoint.name || "one selected node"}. Results stay in this page unless you save, export, or send them. Site analytics records page activity and test status, not raw measurements.</p>
+    <p className="nt-privacy">Cloudflare Turnstile verifies your browser before each new test. Its verification token is used once to start the selected test server session and is not included in your report. Auto sends small health probes to configured test nodes; manual selection probes only your chosen node. Each contacted node sees your public IP. The speed, latency and loss test then uses {report?.endpoint.name || "one selected node"}. Results stay in this page unless you save, export, or send them. Site analytics records page activity and test status, not raw measurements.</p>
     <div role="status" aria-live="polite" className="nt-notice">{notice || (running ? phaseLabel[phase] : "")}</div>
     {report?.errors.length ? <div className="nt-error" role="alert"><strong>Some measurements could not complete.</strong><p>{report.errors.join(" ")}</p><p>Unavailable results are not counted as successful tests.</p></div> : null}
     <div className="nt-analysis-grid"><LatencyChart report={report} /><aside className="nt-summary"><p className="nt-kicker">READING THE RESULT</p><h2>{!report ? "Evidence before conclusions." : running ? "Collecting evidence…" : report.status !== "complete" ? "Partial results. Review the gaps." : relevant.length ? relevant[0].title : "Review the measured coverage."}</h2><p>{!report ? "We look at responsiveness, consistency, and behavior under load. A missing measurement stays unknown." : `${measuredCount} of 6 performance metrics are available. ${relevant.length ? `${relevant.length} finding${relevant.length === 1 ? "" : "s"} to investigate. ` : ""}${report.loss.status !== "measured" ? "UDP message loss remains unknown." : "UDP message loss covers a round-trip relay path; it is not a count of lost IP packets."}`}</p><dl><div><dt>Idle p95</dt><dd>{format(m?.p95 ?? null)} ms</dd></div><div><dt>Download loaded</dt><dd>{format(m?.down ?? null)} ms</dd></div><div><dt>Upload loaded</dt><dd>{format(m?.up ?? null)} ms</dd></div></dl></aside></div>
