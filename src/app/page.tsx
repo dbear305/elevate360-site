@@ -24,8 +24,9 @@ type CaseStudy = {
 const caseStudies: CaseStudy[] = [];
 
 const systemsWork = [
+  "Custom PCs and workstations built around your requirements",
   "Secure infrastructure, network control, and observability",
-  "Custom operational software and internal tools",
+  "Custom websites, operational software, and internal tools",
   "Workflow automation and data reconciliation",
   "Applied R&D for field and industrial systems",
 ];
@@ -73,14 +74,19 @@ const builtSystems = [
 
 const capabilities = [
   {
+    title: "Custom PCs & Workstations",
+    description:
+      "Parts selection, assembly, configuration, and testing around your workload, budget, and upgrade plans. Work directly with the builder and get a scoped quote before work begins.",
+  },
+  {
     title: "Secure Infrastructure",
     description:
       "Firewall architecture, segmentation, private routing, hardened edge deployments, and network observability.",
   },
   {
-    title: "Custom Software Systems",
+    title: "Websites & Custom Software",
     description:
-      "Operational applications, internal tools, dashboards, and backend systems built around a defined business outcome.",
+      "Custom websites, operational applications, internal tools, dashboards, and backend systems built around your requirements.",
   },
   {
     title: "Automation & Data Workflows",
@@ -243,9 +249,9 @@ export default function HomePage() {
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                Elevate360 Systems designs, builds, and deploys secure
-                infrastructure, custom software, and automation around real
-                operational problems.
+                Custom PCs and workstations, websites, software, networking, and
+                automation built around your requirements. Tell us what you need
+                and get a clear scope and quote before work begins.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
@@ -255,7 +261,7 @@ export default function HomePage() {
                   eventLocation="hero"
                   className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
                 >
-                  Discuss a Project
+                  Request a Project Quote
                 </TrackedLink>
                 <TrackedLink
                   href="/systems/nettruth"
@@ -729,13 +735,13 @@ export default function HomePage() {
                 </p>
 
                 <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  Bring us a real operational problem.
+                  Tell us what you need built.
                 </h2>
 
                 <p className="mt-4 text-lg leading-8 text-slate-400">
-                  Tell us what is failing, slowing the business down, or still
-                  being handled manually. Include the current environment,
-                  target outcome, timeline, and budget range.
+                  Describe your computer build, website, software, networking,
+                  or automation project. Include what it needs to do, your
+                  timeline, and budget range so we can provide a scoped quote.
                 </p>
               </div>
 

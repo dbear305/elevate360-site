@@ -154,7 +154,7 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
       </>}
 
       <label className="text-sm font-medium text-slate-200 sm:col-span-2">
-        {isDiagnostic ? "What is failing, and how does it affect the business?" : "What's broken?"}
+        {isDiagnostic ? "What is failing, and how does it affect the business?" : "What do you need built or fixed?"}
         <textarea
           name="message"
           required
