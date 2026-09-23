@@ -243,6 +243,8 @@ export default function HomePage() {
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+                Custom PCs and workstations in Miami, with parts selected around
+                your workload, budget, and upgrade plans. {" "}
                 Elevate360 Systems designs, builds, and deploys secure
                 infrastructure, custom software, and automation around real
                 operational problems.

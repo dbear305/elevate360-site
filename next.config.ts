@@ -10,12 +10,12 @@ const contentSecurityPolicy = `
   form-action 'self' mailto:;
   frame-ancestors 'none';
   object-src 'none';
-  script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://challenges.cloudflare.com;
-  frame-src https://challenges.cloudflare.com;
+  script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://challenges.cloudflare.com https://www.googletagmanager.com https://www.googleadservices.com https://www.google.com;
+  frame-src https://challenges.cloudflare.com https://www.googletagmanager.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob:;
+  img-src 'self' data: blob: https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com;
   font-src 'self' data:;
-  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co ${measurementOrigins};
+  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com https://ad.doubleclick.net ${measurementOrigins};
   manifest-src 'self';
   media-src 'self';
   worker-src 'self' blob:;

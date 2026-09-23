@@ -4,6 +4,7 @@ import { track } from "@vercel/analytics";
 import { useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { addInquiryMetadata, isPipelineTest } from "@/lib/lead-attribution";
+import { trackAcceptedInquiry } from "@/lib/google-ads";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -30,8 +31,8 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
 
     setSubmitState("submitting");
     const isTest = isPipelineTest();
-    inquiryId.current ??= crypto.randomUUID();
-    addInquiryMetadata(formData, inquiryId.current, isTest);
+    const currentInquiryId = inquiryId.current ??= crypto.randomUUID();
+    addInquiryMetadata(formData, currentInquiryId, isTest);
     const subject = isDiagnostic ? "NetTruth paid diagnostic scope request" : "New Elevate360 project inquiry";
     formData.set("_subject", `${isTest ? "[INTERNAL TEST - NOT A LEAD] " : ""}${subject}`);
     formData.set("inquiry_type", intent);
@@ -61,6 +62,7 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
       }
 
       if (!isTest) {
+        trackAcceptedInquiry({ ok: response.ok, result }, currentInquiryId, isTest);
         track("Contact Form Submitted", {
           budget: String(formData.get("budget") || "Not provided"),
           inquiryType: intent,
@@ -163,7 +165,7 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
       </>}
 
       <label className="text-sm font-medium text-slate-200 sm:col-span-2">
-        {isDiagnostic ? "What is failing, and how does it affect the business?" : "What's broken?"}
+        {isDiagnostic ? "What is failing, and how does it affect the business?" : "What would you like to build or fix?"}
         <textarea
           name="message"
           required
@@ -188,6 +190,12 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
             work begins only after we agree the written scope, price, and payment terms.</span>
         </label>
       </>}
+
+      <p className="text-sm leading-6 text-slate-400 sm:col-span-2">
+        FormSubmit delivers your details and campaign source to Elevate360.
+        Google Ads measures accepted requests without advertising cookies;
+        your name, email, and message are not sent to Google.
+      </p>
 
       <div className="flex flex-col items-start gap-4 sm:col-span-2 sm:flex-row sm:items-center">
         <button
