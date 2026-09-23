@@ -1,8 +1,9 @@
 "use client";
 
 import { track } from "@vercel/analytics";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FormEvent } from "react";
+import { addInquiryMetadata, isPipelineTest } from "@/lib/lead-attribution";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -12,6 +13,7 @@ const formEndpoint =
 export function ContactForm({ intent = "project" }: { intent?: "project" | "diagnostic" }) {
   const isDiagnostic = intent === "diagnostic";
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const inquiryId = useRef<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,7 +29,11 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
     }
 
     setSubmitState("submitting");
-    formData.set("_subject", isDiagnostic ? "NetTruth paid diagnostic scope request" : "New Elevate360 project inquiry");
+    const isTest = isPipelineTest();
+    inquiryId.current ??= crypto.randomUUID();
+    addInquiryMetadata(formData, inquiryId.current, isTest);
+    const subject = isDiagnostic ? "NetTruth paid diagnostic scope request" : "New Elevate360 project inquiry";
+    formData.set("_subject", `${isTest ? "[INTERNAL TEST - NOT A LEAD] " : ""}${subject}`);
     formData.set("inquiry_type", intent);
     formData.set("_template", "table");
     formData.set("_captcha", "false");
@@ -54,14 +60,17 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
         throw new Error("The form provider did not accept the submission");
       }
 
-      track("Contact Form Submitted", {
-        budget: String(formData.get("budget") || "Not provided"),
-        inquiryType: intent,
-      });
+      if (!isTest) {
+        track("Contact Form Submitted", {
+          budget: String(formData.get("budget") || "Not provided"),
+          inquiryType: intent,
+        });
+      }
       form.reset();
+      inquiryId.current = null;
       setSubmitState("success");
     } catch {
-      track("Contact Form Failed", { inquiryType: intent });
+      if (!isTest) track("Contact Form Failed", { inquiryType: intent });
       setSubmitState("error");
     } finally {
       clearTimeout(timeout);
