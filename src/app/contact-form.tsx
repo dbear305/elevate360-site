@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { addInquiryMetadata, isPipelineTest } from "@/lib/lead-attribution";
 import { trackAcceptedInquiry } from "@/lib/google-ads";
+import { classifyProviderFailure, FormSubmissionError, safeSubmissionDiagnostic } from "@/lib/form-submit";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -14,6 +15,7 @@ const formEndpoint =
 export function ContactForm({ intent = "project" }: { intent?: "project" | "diagnostic" }) {
   const isDiagnostic = intent === "diagnostic";
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [testDiagnostic, setTestDiagnostic] = useState<string | null>(null);
   const inquiryId = useRef<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -30,6 +32,7 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
     }
 
     setSubmitState("submitting");
+    setTestDiagnostic(null);
     const isTest = isPipelineTest();
     const currentInquiryId = inquiryId.current ??= crypto.randomUUID();
     addInquiryMetadata(formData, currentInquiryId, isTest);
@@ -53,12 +56,19 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
       });
 
       if (!response.ok) {
-        throw new Error("Form submission failed");
+        const result: unknown = await response.json().catch(() => null);
+        throw new FormSubmissionError("http_error", response.status, classifyProviderFailure(result));
       }
-      const result: unknown = await response.json();
+      let result: unknown;
+      try {
+        result = await response.json();
+      } catch (error) {
+        if (error instanceof SyntaxError) throw new FormSubmissionError("invalid_json", response.status);
+        throw error;
+      }
       if (!result || typeof result !== "object" || !("success" in result) ||
           (result.success !== true && result.success !== "true")) {
-        throw new Error("The form provider did not accept the submission");
+        throw new FormSubmissionError("provider_rejected", response.status, classifyProviderFailure(result));
       }
 
       if (!isTest) {
@@ -71,8 +81,9 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
       form.reset();
       inquiryId.current = null;
       setSubmitState("success");
-    } catch {
+    } catch (error) {
       if (!isTest) track("Contact Form Failed", { inquiryType: intent });
+      if (isTest) setTestDiagnostic(safeSubmissionDiagnostic(error));
       setSubmitState("error");
     } finally {
       clearTimeout(timeout);
@@ -218,8 +229,9 @@ export function ContactForm({ intent = "project" }: { intent?: "project" | "diag
           ) : null}
           {submitState === "error" ? (
             <span className="text-rose-200">
-              The form could not send. Call 786-312-7320 or email
-              contact@elevate360systems.com.
+              The form could not send. <a href="tel:+17863127320" className="underline underline-offset-4">Call 786-312-7320</a>{" "}
+              or <a href="mailto:contact@elevate360systems.com" className="underline underline-offset-4">email contact@elevate360systems.com</a>.
+              {testDiagnostic && <span className="mt-2 block text-xs">Internal QA: {testDiagnostic}</span>}
             </span>
           ) : null}
         </p>
