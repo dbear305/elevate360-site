@@ -782,6 +782,12 @@ export default function HomePage() {
             <p className="mt-1">
               Elevate360 Systems LLC • Miami, FL • Florida CET #6445
             </p>
+            <Link
+              href="/company"
+              className="mt-2 inline-flex text-sky-200 underline underline-offset-4"
+            >
+              Official company information
+            </Link>
           </div>
           <p>Secure infrastructure, software &amp; automation</p>
         </div>
