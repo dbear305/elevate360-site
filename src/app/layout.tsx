@@ -19,6 +19,18 @@ const organizationJsonLd = {
   telephone: "+1-786-312-7320",
   description:
     "Secure infrastructure, custom software, workflow automation, network diagnostics, and operational systems built around real-world problems.",
+  disambiguatingDescription:
+    "Independent Florida technology and systems engineering company based in Miami. The official website is elevate360systems.com.",
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "Florida Division of Corporations document number",
+    value: "L25000400858",
+  },
+  founder: {
+    "@type": "Person",
+    name: "Daniel Berriel IV",
+    sameAs: ["https://www.linkedin.com/in/daniel-berriel-70ab04385"],
+  },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Miami",
