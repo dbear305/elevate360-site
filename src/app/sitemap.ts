@@ -8,6 +8,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: "https://www.elevate360systems.com/company",
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: "https://www.elevate360systems.com/systems",
       changeFrequency: "weekly",
       priority: 0.9,
