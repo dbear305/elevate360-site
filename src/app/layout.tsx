@@ -10,6 +10,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   "@id": `${siteUrl}/#organization`,
   name: "Elevate360 Systems LLC",
+  legalName: "Elevate360 Systems LLC",
   alternateName: "Elevate360 Systems",
   url: siteUrl,
   logo: `${siteUrl}/logo.png`,
@@ -50,6 +51,18 @@ const organizationJsonLd = {
     email: "contact@elevate360systems.com",
     contactType: "project inquiries",
     availableLanguage: "English",
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
+  url: siteUrl,
+  name: "Elevate360 Systems",
+  alternateName: "Elevate360 Systems LLC",
+  publisher: {
+    "@id": `${siteUrl}/#organization`,
   },
 };
 
@@ -144,6 +157,15 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationJsonLd).replace(
+              /</g,
+              "\\u003c",
+            ),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd).replace(
               /</g,
               "\\u003c",
             ),
