@@ -1,8 +1,23 @@
-# Elevate360 Security Research
+# Elevate360 Security Lab
 
-Practical OSINT, security automation, and reproducible cybersecurity labs.
+[![Security research checks](https://github.com/dbear305/elevate360-site/actions/workflows/security-research.yml/badge.svg)](https://github.com/dbear305/elevate360-site/actions/workflows/security-research.yml)
 
-This section starts with a working domain evidence collector. It gathers DNS answers through Google Public DNS and certificate names through crt.sh, preserves provenance, and compares observations across runs. It runs independently of the website and NetTruth services.
+**OSINT, OPSEC, hacking tools, and reproducible security research.** A practical workbench for infrastructure investigations, local web testing, Android traffic analysis, and agent security.
+
+Includes three dependency-free Python utilities, a searchable catalog of 24 upstream projects, and local hacking lab configurations. The tools run independently of the website and NetTruth services.
+
+## Start here
+
+| Goal | Start with | Result |
+| --- | --- | --- |
+| Find hacking tools | [Tool catalog](toolkit/README.md#hacking) | Nmap, ffuf, ZAP, Nuclei, Metasploit, sqlmap, mitmproxy |
+| Practice web hacking | [Local web lab](labs/02-web-hacking.md) | Juice Shop + discovery, fuzzing, baseline scanning, template checks |
+| Learn exploitation tooling | [Metasploit and sqlmap](labs/03-exploitation-tools.md) | Scoped module and injection-testing exercises |
+| Investigate infrastructure | [Domain evidence lab](labs/01-domain-evidence.md) | DNS/CT evidence and change comparison |
+| Find specialized OSINT tools | [Catalog CLI](#browse-the-toolkit) | Filter hidden gems, categories, and use cases |
+| Preserve and share findings | [OPSEC workflow](docs/opsec-workflow.md) | File hashes, traffic review, sanitized evidence |
+
+Start with the offline demo, then complete one local lab and publish one manually verified finding. Install other tools when an investigation needs them.
 
 ## Quick start
 
@@ -20,7 +35,26 @@ The offline demo uses clearly labeled synthetic responses and makes no network r
 
 [Read the sample report](examples/report.md) or [inspect the JSON](examples/report.json).
 
-## Collect public evidence
+## Browse the toolkit
+
+From `security-research/`:
+
+```bash
+python3 src/toolkit.py list --starter
+python3 src/toolkit.py list --category hacking
+python3 src/toolkit.py list --gems
+python3 src/toolkit.py list --search Android --json
+python3 src/toolkit.py show metasploit
+python3 src/toolkit.py doctor --category hacking
+```
+
+The catalog and CLI work offline. `show` includes the upstream installation link, practical use, setup estimate, network exposure, and limitations. `doctor` only checks executable names on PATH; it does not run or install tools, inspect versions, or guarantee that a binary is authentic. GUI, Android, and some source-based tools require manual setup checks.
+
+Catalog exit codes: `0` success, `1` catalog/input error, `2` missing PATH tools from `doctor`. A `manual` result means no automatic readiness check was performed.
+
+Third-party projects are linked and documented, not copied into this repo. The core Python utilities require no packages; optional labs and external tools have their own dependencies.
+
+## Domain evidence
 
 ```bash
 python3 src/evidence.py example.com
@@ -43,12 +77,16 @@ Exit codes: `0` all configured source requests succeeded; `2` partial collection
 | Location | Contents |
 | --- | --- |
 | [src/evidence.py](src/evidence.py) | Dependency-free command-line collector |
-| [tests](tests/test_evidence.py) | Offline parsing, error, comparison, and CLI tests |
+| [src/toolkit.py](src/toolkit.py) | Search, filter, inspect, and check tool availability |
+| [src/manifest.py](src/manifest.py) | Create and verify SHA-256 evidence inventories |
+| [toolkit](toolkit/README.md) | 24 curated tools, including specialized OSINT finds |
+| [tests](tests/) | Offline parsing, integrity, catalog, and CLI tests |
 | [examples](examples/README.md) | Synthetic source data and generated reports |
-| [labs](labs/01-domain-evidence.md) | Reproducible evidence and change-detection lab |
+| [labs](labs/02-web-hacking.md) | Domain evidence, local web hacking, and exploitation-tool practice |
 | [research](research/README.md) | Demonstration case study and research template |
 | [docs/methodology.md](docs/methodology.md) | Collection behavior and evidence limitations |
 | [docs/resources.md](docs/resources.md) | Curated primary resources |
+| [docs/opsec-workflow.md](docs/opsec-workflow.md) | Evidence preservation, Android/agent review, publication hygiene |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution and verification instructions |
 
 ## Verification
@@ -57,7 +95,7 @@ Exit codes: `0` all configured source requests succeeded; `2` partial collection
 python3 -m unittest discover -s tests -v
 ```
 
-The GitHub Actions workflow runs the offline tests and demo whenever this section changes. Live source availability is not tested in CI.
+The GitHub Actions workflow runs offline tests and the demo on Python 3.10 and 3.12, validates the catalog, and checks Compose configuration whenever this section changes. Live source availability and third-party scanner execution are not tested in CI. See each lab's verification boundary before treating its instructions as a validated result.
 
 ## Scope and reuse
 
@@ -65,6 +103,13 @@ Use the labs for training and the collector for public-source research. Define a
 
 The [MIT license](LICENSE) applies only to the new material within `security-research/`. It does not relicense the website, NetTruth, or third-party source data. See the repository [security policy](../SECURITY.md) for vulnerability reporting.
 
-## Next milestone
+## Evidence integrity
 
-Publish one original, sanitized case study with independently checked findings. Then improve the collector based on actual use. Active probes, dashboards, and scheduled monitoring are outside this initial release.
+After collecting a case, hash the completed folder and verify it later:
+
+```bash
+python3 src/manifest.py create reports/case-001 reports/case-001.manifest.json
+python3 src/manifest.py verify reports/case-001 reports/case-001.manifest.json
+```
+
+Use an existing case folder and keep its manifest outside it. The tool detects added, missing, and changed files; it does not prove source authenticity or replace a signed chain of custody. See [limitations and workflow](docs/opsec-workflow.md).

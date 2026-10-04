@@ -4,7 +4,14 @@ Company website, NetTruth services, and practical security research.
 
 ## Security research
 
-Explore [security-research/](security-research/) for the domain evidence collector, reproducible OSINT lab, sample reports, and contribution guide. The Python tools run independently of the website.
+Explore [Elevate360 Security Lab](security-research/) for OSINT, OPSEC, and hacking tools:
+
+- [24-tool catalog](security-research/toolkit/README.md): Nmap, ffuf, Nuclei, ZAP, Metasploit, sqlmap, Android inspection, agent security, and specialized OSINT projects.
+- [Local web hacking lab](security-research/labs/02-web-hacking.md): Juice Shop with discovery, fuzzing, and scanning workflows.
+- [Original Python utilities](security-research/src/): domain evidence collection, searchable toolkit, and SHA-256 evidence verification.
+- [OPSEC workflow](security-research/docs/opsec-workflow.md): preserve evidence, inspect traffic, and prepare findings for publication.
+
+The Python tools run independently of the website with no additional packages.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

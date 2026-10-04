@@ -11,3 +11,14 @@ Keep changes small and tied to a reproducible problem. Describe the current beha
 CI must work offline without API keys. Do not commit generated private reports, credentials, or third-party material without permission to redistribute it. New collectors should document provider limits and avoid silent retries or unbounded requests. Keep active-testing capabilities explicit and separate from source collection.
 
 The MIT license here covers this directory only. Repository security issues should follow [SECURITY.md](../SECURITY.md).
+
+## Toolkit and lab updates
+
+Edit `toolkit/catalog.json` for catalog changes, then regenerate the reference from `security-research/`:
+
+```bash
+python3 src/toolkit.py list --markdown > toolkit/README.md
+python3 -m unittest discover -s tests -v
+```
+
+Keep upstream URLs, data exposure, setup estimates, and limitations explicit. Do not label a linked project audited or runtime-tested without evidence. Record actual versions and observations in lab write-ups. Do not commit raw case files or binaries.
