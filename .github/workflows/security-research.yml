@@ -1,0 +1,28 @@
+name: Security research checks
+on:
+  push:
+    paths:
+      - 'security-research/**'
+      - '.github/workflows/security-research.yml'
+  pull_request:
+    paths:
+      - 'security-research/**'
+      - '.github/workflows/security-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run offline tests
+        run: python3 -m unittest discover -s security-research/tests -v
+      - name: Run documented demo
+        working-directory: security-research
+        run: python3 src/evidence.py example.com --fixture examples/fixture.json
+      - name: Check Python syntax
+        run: python3 -m compileall -q security-research/src
