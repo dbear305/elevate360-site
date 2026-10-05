@@ -1,0 +1,55 @@
+name: NetTruth transport check
+on:
+  push:
+    branches: [fix/nettruth-diagnostics-20260920]
+    paths: ['.github/workflows/nettruth-transport-check.yml']
+permissions:
+  contents: read
+jobs:
+  transport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Compare existing Miami endpoint protocols without changing the server
+        run: |
+          node --input-type=module <<'NODE'
+          import http2 from 'node:http2';
+          import { lookup } from 'node:dns/promises';
+          import { writeFile, unlink } from 'node:fs/promises';
+          import { execFile } from 'node:child_process';
+          import { promisify } from 'node:util';
+          const exec = promisify(execFile);
+          const node = 'https://measure-miami.elevate360systems.com';
+          const origin = 'https://www.elevate360systems.com';
+          console.log('DNS', await lookup(new URL(node).hostname, {all:true}));
+          await new Promise(resolve => {
+            const client = http2.connect(node);
+            const timer = setTimeout(() => {client.destroy();resolve();},10000);
+            client.on('remoteSettings', settings => {
+              console.log('H2_SETTINGS', JSON.stringify(settings));
+              client.close(); clearTimeout(timer); resolve();
+            });
+            client.on('error',e=>{console.log('H2_ERROR',e.message);clearTimeout(timer);resolve();});
+          });
+          const r = await fetch(node+'/session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({mode:'extended'}),signal:AbortSignal.timeout(10000)});
+          if(r.status!==201) throw new Error('Session refused: '+r.status);
+          const {token}=await r.json();
+          if(!/^[a-f0-9]{48}$/.test(token))throw new Error('Invalid token');
+          const file='/tmp/nettruth-payload.bin';
+          await writeFile(file,Buffer.alloc(25000000,0x30));
+          const format='{"status":%{response_code},"version":"%{http_version}","ip":"%{remote_ip}","connect":%{time_connect},"pre":%{time_pretransfer},"ttfb":%{time_starttransfer},"total":%{time_total},"down":%{size_download},"up":%{size_upload}}';
+          try {
+            for(const protocol of ['--http2','--http1.1','--http1.1','--http2']) {
+              for(const direction of ['down','up']) {
+                const args=['-sS',protocol,'--max-time','25','-H',`Origin: ${origin}`,'-H','Expect:','-o','/dev/null','-w',format];
+                if(direction==='up')args.push('-H','Content-Type: text/plain','--data-binary','@'+file);
+                args.push(`${node}/__${direction}?token=${token}${direction==='down'?'&bytes=25000000':''}`);
+                const out=await exec('curl',args,{timeout:30000});
+                const m=JSON.parse(out.stdout);
+                if(m.status!==200)throw new Error('Measurement refused: '+m.status);
+                const seconds=(direction==='down'?m.total:m.ttfb)-m.pre;
+                console.log('TRANSFER',JSON.stringify({protocol,direction,...m,requestMbps:25000000*8/1e6/seconds}));
+              }
+            }
+          }finally{await unlink(file);}
+          NODE

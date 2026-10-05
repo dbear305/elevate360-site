@@ -1,0 +1,118 @@
+name: NetTruth repair validation
+on:
+  push:
+    branches: [fix/nettruth-diagnostics-20260920]
+    paths: ['.github/workflows/nettruth-repair-validation.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Locked app regression tests and production build
+        run: |
+          npm ci --no-audit --no-fund
+          npm run test:nettruth
+          npm run check
+          git diff --exit-code
+      - name: Test repair guards, dry run, apply and rollback with mocked services
+        run: |
+          sudo python3 - <<'PY'
+          import importlib.util, os, sys, tempfile
+          from pathlib import Path
+          from unittest.mock import patch
+          spec=importlib.util.spec_from_file_location('repair','services/nettruth-node/repair_transport.py')
+          m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+          stock=b'measure-miami.elevate360systems.com {\n reverse_proxy 127.0.0.1:8090 {\n header_up X-Real-IP {remote_host}\n flush_interval -1\n }\n}\n'
+          host, repaired=m.plan(stock)
+          assert host=='measure-miami.elevate360systems.com'
+          assert m.plan(repaired)==(host,repaired)
+          assert m.plan(b'# comment\n'+stock)[0]==host
+          for bad in [stock+b'other.example.com { respond 200 }',stock.replace(b'measure-miami',b'www'),b'{ debug }\n'+stock,stock.replace(b'8090',b'9999')]:
+            try:m.plan(bad)
+            except RuntimeError:pass
+            else:raise AssertionError('Unsafe config accepted')
+          realpath=Path
+          with tempfile.TemporaryDirectory() as root:
+            config=Path(root)/'Caddyfile'; config.write_bytes(stock); config.chmod(0o644)
+            backupdir=Path(root)/'backups'
+            def cmd(args,timeout=30):
+              if args[:3]==['systemctl','show','caddy']:return '/usr/bin/caddy run --config /etc/caddy/Caddyfile'
+              return ''
+            def paths(value):return backupdir if value=='/var/backups/nettruth-transport' else realpath(value)
+            with patch.object(m,'CONFIG',config), patch.object(m,'Path',side_effect=paths), patch.object(m.shutil,'which',return_value='/usr/bin/tool'), patch.object(m,'command',side_effect=cmd), patch.object(m,'health',return_value=True), patch.object(m.time,'sleep'):
+              with patch.object(sys,'argv',['repair']),patch.object(m,'negotiated_protocol',return_value='h2'):
+                m.main(); assert config.read_bytes()==stock; assert not backupdir.exists()
+              with patch.object(sys,'argv',['repair','--apply']),patch.object(m,'negotiated_protocol',side_effect=['h2','http/1.1']):
+                m.main(); assert config.read_bytes()==repaired
+              assert next(backupdir.glob('*.bak')).read_bytes()==stock
+              config.write_bytes(stock)
+              with patch.object(sys,'argv',['repair','--apply']),patch.object(m,'negotiated_protocol',return_value='h2'):
+                try:m.main()
+                except RuntimeError:pass
+                else:raise AssertionError('Failed protocol check was accepted')
+              assert config.read_bytes()==stock, 'Rollback did not restore original bytes'
+          print('REPAIR_TESTS: guards, idempotence, dry run, apply, backup, and automatic rollback passed')
+          PY
+      - name: Validate repair Caddy syntax with packaged Caddy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq caddy
+          sudo systemctl stop caddy
+          python3 - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          s=importlib.util.spec_from_file_location('repair','services/nettruth-node/repair_transport.py')
+          m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+          Path('/tmp/NetTruth.Caddyfile').write_text(m.PREFIX+'measure-miami.elevate360systems.com {\n reverse_proxy 127.0.0.1:8090 {\n header_up X-Real-IP {remote_host}\n flush_interval -1\n }\n}\n')
+          PY
+          caddy adapt --config /tmp/NetTruth.Caddyfile --adapter caddyfile > /tmp/nettruth-caddy.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/nettruth-caddy.json'))
+          for s in d['apps']['http']['servers'].values():
+            if ':443' in s.get('listen',[]): assert s['protocols']==['h1']
+          print('CADDY: actual adapter accepted HTTPS HTTP/1.1 configuration')
+          PY
+          caddy validate --config /tmp/NetTruth.Caddyfile --adapter caddyfile
+      - name: Install isolated browser dependency without changing locked app packages
+        run: |
+          npm install --prefix /tmp/nettruth-browser --no-audit --no-fund playwright@1.55.0
+          node /tmp/nettruth-browser/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Same-runner browser A/B, two quick tests maximum
+        run: |
+          node --experimental-strip-types --input-type=module <<'NODE'
+          import { chromium } from '/tmp/nettruth-browser/node_modules/playwright/index.mjs';
+          import { readFile } from 'node:fs/promises';
+          import { metrics } from './src/lib/nettruth/model.ts';
+          for (const forceH1 of [false,true]) {
+            const browser=await chromium.launch({args:forceH1?['--disable-http2','--disable-quic']:['--disable-quic']});
+            try {
+              const page=await browser.newPage();
+              await page.addInitScript(()=>{
+                window.__ntProtocols=[];
+                new PerformanceObserver(list=>{for(const p of list.getEntries())if(p.name.includes('measure-miami.elevate360systems.com'))window.__ntProtocols.push(p.nextHopProtocol);}).observe({type:'resource',buffered:true});
+              });
+              await page.goto('https://www.elevate360systems.com/systems/nettruth',{waitUntil:'networkidle',timeout:45000});
+              await page.locator('select').nth(1).selectOption('mia1');
+              await page.getByRole('button',{name:'Run test',exact:true}).click();
+              await page.getByRole('button',{name:'Run again',exact:true}).waitFor({timeout:110000});
+              const exp=page.getByRole('button',{name:/Export JSON/});
+              if(!await exp.count())throw new Error('No report produced');
+              const event=page.waitForEvent('download');await exp.click();const download=await event;
+              const report=JSON.parse(await readFile(await download.path(),'utf8'));
+              console.log('BROWSER_AB',JSON.stringify({forceH1,protocols:await page.evaluate(()=>[...new Set(window.__ntProtocols)]),endpoint:report.endpoint,status:report.status,metrics:metrics(report),errors:report.errors,elapsedMs:report.elapsedMs}));
+              if(report.errors.length)throw new Error('Measurement returned errors; no further runs');
+            } finally {await browser.close();}
+          }
+          NODE
