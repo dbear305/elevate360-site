@@ -12,4 +12,4 @@ Report against the current default branch. Historical snapshots do not have a se
 
 ## Research material
 
-Security research contribution guidance is in [security-research/CONTRIBUTING.md](security-research/CONTRIBUTING.md). Synthetic examples are explicitly labeled. Live reports should be reviewed before publication.
+Security research contribution guidance is in [the standalone Security Lab contribution guide](https://github.com/dbear305/security-lab/blob/main/CONTRIBUTING.md). Synthetic examples are explicitly labeled. Live reports should be reviewed before publication.
