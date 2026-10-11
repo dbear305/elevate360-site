@@ -27,7 +27,7 @@ const systemsWork = [
   "Secure infrastructure, network control, and observability",
   "Custom operational software and internal tools",
   "Workflow automation and data reconciliation",
-  "Applied R&D for field and industrial systems",
+  "Systems integration for field and industrial environments",
 ];
 
 const proofPoints = [
@@ -47,18 +47,13 @@ const proofPoints = [
       "Protected systems, workstations, and general devices can be separated so the whole environment is not treated the same.",
   },
   {
-    title: "Tested under real load",
+    title: "Controlled access",
     description:
-      "Traffic behavior is checked under active use with bufferbloat testing, latency review, and load-based tuning.",
+      "Defined access policies and DNS controls keep protected systems separate from general devices.",
   },
 ];
 
 const builtSystems = [
-  {
-    title: "NetTruth QuickCheck",
-    description:
-      "A browser test for speed, latency, jitter, delay under load, and UDP message loss when measurable. Test against Miami or Dallas, export the evidence, and request a paid diagnostic when your business needs investigation.",
-  },
   {
     title: "FieldPay",
     description:
@@ -95,12 +90,6 @@ const capabilities = [
 ];
 
 const deploymentOptions = [
-  {
-    title: "Network Diagnostic",
-    price: "Starts at $750",
-    description:
-      "One location, one agreed network problem. Guided remote measurements, authorized configuration review, written findings, and a prioritized correction plan. Scope and total price agreed before work begins.",
-  },
   {
     title: "Secure Performance Network",
     description:
@@ -191,9 +180,6 @@ export default function HomePage() {
           </Link>
 
           <nav aria-label="Main navigation" className="hidden shrink-0 items-center gap-5 whitespace-nowrap text-sm text-slate-300 lg:flex">
-            <Link href="/systems/nettruth" className="font-semibold text-sky-200 transition hover:text-white">
-              Network Test
-            </Link>
             <a href="#proof" className="transition hover:text-white">
               Proof
             </a>
@@ -221,10 +207,16 @@ export default function HomePage() {
             <span className="hidden sm:inline">Call {phoneDisplay}</span>
           </TrackedLink>
         </div>
-        <nav aria-label="Network test" className="border-t border-white/10 px-4 py-2 lg:hidden">
-          <Link href="/systems/nettruth" className="flex min-h-11 items-center justify-center rounded-lg bg-sky-300/10 text-sm font-semibold text-sky-200 hover:bg-sky-300/20">
-            Run the NetTruth network test
+        <nav aria-label="Mobile navigation" className="flex items-center justify-center gap-2 border-t border-white/10 px-4 py-2 text-sm lg:hidden">
+          <a href="#about" className="inline-flex min-h-11 items-center rounded-lg px-4 text-slate-300 hover:bg-white/5 hover:text-white">
+            About
+          </a>
+          <Link href="/systems" className="inline-flex min-h-11 items-center rounded-lg px-4 text-slate-300 hover:bg-white/5 hover:text-white">
+            Systems
           </Link>
+          <a href="#contact" className="inline-flex min-h-11 items-center rounded-lg bg-sky-300/10 px-4 font-semibold text-sky-200 hover:bg-sky-300/20">
+            Contact
+          </a>
         </nav>
       </header>
 
@@ -258,14 +250,6 @@ export default function HomePage() {
                   className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
                 >
                   Discuss a Project
-                </TrackedLink>
-                <TrackedLink
-                  href="/systems/nettruth"
-                  eventName="NetTruth Opened"
-                  eventLocation="home-hero"
-                  className="rounded-full border border-sky-300/40 bg-sky-300/10 px-6 py-3 text-sm font-semibold text-sky-100 transition hover:bg-sky-300/20"
-                >
-                  Network Test
                 </TrackedLink>
                 <Link
                   href="/systems"
@@ -506,7 +490,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-12 grid gap-6 md:grid-cols-2">
               {builtSystems.map((system) => (
                 <div
                   key={system.title}
@@ -518,19 +502,14 @@ export default function HomePage() {
                   <p className="mt-3 text-sm leading-7 text-slate-400">
                     {system.description}
                   </p>
-                  {system.title === "NetTruth QuickCheck" && (
-                    <Link href="/systems/nettruth" className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-sky-200 underline underline-offset-4">
-                      Run the network test
-                    </Link>
-                  )}
                 </div>
               ))}
             </div>
 
             <div className="mt-10 flex flex-col items-start gap-5 rounded-3xl border border-sky-400/20 bg-sky-400/[0.08] p-7 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-3xl text-sm leading-7 text-slate-300">
-                Run the live network test or explore system demonstrations, then discuss custom
-                engineering, pilot, or licensing opportunities.
+                Explore the existing systems, then discuss engineering,
+                integration, or licensing opportunities.
               </p>
               <Link
                 href="/systems"
@@ -598,12 +577,12 @@ export default function HomePage() {
 
               <p className="mt-4 text-lg leading-8 text-slate-400">
                 Infrastructure work is scoped around the actual environment,
-                including instability, security, segmentation, latency
-                behavior, private routing, and visibility.
+                including security, segmentation, access control,
+                private routing, and visibility.
               </p>
             </div>
 
-            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            <div className="mt-12 grid gap-6 lg:grid-cols-2">
               {deploymentOptions.map((option) => (
                 <div
                   key={option.title}
@@ -612,15 +591,9 @@ export default function HomePage() {
                   <h3 className="text-xl font-semibold text-white">
                     {option.title}
                   </h3>
-                  {"price" in option ? (
-                    <p className="mt-3 text-sm font-semibold text-sky-200">
-                      {option.price}
-                    </p>
-                  ) : null}
                   <p className="mt-4 text-sm leading-7 text-slate-400">
                     {option.description}
                   </p>
-                  {option.title === "Network Diagnostic" && <Link href="/systems/nettruth/diagnostic" className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-sky-200 underline underline-offset-4">See scope and request a diagnostic</Link>}
                 </div>
               ))}
             </div>

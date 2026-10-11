@@ -4,16 +4,16 @@ import { SystemFooter } from "./system-footer";
 import { SystemHeader } from "./system-header";
 
 export const metadata: Metadata = {
-  title: "Built Systems & Demonstrations",
+  title: "Built Systems",
   description:
-    "Run the NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
+    "Explore field-pay validation, operational software, and secure infrastructure built by Elevate360.",
   alternates: {
     canonical: "/systems",
   },
   openGraph: {
-    title: "Built Systems & Demonstrations | Elevate360 Systems",
+    title: "Built Systems | Elevate360 Systems",
     description:
-      "Run the NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
+      "Explore field-pay validation, operational software, and secure infrastructure built by Elevate360.",
     url: "/systems",
     siteName: "Elevate360 Systems",
     images: [
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Built Systems & Demonstrations | Elevate360 Systems",
+    title: "Built Systems | Elevate360 Systems",
     description:
-      "Run the NetTruth network test and explore field-pay validation and infrastructure built by Elevate360.",
+      "Explore field-pay validation, operational software, and secure infrastructure built by Elevate360.",
     images: ["/opgraph.png"],
   },
 };
@@ -53,28 +53,29 @@ export default function SystemsPage() {
           <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-24">
             <div className="max-w-4xl">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
-                Systems in Action
+                Built Systems
               </p>
               <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-                Built systems. Observable proof.
+                Systems built around the work.
               </h1>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
                 See how Elevate360 turns operational inputs into measured
                 evidence, deterministic calculations, controlled workflows,
-                and auditable results. NetTruth measures your live connection.
-                Product demonstrations use synthetic data.
+                and auditable results. The FieldPay preview below uses
+                synthetic data; technical details are shared for qualified
+                engineering and licensing discussions.
               </p>
             </div>
 
             <div className="mt-10 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
               <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                Live network test
+                Operational software
               </span>
               <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                Exportable evidence
+                Secure infrastructure
               </span>
               <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                Synthetic demo data
+                Synthetic preview data
               </span>
             </div>
           </div>
@@ -82,73 +83,7 @@ export default function SystemsPage() {
 
         <section className="border-b border-white/10 bg-[#061022]">
           <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
-            <div className="grid gap-6 lg:grid-cols-3">
-              <article className="group relative overflow-hidden rounded-[30px] border border-sky-300/25 bg-gradient-to-br from-sky-400/[0.14] to-white/[0.03] p-7 lg:col-span-2 sm:p-9">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <span className="rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                    Automated network test
-                  </span>
-                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Diagnostics and evidence
-                  </span>
-                </div>
-
-                <div className="mt-8 grid gap-8 md:grid-cols-[1.05fr_0.95fr] md:items-end">
-                  <div>
-                    <h2 className="text-3xl font-semibold text-white">
-                      NetTruth QuickCheck
-                    </h2>
-                    <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
-                      Run a live browser check for speed, latency, jitter, and
-                      responsiveness under load. Export the evidence, then use
-                      a paid diagnostic, starting at $750, to investigate the layers a browser
-                      cannot inspect.
-                    </p>
-                    <div className="mt-7 flex flex-wrap gap-3">
-                      <Link
-                        href="/systems/nettruth"
-                        className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-200"
-                      >
-                        Run the test
-                      </Link>
-                      <Link
-                        href="/systems/nettruth/diagnostic"
-                        className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
-                      >
-                        Paid diagnostic scope
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div
-                    className="rounded-3xl border border-white/10 bg-[#020817]/70 p-5"
-                  >
-                    <div className="flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">
-                      <span>What it measures</span>
-                      <span className="text-sky-300">Live</span>
-                    </div>
-                    <div className="mt-5 space-y-3">
-                      {[
-                        ["Download / upload", "Mbps"],
-                        ["Latency / jitter", "ms"],
-                        ["Delay under load", "ms"],
-                        ["UDP message loss", "%"],
-                      ].map(([label, value]) => (
-                        <div
-                          key={label}
-                          className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.03] px-4 py-3 text-sm"
-                        >
-                          <span className="flex items-center gap-3 text-slate-300">
-                            {label}
-                          </span>
-                          <span className="font-medium text-white">{value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </article>
-
+            <div className="max-w-3xl">
               <article
                 id="fieldpay"
                 className="rounded-[30px] border border-white/10 bg-white/[0.04] p-7 sm:p-8"
@@ -211,7 +146,7 @@ export default function SystemsPage() {
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-400">
                   Firewall appliances, segmentation, private routing, access
-                  control, DNS policy, and traffic tuning validated under load.
+                  control, DNS policy, and deployment validation.
                 </p>
                 <p className="mt-5 text-sm font-semibold text-sky-200">
                   View the reference deployment

@@ -1,6 +1,6 @@
 # Elevate360 Systems
 
-Company website and NetTruth network diagnostic services, founded by [Daniel Berriel IV](https://github.com/dbear305).
+Company website for Elevate360 Systems LLC, founded by [Daniel Berriel IV](https://github.com/dbear305).
 
 [Website](https://www.elevate360systems.com/) · [Daniel's projects](https://github.com/dbear305) · [Independent Security Lab](https://github.com/dbear305/security-lab)
 
@@ -9,14 +9,16 @@ Company website and NetTruth network diagnostic services, founded by [Daniel Ber
 | Location | Purpose |
 | --- | --- |
 | `src/app/` | Company website, contact flow, and product pages |
-| `src/app/systems/nettruth/` | NetTruth interface and diagnostic flows |
-| `src/lib/nettruth/` | Measurement, scoring, node selection, and session logic |
-| `services/nettruth-node/` | Network diagnostic node and operating instructions |
-| `scripts/` | Deployment and regional setup utilities |
-| `tests/` | Application and NetTruth checks |
-| `docs/` | NetTruth setup, launch, and verification documentation |
+| `src/lib/` | Contact delivery, campaign attribution, and accepted-inquiry analytics |
+| `tests/` | Contact delivery and attribution regression checks |
 
-NetTruth remains here because its interface, shared code, deployment scripts, and tests are connected. Independent security research lives in [dbear305/security-lab](https://github.com/dbear305/security-lab).
+Independent security research lives in [dbear305/security-lab](https://github.com/dbear305/security-lab).
+
+## Retired network testing
+
+NetTruth was retired after the measurement VPS nodes were removed. The website no longer serves its test, demo, paid diagnostic flow, or Windows posture download. Existing `/systems/nettruth` links and subpaths permanently redirect to `/systems`. Its measurement library, speed-test dependency, and network-specific workflows are also removed from the active checkout.
+
+The complete source, tests, deployment scripts, node service, and operating documentation remain recoverable at the [last pre-retirement revision](https://github.com/dbear305/elevate360-site/tree/ada7beb191aeff661b07a72bce5d2e449cb4d36d) and in Git history for sale, licensing, or rollback. This retirement does not provision any infrastructure.
 
 ## Local development
 
@@ -25,22 +27,19 @@ npm ci
 npm run dev
 ```
 
-Open <http://localhost:3000>. Read the relevant documentation before configuring external services or regional nodes.
+Open <http://localhost:3000>.
 
 ## Verification
 
 ```bash
 npm run check
-npm run test:nettruth
+node --experimental-strip-types --test tests/*.test.mjs
 ```
 
-`check` runs lint, type checking, and a production build. The NetTruth test command uses Node's experimental TypeScript stripping; the existing verification workflow uses Node 22.
+`check` runs lint, type checking, and a production build. Regression checks use Node's TypeScript stripping with Node 22 or later.
 
 ## Operations and security
 
-- [NetTruth launch guide](docs/NETTRUTH-LAUNCH.md)
-- [NetTruth verification](docs/NETTRUTH-VERIFICATION.md)
-- [Node operations](services/nettruth-node/OPERATIONS.md)
 - [Security policy](SECURITY.md)
 
 This repository contains company work. Daniel's personal GitHub profile also includes independent software, security research, and technical experiments.

@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
-import { getMeasurementConfig } from "./src/lib/nettruth/config";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const measurementOrigins = getMeasurementConfig().nodes.map(node => node.origin).join(" ");
 
 const contentSecurityPolicy = `
   default-src 'self';
@@ -10,12 +8,12 @@ const contentSecurityPolicy = `
   form-action 'self' mailto:;
   frame-ancestors 'none';
   object-src 'none';
-  script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://challenges.cloudflare.com https://www.googletagmanager.com https://www.googleadservices.com https://www.google.com;
-  frame-src https://challenges.cloudflare.com https://www.googletagmanager.com;
+  script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://www.googletagmanager.com https://www.googleadservices.com https://www.google.com;
+  frame-src https://www.googletagmanager.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com;
   font-src 'self' data:;
-  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com https://ad.doubleclick.net ${measurementOrigins};
+  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://formsubmit.co https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com https://ad.doubleclick.net;
   manifest-src 'self';
   media-src 'self';
   worker-src 'self' blob:;
@@ -58,6 +56,16 @@ const nextConfig: NextConfig = {
 
   turbopack: {
     root: process.cwd(),
+  },
+
+  async redirects() {
+    return [
+      {
+        source: "/systems/nettruth/:path*",
+        destination: "/systems",
+        permanent: true,
+      },
+    ];
   },
 
   async headers() {

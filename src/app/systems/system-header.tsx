@@ -37,10 +37,10 @@ export function SystemHeader() {
             Systems
           </Link>
           <Link
-            href="/systems/nettruth"
+            href="/#contact"
             className="rounded-full border border-sky-300/30 bg-sky-300/10 px-3 py-2.5 text-sm font-semibold text-sky-200 hover:bg-sky-300/20 sm:px-5"
           >
-            Network Test
+            Contact
           </Link>
           <a
             href="tel:+17863127320"
