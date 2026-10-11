@@ -104,7 +104,7 @@ export default function CompanyPage() {
           <h2 className="text-xl font-semibold">What Elevate360 Systems does</h2>
           <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-300">
             Elevate360 Systems designs and builds secure infrastructure, custom
-            software, workflow automation, network diagnostics, monitoring, and
+            software, workflow automation, monitoring, and
             operational systems for real-world environments.
           </p>
         </div>

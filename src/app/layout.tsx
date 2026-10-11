@@ -18,7 +18,7 @@ const organizationJsonLd = {
   email: "contact@elevate360systems.com",
   telephone: "+1-786-312-7320",
   description:
-    "Secure infrastructure, custom software, workflow automation, network diagnostics, and operational systems built around real-world problems.",
+    "Secure infrastructure, custom software, workflow automation, and operational systems built around real-world problems.",
   disambiguatingDescription:
     "Independent Florida technology and systems engineering company based in Miami. The official website is elevate360systems.com.",
   identifier: {
@@ -48,8 +48,6 @@ const organizationJsonLd = {
     "WireGuard",
     "Network segmentation",
     "Private routing",
-    "Latency optimization",
-    "Bufferbloat reduction",
     "Custom network appliances",
     "Custom software development",
     "Workflow automation",
@@ -105,7 +103,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Elevate360 Systems designs and builds secure infrastructure, custom software, workflow automation, network diagnostics, and operational systems for real-world environments.",
+    "Elevate360 Systems designs and builds secure infrastructure, custom software, workflow automation, and operational systems for real-world environments.",
 
   alternates: {
     canonical: "/",

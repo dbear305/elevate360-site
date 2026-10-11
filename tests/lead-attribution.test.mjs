@@ -4,7 +4,7 @@ import { resolveAttribution, captureLeadAttribution, addInquiryMetadata, isPipel
 
 test("campaign attribution survives an untagged trip to the inquiry form", () => {
   const entry = resolveAttribution("https://www.elevate360systems.com/?utm_source=google&utm_medium=cpc&utm_campaign=123&gclid=click-abc&email=private@example.test", null);
-  const inquiry = resolveAttribution("https://www.elevate360systems.com/systems/nettruth/diagnostic", entry);
+  const inquiry = resolveAttribution("https://www.elevate360systems.com/systems", entry);
   assert.deepEqual(inquiry, entry);
   assert.equal(inquiry.landing_path, "/");
   assert.equal(inquiry.parameters.gclid, "click-abc");
@@ -42,13 +42,13 @@ test("accepted inquiry payload can carry attribution and an explicit QA exclusio
   };
   captureLeadAttribution();
   assert.equal(isPipelineTest(), true);
-  window.location = new URL("https://www.elevate360systems.com/systems/nettruth/diagnostic");
+  window.location = new URL("https://www.elevate360systems.com/systems");
   const form = new FormData();
   form.set("name", "Internal QA");
   addInquiryMetadata(form, "qa-inquiry-id", isPipelineTest());
   assert.equal(form.get("inquiry_id"), "qa-inquiry-id");
   assert.equal(form.get("landing_path"), "/");
-  assert.equal(form.get("form_path"), "/systems/nettruth/diagnostic");
+  assert.equal(form.get("form_path"), "/systems");
   assert.equal(form.get("gclid"), "qa-click");
   assert.match(form.get("is_test"), /exclude from leads and revenue/);
   assert.equal([...values.values()].some(value => value.includes("Internal QA")), false);
