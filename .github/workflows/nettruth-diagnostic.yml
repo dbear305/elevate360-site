@@ -1,0 +1,75 @@
+name: NetTruth diagnostic
+on:
+  push:
+    branches: [fix/nettruth-diagnostics-20260920]
+    paths: ['.github/workflows/nettruth-diagnostic.yml']
+permissions:
+  contents: read
+concurrency:
+  group: nettruth-diagnostic
+  cancel-in-progress: true
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies and run existing tests
+        run: |
+          npm ci --no-audit --no-fund
+          npm run test:nettruth
+          npm run lint
+          npm run typecheck
+      - name: Install isolated browser test dependency
+        run: |
+          npm install --no-save --package-lock=false --no-audit --no-fund playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Inspect deployed route and run one bounded quick test
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          import { readFile } from 'node:fs/promises';
+          const origin = 'https://www.elevate360systems.com';
+          const nodes = JSON.parse(await readFile('src/lib/nettruth/nodes.json', 'utf8'));
+          for (const node of nodes) {
+            try {
+              const r = await fetch(`${node.origin}/health`, {headers:{Origin:origin}, signal:AbortSignal.timeout(10000)});
+              console.log('HEALTH', JSON.stringify({id:node.id, status:r.status, url:r.url, headers:Object.fromEntries(['server','via','access-control-allow-origin','timing-allow-origin','content-encoding','x-vercel-id','cf-ray'].map(h=>[h,r.headers.get(h)])), body:(await r.text()).slice(0,512)}));
+            } catch (e) { console.log('HEALTH_ERROR', node.id, e.message); }
+          }
+          const browser = await chromium.launch();
+          try {
+            const page = await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+            const requests = [];
+            page.on('requestfinished', async request => {
+              const u = new URL(request.url());
+              if (!['/health','/session','/__down','/__up'].includes(u.pathname)) return;
+              const response = await request.response();
+              requests.push({origin:u.origin,path:u.pathname,bytes:u.searchParams.get('bytes'),method:request.method(),status:response?.status(),timing:request.timing()});
+            });
+            page.on('pageerror', error => console.log('BROWSER_ERROR', error.message.replace(/token=[a-f0-9]+/gi,'token=[redacted]')));
+            await page.goto(`${origin}/systems/nettruth`, {waitUntil:'networkidle',timeout:45000});
+            console.log('DEPLOYED_SERVERS', JSON.stringify(await page.locator('select').allTextContents()));
+            await page.getByRole('button',{name:'Run test',exact:true}).click();
+            await page.getByRole('button',{name:'Run again',exact:true}).waitFor({timeout:110000});
+            const exp = page.getByRole('button',{name:/Export JSON/});
+            if (await exp.count()) {
+              const event = page.waitForEvent('download');
+              await exp.click();
+              const download = await event;
+              const report = JSON.parse(await readFile(await download.path(),'utf8'));
+              console.log('REPORT', JSON.stringify({mode:report.mode,status:report.status,endpoint:report.endpoint,selection:report.selection,samples:report.samples,errors:report.errors,elapsedMs:report.elapsedMs,loss:report.loss}));
+            } else console.log('NOTICE', await page.locator('.nt-notice').innerText());
+            const timing = await page.evaluate(() => performance.getEntriesByType('resource').filter(p=>/\/(__down|__up|health)(\?|$)/.test(p.name)).map(p=>({origin:new URL(p.name).origin,path:new URL(p.name).pathname,bytes:new URL(p.name).searchParams.get('bytes'),startTime:p.startTime,requestStart:p.requestStart,responseStart:p.responseStart,responseEnd:p.responseEnd,transferSize:p.transferSize,encodedBodySize:p.encodedBodySize,nextHopProtocol:p.nextHopProtocol,serverTiming:p.serverTiming})));
+            console.log('RESOURCE_TIMING', JSON.stringify(timing));
+            console.log('REQUESTS', JSON.stringify(requests));
+          } finally { await browser.close(); }
+          NODE
